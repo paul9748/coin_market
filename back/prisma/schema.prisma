@@ -10,24 +10,258 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  password String
-  nickname String
-  profile_image String?
-  user_desc String?
-  items Item[]
+  id    String @id @default(uuid())    
+  email    String    
+  isEmailAuthorized    Boolean    @default(false)    @map("is_email_authorized")
+  password    String    
+  role    Role    @default(USER)
+  nickName    String    @map("nick_name")  
+  name    String    
+  phoneNumber    String     @map("phone_number")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  wallets Wallet[]
+  snsLogins SnsLogin[]
+  addresses Address[]
+  buys Buy[]
+  sale Sale[]
+  @@map("user")
 }
 
-model Item {
-  id        Int      @default(autoincrement()) @id
-  item_name     String
-  item_category   String?
-  item_type   String?
-  item_image   String?
-  status   String? @default("inStock")
-  open_chat   String?
-  seller    User?    @relation(fields: [sellerId], references: [id])
-  sellerId  Int?
+enum Role {
+  ADMIN   @map("admin")
+  USER    @map("user")
+  @@map("_Role")
+}
+
+model Coin {
+  id    String @id @default(uuid())    
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId   String    @map("country_id")
+  currencyType    String    @map("currency_type")
+  unitAmount    Int    @map("unit_amount")
+  imageUrl    String    @map("image_url")
+  isUsed    Boolean    @map("is_used")    @default(true)
+  stockAmount    Int    @default(0)
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  saleDetails SaleDetail[]
+  analysisDetails AnalysisDetail[]
+  @@map("coin")
+}
+
+model Deal {
+  id    String @id @default(uuid())    
+  dealCount    Int    @map("deal_count")    
+  exchangeRate    Int    @map("exchange_rate")
+  buys Buy[]
+  saleDetails SaleDetail[]
+  @@map("deal")
+}
+
+model Buy {
+  id    String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId   String    @map("country_id")
+  deal   Deal   @relation(fields: [dealId], references: [id])
+  dealId   String    @map("deal_id")
+  amount    Float    
+  status    BuyStatus    @default(SAVE)
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  deliveries Delivery[]
+  @@map("buy")
+}
+
+enum BuyStatus {
+ SAVE    @map("save")
+ APPLY    @map("apply")
+ WAIT    @map("wait")
+ SHIPPING    @map("shipping")
+ COMPLETED    @map("completed")
+ @@map("_buy_status")
+}
+
+model Country {
+  id    String @id @default(uuid())    
+  countryName    String    @map("country_name")    
+  countryNameEng    String    @map("country_name_eng")    
+  countryCode    String    @map("country_code")    
+  exchangeRateCode    String?    @map("exchange_rate_code")  
+  stockAmount    Int    @default(0)    @map("stock_amount")
+  isHandled   Boolean    @default(true)    @map("is_handled")
+  currencyUnitName   String?    @map("currency_unit_name")
+  currencyUnitAbbr   String?    @map("currency_unit_abbr")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  countries_non_handling CountryNonHandling[]
+  coins Coin[]
+  buys Buy[]
+  @@map("country")
+}
+
+model Address {
+  id    String @id @default(uuid())    
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  addressName   String?    @map("address_name")
+  name    String    
+  phoneUumber    String    @map("phone_number")    
+  postalCode    String?    @map("postal_code")
+  address1    String    
+  address2    String?
+  isDefault    Boolean    @default(false)    @map("country_name")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  deliveries Delivery[]
+  @@map("address")
+}
+
+model CountryNonHandling {
+  id    String @id @default(uuid())    
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId   String    @map("country_id") 
+  nonHandlingReason    NonHandlingReason    @default(SHORTAGE_DEALS)    @map("non_handling_reason")
+  startDate    Int    @map("start_date")    
+  endDate    Int    @default(99991231)    @map("end_date")
+  stockAmount    Int    @default(0)    @map("stock_amount")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("country_non_handling") 
+}
+
+enum NonHandlingReason {
+  TRAVEL_BAN_COUNTRY    @map("travel_ban_country")
+  SHORTAGE_DEALS    @map("shortage_deals")
+  @@map("_non_handling_reason") 
+}
+
+model Analysis {
+  id    String @id @default(uuid())    
+  sale   Sale   @relation(fields: [saleId], references: [id])
+  saleId   String    @map("sale_id")
+  imageUrl    String     @map("image_url")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("analysis")
+  analysisDetails AnalysisDetail[]
+}
+
+model AnalysisDetail {
+  id    String @id @default(uuid())    
+  analysis   Analysis   @relation(fields: [analysisId], references: [id])
+  analysisId   String    @map("analysis_id")
+  coin   Coin   @relation(fields: [coinId], references: [id])
+  coinId   String    @map("coin_id")
+  coordinate    String 
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("analysis_detail")
+}
+
+model Sale {
+  id    String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  status  SaleStatus    @default(SAVE)
+  sellerConfirm    SellerConfirm?    @map("seller_confirm")
+  rejectReason    String?    @map("reject_reason")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  SaleDetails SaleDetail[]
+  analyses Analysis[]
+  Deliveries Delivery[]
+  @@map("sale")
+}
+
+enum SaleStatus {
+  SAVE    @map("save")
+  APPLY    @map("apply")
+  ENTER_WAYBILL_NUMBER    @map("enter_waybill_number")
+  RECEIVING_CONFIRMATION    @map("Receiving_confirmation")
+  INSPECTION_COMPLETED    @map("Inspection_completed")
+  ON_SALE    @map("on_sale")
+  COMPLETED    @map("completed")
+  @@map("_sale_status") 
+}
+
+enum SellerConfirm {
+  auto    @map("auto")
+  yet    @map("yet")
+  confirmed    @map("confirmed")
+  rejected    @map("rejected")
+  @@map("_seller_confirm") 
+}
+
+model SaleDetail {
+  id    String @id @default(uuid())    
+  coin   Coin   @relation(fields: [coinId], references: [id])
+  coinId   String    @map("coin_id")
+  sale   Sale   @relation(fields: [saleId], references: [id])
+  saleId   String    @map("sale_id")
+  deal   Deal   @relation(fields: [dealId], references: [id])
+  dealId   String    @map("deal_id")
+  countAnalyzed    Int    @map("count_analyzed")
+  countEntered    Int    @map("count_entered")
+  countConfirmed    Int?    @map("count_confirmed")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("sale_detail")
+}
+
+model Delivery {
+  id    String @id @default(uuid())
+  address   Address   @relation(fields: [addressId], references: [id])
+  addressId   String    @map("address_id")
+  sale   Sale   @relation(fields: [saleId], references: [id])
+  saleId   String    @map("sale_id")  
+  buy   Buy   @relation(fields: [buyId], references: [id])
+  buyId   String    @map("buy_id")    
+  type    DeliveryType?
+  comapny    String?
+  document_number    Int?
+  status    DeliveryStatus?    @default(PREPARING)
+  @@map("delivery")
+}
+
+enum DeliveryType {
+  SALE    @map("sale")
+  BUY    @map("buy")
+  SALE_RETURN    @map("sale_return")
+  BUY_RETURN    @map("buy_return")
+  @@map("_delivery_type") 
+}
+
+enum DeliveryStatus {
+  PREPARING     @map("preparing")
+  DEPARTURE    @map("departure")
+  SHIPPING    @map("shipping")
+  ARRIVED    @map("arrived")
+  @@map("_delivery_status")
+}
+
+
+model Wallet {
+  id    String @id @default(uuid())    
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  krwAmount    Int    @map("krw_amount")    
+  statement    String    
+  expirationDate    Int    @default(99991231)    @map("expiration_datetime")
+  @@map("wallet")
+}
+
+model SnsLogin {
+  id    String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  snsType    String    @map("sns_type")    
+  snsName    String    @map("sns_name")
+  snsProfile    String?    @map("sns_profile")
+  snsId    String    @map("sns_id")
+  @@map("sns_login")
 }
