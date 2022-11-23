@@ -3,7 +3,9 @@ function Footer() {
       <footer
          style={{
             background: 'rgb(51, 51, 51)',
-            height: '300px',
+            height: '100px',
+            marginTop: 'auto',
+            minWidth: '1280px',
          }}></footer>
    );
 }

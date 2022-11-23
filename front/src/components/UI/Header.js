@@ -1,31 +1,44 @@
 import styled from 'styled-components';
-import logo from '../../assets/images/coin_market(4).png';
 import { Link } from 'react-router-dom';
+import logo_mint from '../../assets/images/coin_market(4).png';
+import logo_white from '../../assets/images/coin_market(3).png';
 
-function Header() {
+function Header(props) {
    return (
-      <StyledHeader>
+      <StyledHeader backColor={props.backColor}>
          <div>
             <Link to="/">
-               <StyledImg src={logo} alt={'logo'}></StyledImg>
+               {props.logoImage === 'white' ? (
+                  <StyledImg src={logo_white} alt={'logo'}></StyledImg>
+               ) : (
+                  <StyledImg src={logo_mint} alt={'logo'}></StyledImg>
+               )}
             </Link>
          </div>
          <nav>
             <StyledUl>
                <li>
-                  <StyledLink to="/about">about</StyledLink>
+                  <StyledLink to="/about" color={props.color}>
+                     about
+                  </StyledLink>
                </li>
 
                <li>
-                  <StyledLink to="/buy">구매</StyledLink>
+                  <StyledLink to="/buy" color={props.color}>
+                     구매
+                  </StyledLink>
                </li>
 
                <li>
-                  <StyledLink to="/sell">판매</StyledLink>
+                  <StyledLink to="/sell" color={props.color}>
+                     판매
+                  </StyledLink>
                </li>
 
                <li>
-                  <StyledLink to="/login">로그인</StyledLink>
+                  <StyledLink to="/login" color={props.color}>
+                     로그인
+                  </StyledLink>
                </li>
             </StyledUl>
          </nav>
@@ -43,6 +56,9 @@ const StyledHeader = styled.header`
    align-items: center;
    height: 100px;
    padding: 4px 16px;
+   background-color: ${(props) => props.backColor};
+   min-width: 1280px;
+   z-index: 20;
 `;
 
 const StyledImg = styled.img`
@@ -60,6 +76,8 @@ const StyledLink = styled(Link)`
    height: 40px;
    padding: 10px 20px;
    transition: background-Color 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+
+   color: ${(props) => props.color};
 
    &:hover {
       background-color: rgba(0, 0, 0, 0.1);
