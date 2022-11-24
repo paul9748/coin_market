@@ -74,6 +74,7 @@ const StyledUl = styled.ul`
 const StyledLink = styled(Link)`
    display: block;
    height: 40px;
+   line-height: 40px;
    padding: 10px 20px;
    transition: background-Color 0.2s cubic-bezier(0.4, 0, 0.6, 1);
 

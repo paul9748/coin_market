@@ -2,9 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 
-*, *::before, *::after {
-    box-sizing: border-box;
-  }
 
   html, body, div, span,
 h1, h2, h3, p,

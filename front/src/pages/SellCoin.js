@@ -1,6 +1,8 @@
 import Header from '../components/UI/Header';
 import Footer from '../components/UI/Footer';
 import styled from 'styled-components';
+
+import UploadImage from '../components/UploadImage';
 // import image_coin_detect from '../assets/images/image_coin_detect.png';
 
 function SellCoin() {
@@ -12,9 +14,7 @@ function SellCoin() {
                <TitleLabel>STEP 2</TitleLabel>
                <TitleContent>사진을 업로드 해주세요.</TitleContent>
             </StyledTitle>
-            <UploadImage>
-               <input type="file" />
-            </UploadImage>
+            <UploadImage></UploadImage>
             <StyledP>
                인식이 잘 안되는 경우 다른 사진으로 다시 업로드 하실 수 있습니다.
             </StyledP>
@@ -69,14 +69,6 @@ const TitleContent = styled.div`
    line-height: 50px;
    text-indent: 20px;
    font-weight: bold;
-`;
-
-const UploadImage = styled.div`
-   border: 5px dashed rgba(0, 0, 0, 0.2);
-   padding: 20px;
-   width: 420px;
-   height: 370px;
-   margin: 50px auto 10px;
 `;
 
 const StyledP = styled.p`
