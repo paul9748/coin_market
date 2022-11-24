@@ -30,9 +30,6 @@
     "rxjs": "^7.5.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@babel/eslint-parser": "^7.19.1",
-    "@babel/preset-env": "^7.20.2",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
@@ -75,7 +72,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "main": ".eslintrc.js",
+  "main": ".eslintrc.json",
   "directories": {
     "test": "test"
   },
