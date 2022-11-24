@@ -1,5 +1,8 @@
 {
   "singleQuote": true,
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "printWidth": 120,
   "trailingComma": "all",
   "extends": ["prettier"],
   "plugins": ["prettier"],
