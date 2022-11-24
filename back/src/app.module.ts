@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { SalesModule } from './sales/sales.module';
-import { BuysModule } from './buys/buys.module';
+import { SellModule } from './sell/sell.module';
+import { BuyModule } from './buy/buy.module';
 import { DeliveriesModule } from './deliveries/deliveries.module';
 import { DealsModule } from './deals/deals.module';
 import { AddressesModule } from './addresses/addresses.module';
@@ -15,8 +15,8 @@ import { WalletsModule } from './wallets/wallets.module';
 @Module({
   imports: [
     UsersModule,
-    SalesModule,
-    BuysModule,
+    SellModule,
+    BuyModule,
     DeliveriesModule,
     DealsModule,
     AddressesModule,

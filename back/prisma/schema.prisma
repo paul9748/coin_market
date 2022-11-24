@@ -25,8 +25,8 @@ model User {
   wallets Wallet[]
   snsLogins SnsLogin[]
   addresses Address[]
-  buys Buy[]
-  sale Sale[]
+  buy Buy[]
+  sell Sell[]
   @@map("user")
 }
 
@@ -47,7 +47,7 @@ model Coin {
   stockAmount    Int    @default(0)
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  saleDetails SaleDetail[]
+  sellDetails SellDetail[]
   analysisDetails AnalysisDetail[]
   @@map("coin")
 }
@@ -56,8 +56,8 @@ model Deal {
   id    String @id @default(uuid())    
   dealCount    Int    @map("deal_count")    
   exchangeRate    Int    @map("exchange_rate")
-  buys Buy[]
-  saleDetails SaleDetail[]
+  buy Buy[]
+  sellDetails SellDetail[]
   @@map("deal")
 }
 
@@ -70,14 +70,14 @@ model Buy {
   deal   Deal   @relation(fields: [dealId], references: [id])
   dealId   String    @map("deal_id")
   amount    Float    
-  status    BuyStatus    @default(SAVE)
+  status    Buytatus    @default(SAVE)
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
   deliveries Delivery[]
   @@map("buy")
 }
 
-enum BuyStatus {
+enum Buytatus {
  SAVE    @map("save")
  APPLY    @map("apply")
  WAIT    @map("wait")
@@ -100,7 +100,7 @@ model Country {
   updatedAt DateTime @updatedAt  @map("updated_at")
   countries_non_handling CountryNonHandling[]
   coins Coin[]
-  buys Buy[]
+  buy Buy[]
   @@map("country")
 }
 
@@ -142,8 +142,8 @@ enum NonHandlingReason {
 
 model Analysis {
   id    String @id @default(uuid())    
-  sale   Sale   @relation(fields: [saleId], references: [id])
-  saleId   String    @map("sale_id")
+  sell   Sell   @relation(fields: [sellId], references: [id])
+  sellId   String    @map("sell_id")
   imageUrl    String     @map("image_url")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
@@ -163,30 +163,30 @@ model AnalysisDetail {
   @@map("analysis_detail")
 }
 
-model Sale {
+model Sell {
   id    String @id @default(uuid())
   user   User   @relation(fields: [userId], references: [id])
   userId   String    @map("user_id")
-  status  SaleStatus    @default(SAVE)
+  status  Selltatus    @default(SAVE)
   sellerConfirm    SellerConfirm?    @map("seller_confirm")
   rejectReason    String?    @map("reject_reason")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  SaleDetails SaleDetail[]
+  SellDetails SellDetail[]
   analyses Analysis[]
   Deliveries Delivery[]
-  @@map("sale")
+  @@map("sell")
 }
 
-enum SaleStatus {
+enum Selltatus {
   SAVE    @map("save")
   APPLY    @map("apply")
   ENTER_WAYBILL_NUMBER    @map("enter_waybill_number")
   RECEIVING_CONFIRMATION    @map("Receiving_confirmation")
   INSPECTION_COMPLETED    @map("Inspection_completed")
-  ON_SALE    @map("on_sale")
+  ON_SELL    @map("on_sell")
   COMPLETED    @map("completed")
-  @@map("_sale_status") 
+  @@map("_sell_status") 
 }
 
 enum SellerConfirm {
@@ -197,12 +197,12 @@ enum SellerConfirm {
   @@map("_seller_confirm") 
 }
 
-model SaleDetail {
+model SellDetail {
   id    String @id @default(uuid())    
   coin   Coin   @relation(fields: [coinId], references: [id])
   coinId   String    @map("coin_id")
-  sale   Sale   @relation(fields: [saleId], references: [id])
-  saleId   String    @map("sale_id")
+  sell   Sell   @relation(fields: [sellId], references: [id])
+  sellId   String    @map("sell_id")
   deal   Deal   @relation(fields: [dealId], references: [id])
   dealId   String    @map("deal_id")
   countAnalyzed    Int    @map("count_analyzed")
@@ -210,15 +210,15 @@ model SaleDetail {
   countConfirmed    Int?    @map("count_confirmed")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  @@map("sale_detail")
+  @@map("sell_detail")
 }
 
 model Delivery {
   id    String @id @default(uuid())
   address   Address   @relation(fields: [addressId], references: [id])
   addressId   String    @map("address_id")
-  sale   Sale   @relation(fields: [saleId], references: [id])
-  saleId   String    @map("sale_id")  
+  sell   Sell   @relation(fields: [sellId], references: [id])
+  sellId   String    @map("sell_id")  
   buy   Buy   @relation(fields: [buyId], references: [id])
   buyId   String    @map("buy_id")    
   type    DeliveryType?
@@ -229,9 +229,9 @@ model Delivery {
 }
 
 enum DeliveryType {
-  SALE    @map("sale")
+  SELL    @map("sell")
   BUY    @map("buy")
-  SALE_RETURN    @map("sale_return")
+  SELL_RETURN    @map("sell_return")
   BUY_RETURN    @map("buy_return")
   @@map("_delivery_type") 
 }
