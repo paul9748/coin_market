@@ -1,10 +1,86 @@
 import styled from 'styled-components';
 import backImage from '../assets/images/upload_image.png';
-import { useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 function UploadImage() {
    const [isLoading, setIsLoading] = useState(false);
+   const [isDragging, setIsDragging] = useState(false);
    const [coinImage, setCoinImage] = useState(null);
+
+   const dragRef = useRef(null);
+
+   const onUploadImage = useCallback(
+      (e) => {
+         let selectFiles = coinImage;
+
+         if (e.type === 'drop') {
+            selectFiles = e.dataTransfer.files[0];
+            encodeFile(selectFiles);
+         } else {
+            selectFiles = e.target.files;
+         }
+
+         setCoinImage(selectFiles);
+      },
+      [coinImage]
+   );
+
+   const handleDragIn = useCallback((e) => {
+      e.preventDefault();
+      e.stopPropagation();
+   }, []);
+
+   const handleDragOut = useCallback((e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setIsDragging(false);
+   }, []);
+
+   const handleDragOver = useCallback((e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.dataTransfer?.files) {
+         setIsDragging(true);
+      }
+   }, []);
+
+   const handleDrop = useCallback(
+      (e) => {
+         e.preventDefault();
+         e.stopPropagation();
+
+         onUploadImage(e);
+         setIsDragging(false);
+      },
+      [onUploadImage]
+   );
+
+   const initDragEvents = useCallback(() => {
+      if (dragRef.current !== null) {
+         dragRef.current.addEventListener('dragenter', handleDragIn);
+         dragRef.current.addEventListener('dragleave', handleDragOut);
+         dragRef.current.addEventListener('dragover', handleDragOver);
+         dragRef.current.addEventListener('drop', handleDrop);
+      }
+   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+   const resetDragEvents = useCallback(() => {
+      if (dragRef.current !== null) {
+         dragRef.current.removeEventListener('dragenter', handleDragIn);
+         dragRef.current.removeEventListener('dragleave', handleDragOut);
+         dragRef.current.removeEventListener('dragover', handleDragOver);
+         dragRef.current.removeEventListener('drop', handleDrop);
+      }
+   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+   useEffect(() => {
+      initDragEvents();
+
+      return () => resetDragEvents();
+   }, [initDragEvents, resetDragEvents]);
+
    const encodeFile = async (fileBlob) => {
       const reader = new FileReader();
       reader.readAsDataURL(fileBlob);
@@ -21,16 +97,6 @@ function UploadImage() {
       }
    };
 
-   //   const formData = new FormData();
-
-   //   const files = e.target.itemImage.files;
-
-   //   for (let i = 0; i < files.length; i++) {
-   //      formData.append('file', files[i]);
-   //   }
-
-   //   formData.append('itemName', itemName);
-
    return (
       <StyledDiv>
          {isLoading ? (
@@ -44,13 +110,14 @@ function UploadImage() {
             <>
                <StyledBackImage src={backImage}></StyledBackImage>
                <StyledP>동전 이미지를 드래그하여 올려놓거나 눌러서 업로드하세요.</StyledP>
-               <StyledLabel htmlFor="file"></StyledLabel>
+               <StyledLabel htmlFor="file" ref={dragRef}></StyledLabel>
                <StyledImage
                   type="file"
                   name="file"
                   id="file"
                   accept="image/*"
-                  onChange={(e) => encodeFile(e.target.files[0])}
+                  multiple={true}
+                  onChange={(e) => onUploadImage(e)}
                />
             </>
          )}
