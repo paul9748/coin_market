@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import backImage from '../assets/images/upload_image.png';
+import backImage from '../../assets/images/upload_image.png';
 import { useEffect, useState, useRef, useCallback } from 'react';
 
 function UploadImage() {
-   const [isLoading, setIsLoading] = useState(false);
    const [isDragging, setIsDragging] = useState(false);
    const [coinImage, setCoinImage] = useState(null);
 
@@ -87,10 +86,6 @@ function UploadImage() {
       try {
          reader.onload = async () => {
             setCoinImage(reader.result);
-            setIsLoading((preState) => !preState);
-            setTimeout(() => {
-               setIsLoading((preState) => !preState);
-            }, 3000);
          };
       } catch (err) {
          console.log(err);
@@ -98,30 +93,43 @@ function UploadImage() {
    };
 
    return (
-      <StyledDiv>
-         {isLoading ? (
-            <Loading>
-               <LoadingMark></LoadingMark>
-            </Loading>
-         ) : null}
+      <>
          {coinImage ? (
-            <img src={coinImage} style={{ width: '420px' }}></img>
+            <>
+               <PreviewImage src={coinImage}></PreviewImage>
+               <StyledBtn
+                  onClick={(preState) => {
+                     setCoinImage(!preState);
+                  }}>
+                  다른 사진으로 업로드하기
+               </StyledBtn>
+            </>
          ) : (
             <>
-               <StyledBackImage src={backImage}></StyledBackImage>
-               <StyledP>동전 이미지를 드래그하여 올려놓거나 눌러서 업로드하세요.</StyledP>
-               <StyledLabel htmlFor="file" ref={dragRef}></StyledLabel>
-               <StyledImage
-                  type="file"
-                  name="file"
-                  id="file"
-                  accept="image/*"
-                  multiple={true}
-                  onChange={(e) => onUploadImage(e)}
-               />
+               <StyledDiv>
+                  <StyledBackImage src={backImage}></StyledBackImage>
+                  <StyledP>
+                     동전 이미지를 드래그하여 올려놓거나 눌러서 업로드하세요.
+                  </StyledP>
+                  <StyledLabel
+                     htmlFor="file"
+                     ref={dragRef}
+                     isDragging={isDragging}></StyledLabel>
+                  <StyledImage
+                     type="file"
+                     name="file"
+                     id="file"
+                     accept="image/*"
+                     multiple={true}
+                     onChange={(e) => onUploadImage(e)}
+                  />
+               </StyledDiv>
+               <StyledComment>
+                  인식이 잘 안되는 경우 다른 사진으로 다시 업로드 하실 수 있습니다.
+               </StyledComment>
             </>
          )}
-      </StyledDiv>
+      </>
    );
 }
 
@@ -145,6 +153,9 @@ const StyledLabel = styled.label`
    cursor: pointer;
    width: 420px;
    height: 370px;
+   z-index: 10;
+
+   ${(props) => (props.isDragging ? { backgroundColor: 'rgba(0,0,0,0.2)' } : null)}
 
    &:hover {
       background-color: rgba(0, 0, 0, 0.2);
@@ -167,6 +178,31 @@ const StyledP = styled.p`
    z-index: -1;
    text-align: center;
    line-height: 27px;
+`;
+
+const StyledComment = styled.p`
+   margin: 20px auto;
+   font-size: 12px;
+`;
+
+const PreviewImage = styled.img`
+   width: 500px;
+   margin: 30px auto;
+`;
+
+const StyledBtn = styled.button`
+   width: 200px;
+   height: 50px;
+   background-color: rgba(92, 92, 224, 0.3);
+   margin: 0 auto 15px;
+   border: 0;
+   border-radius: 20px;
+   font-weight: bold;
+   cursor: pointer;
+
+   &:hover {
+      background-color: rgba(92, 92, 224, 0.2);
+   }
 `;
 
 const Loading = styled.div`

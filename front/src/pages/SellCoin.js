@@ -2,8 +2,7 @@ import Header from '../components/UI/Header';
 import Footer from '../components/UI/Footer';
 import styled from 'styled-components';
 
-import UploadImage from '../components/UploadImage';
-// import image_coin_detect from '../assets/images/image_coin_detect.png';
+import UploadImage from '../components/Sell/UploadImage';
 
 function SellCoin() {
    return (
@@ -15,9 +14,6 @@ function SellCoin() {
                <TitleContent>사진을 업로드 해주세요.</TitleContent>
             </StyledTitle>
             <UploadImage></UploadImage>
-            <StyledP>
-               인식이 잘 안되는 경우 다른 사진으로 다시 업로드 하실 수 있습니다.
-            </StyledP>
          </StyledMain>
          <Footer></Footer>
       </>
@@ -30,15 +26,14 @@ const StyledMain = styled.main`
    display: flex;
    flex-direction: column;
    min-height: calc(100vh - 200px);
-   max-width: 1280px;
+   min-width: 500px;
    margin: 0 auto;
-   border: 1px solid black;
 `;
 
 const StyledTitle = styled.div`
    display: flex;
    margin: 20px auto;
-   width: 1000px;
+   width: 500px;
 `;
 
 const TitleLabel = styled.div`
@@ -65,13 +60,8 @@ const TitleContent = styled.div`
    position: relative;
    top: 40px;
    left: 10px;
-   width: 450px;
+   width: 330px;
    line-height: 50px;
    text-indent: 20px;
    font-weight: bold;
-`;
-
-const StyledP = styled.p`
-   margin: 10px auto 30px;
-   font-size: 12px;
 `;

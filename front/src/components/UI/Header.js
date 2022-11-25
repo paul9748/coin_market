@@ -56,8 +56,9 @@ const StyledHeader = styled.header`
    align-items: center;
    height: 100px;
    padding: 4px 16px;
+   box-sizing: border-box;
    background-color: ${(props) => props.backColor};
-   min-width: 1280px;
+   min-width: 1260px;
    z-index: 20;
 `;
 
