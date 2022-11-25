@@ -16,7 +16,8 @@ function UploadImage() {
             selectFiles = e.dataTransfer.files[0];
             encodeFile(selectFiles);
          } else {
-            selectFiles = e.target.files;
+            selectFiles = e.target.files[0];
+            encodeFile(selectFiles);
          }
 
          setCoinImage(selectFiles);
