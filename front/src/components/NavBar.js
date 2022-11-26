@@ -1,23 +1,15 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function NavBar(props) {
    const [isToggle, setIsToggle] = useState(false);
-
-   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-   useEffect(() => {
-      const resizeListener = () => {
-         innerWidth > 600 ? setIsToggle(false) : setInnerWidth(window.innerWidth);
-      };
-      window.addEventListener('resize', resizeListener);
-   }, [innerWidth]);
 
    return (
       <StyledNav>
          <StyledBtn
             onClick={() => setIsToggle((preState) => !preState)}
+            onBlur={() => setIsToggle(false)}
             color={props.color}>
             <StyledSpread></StyledSpread>
             <StyledSpread></StyledSpread>
