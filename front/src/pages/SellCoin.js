@@ -25,9 +25,14 @@ export default SellCoin;
 const StyledMain = styled.main`
    display: flex;
    flex-direction: column;
+   flex: 1 1 auto;
    min-height: calc(100vh - 200px);
-   min-width: 500px;
-   margin: 0 auto;
+   min-width: 600px;
+   /* margin: 0 auto; */
+
+   @media (max-width: 600px) {
+      min-width: 300px;
+   }
 `;
 
 const StyledTitle = styled.div`

@@ -99,8 +99,8 @@ function UploadImage() {
             <>
                <PreviewImage src={coinImage}></PreviewImage>
                <StyledBtn
-                  onClick={(preState) => {
-                     setCoinImage(!preState);
+                  onClick={() => {
+                     setCoinImage((preState) => !preState);
                   }}>
                   다른 사진으로 업로드하기
                </StyledBtn>
