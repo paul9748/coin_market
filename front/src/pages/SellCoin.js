@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import StartSell from '../components/Sell/StartSell';
 import UploadImage from '../components/Sell/UploadImage';
+import SellStepOne from '../components/Sell/SellStepOne';
 
 function SellCoin() {
    const [currentStep, setCurrentStep] = useState(0);
@@ -27,7 +28,7 @@ function SellCoin() {
                </StyledTitle>
             )}
             {currentStep === 0 ? <StartSell></StartSell> : null}
-            {currentStep === 1 ? <></> : null}
+            {currentStep === 1 ? <SellStepOne></SellStepOne> : null}
             {currentStep === 2 ? <UploadImage></UploadImage> : null}
             <StyledBtnWrapper>
                {currentStep === 0 ? null : (
@@ -69,14 +70,14 @@ const StyledMain = styled.main`
 const StyledTitle = styled.div`
    display: flex;
    margin: 20px auto;
-   width: 500px;
+   width: 440px;
 `;
 
 const TitleLabel = styled.div`
    position: relative;
    padding: 10px;
    border-radius: 10px;
-   font-size: 30px;
+   font-size: 25px;
    font-weight: bold;
    color: white;
    background-color: #2ac1bc;
@@ -96,7 +97,7 @@ const TitleContent = styled.div`
    position: relative;
    top: 40px;
    left: 10px;
-   width: 330px;
+   width: 300px;
    line-height: 50px;
    text-indent: 20px;
    font-weight: bold;

@@ -12,6 +12,6 @@ const StyledFooter = styled.footer`
    margin-top: auto;
    min-width: 600px;
    @media (max-width: 600px) {
-      min-width: 500px;
+      min-width: 440px;
    }
 `;

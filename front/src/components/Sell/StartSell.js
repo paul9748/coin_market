@@ -20,5 +20,5 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledP = styled.p`
-   font-size: 21px;
+   font-size: 28px;
 `;

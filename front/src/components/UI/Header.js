@@ -38,7 +38,7 @@ const StyledHeader = styled.header`
    font-weight: bold;
 
    @media (max-width: 600px) {
-      min-width: 500px;
+      min-width: 440px;
    }
 `;
 
