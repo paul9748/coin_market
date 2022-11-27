@@ -9,7 +9,7 @@ function NavBar(props) {
       <StyledNav>
          <StyledBtn
             onClick={() => setIsToggle((preState) => !preState)}
-            onBlur={() => setIsToggle(false)}
+            onBlur={() => setTimeout(() => setIsToggle(false), 100)}
             color={props.color}>
             <StyledSpread></StyledSpread>
             <StyledSpread></StyledSpread>
