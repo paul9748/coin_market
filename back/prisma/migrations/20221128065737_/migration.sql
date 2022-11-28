@@ -15,14 +15,11 @@ CREATE TABLE `user` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `coin` (
+CREATE TABLE `deal` (
     `id` VARCHAR(191) NOT NULL,
-    `country_id` VARCHAR(191) NOT NULL,
-    `currency_type` VARCHAR(191) NOT NULL,
-    `unit_amount` INTEGER NOT NULL,
-    `image_url` VARCHAR(191) NOT NULL,
-    `is_used` BOOLEAN NOT NULL DEFAULT true,
-    `stockAmount` INTEGER NOT NULL DEFAULT 0,
+    `user_id` VARCHAR(191) NOT NULL,
+    `deal_status` ENUM('buy', 'sell') NOT NULL,
+    `image_url` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -30,22 +27,39 @@ CREATE TABLE `coin` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `deal` (
+CREATE TABLE `order_coin` (
     `id` VARCHAR(191) NOT NULL,
-    `deal_count` INTEGER NOT NULL,
-    `exchange_rate` INTEGER NOT NULL,
+    `deal_id` VARCHAR(191) NOT NULL,
+    `coin_id` VARCHAR(191) NOT NULL,
+    `deal_amount` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `buy` (
+CREATE TABLE `deal_detail` (
     `id` VARCHAR(191) NOT NULL,
-    `user_id` VARCHAR(191) NOT NULL,
-    `country_id` VARCHAR(191) NOT NULL,
     `deal_id` VARCHAR(191) NOT NULL,
-    `amount` DOUBLE NOT NULL,
-    `status` ENUM('save', 'apply', 'wait', 'shipping', 'completed') NOT NULL DEFAULT 'save',
+    `res_name` VARCHAR(191) NOT NULL,
+    `res_address1` VARCHAR(191) NOT NULL,
+    `res_address2` VARCHAR(191) NOT NULL,
+    `res_status` ENUM('waiting', 'shipping', 'completion') NOT NULL,
+    `company` VARCHAR(191) NULL,
+    `delivery_number` VARCHAR(191) NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `coin` (
+    `id` VARCHAR(191) NOT NULL,
+    `country_id` VARCHAR(191) NOT NULL,
+    `currency_type` VARCHAR(191) NOT NULL,
+    `unit_amount` INTEGER NOT NULL,
+    `is_used` BOOLEAN NOT NULL DEFAULT true,
+    `stockAmount` INTEGER NOT NULL DEFAULT 0,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -76,10 +90,10 @@ CREATE TABLE `address` (
     `address_name` VARCHAR(191) NULL,
     `name` VARCHAR(191) NOT NULL,
     `phone_number` VARCHAR(191) NOT NULL,
-    `postal_code` VARCHAR(191) NULL,
+    `postal_code` VARCHAR(191) NOT NULL,
     `address1` VARCHAR(191) NOT NULL,
-    `address2` VARCHAR(191) NULL,
-    `country_name` BOOLEAN NOT NULL DEFAULT false,
+    `address2` VARCHAR(191) NOT NULL,
+    `is_default` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -103,7 +117,6 @@ CREATE TABLE `country_non_handling` (
 -- CreateTable
 CREATE TABLE `analysis` (
     `id` VARCHAR(191) NOT NULL,
-    `sell_id` VARCHAR(191) NOT NULL,
     `image_url` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -115,52 +128,12 @@ CREATE TABLE `analysis` (
 CREATE TABLE `analysis_detail` (
     `id` VARCHAR(191) NOT NULL,
     `analysis_id` VARCHAR(191) NOT NULL,
-    `coin_id` VARCHAR(191) NOT NULL,
     `coordinate` VARCHAR(191) NOT NULL,
+    `country` VARCHAR(191) NOT NULL,
+    `currency_type` VARCHAR(191) NOT NULL,
+    `amount` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `sell` (
-    `id` VARCHAR(191) NOT NULL,
-    `user_id` VARCHAR(191) NOT NULL,
-    `status` ENUM('save', 'apply', 'enter_waybill_number', 'Receiving_confirmation', 'Inspection_completed', 'on_sell', 'completed') NOT NULL DEFAULT 'save',
-    `seller_confirm` ENUM('auto', 'yet', 'confirmed', 'rejected') NULL,
-    `reject_reason` VARCHAR(191) NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `sell_detail` (
-    `id` VARCHAR(191) NOT NULL,
-    `coin_id` VARCHAR(191) NOT NULL,
-    `sell_id` VARCHAR(191) NOT NULL,
-    `deal_id` VARCHAR(191) NOT NULL,
-    `count_analyzed` INTEGER NOT NULL,
-    `count_entered` INTEGER NOT NULL,
-    `count_confirmed` INTEGER NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `delivery` (
-    `id` VARCHAR(191) NOT NULL,
-    `address_id` VARCHAR(191) NOT NULL,
-    `sell_id` VARCHAR(191) NOT NULL,
-    `buy_id` VARCHAR(191) NOT NULL,
-    `type` ENUM('sell', 'buy', 'sell_return', 'buy_return') NULL,
-    `comapny` VARCHAR(191) NULL,
-    `document_number` INTEGER NULL,
-    `status` ENUM('preparing', 'departure', 'shipping', 'arrived') NULL DEFAULT 'preparing',
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -189,16 +162,19 @@ CREATE TABLE `sns_login` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `deal` ADD CONSTRAINT `deal_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `order_coin` ADD CONSTRAINT `order_coin_deal_id_fkey` FOREIGN KEY (`deal_id`) REFERENCES `deal`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `order_coin` ADD CONSTRAINT `order_coin_coin_id_fkey` FOREIGN KEY (`coin_id`) REFERENCES `coin`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `deal_detail` ADD CONSTRAINT `deal_detail_deal_id_fkey` FOREIGN KEY (`deal_id`) REFERENCES `deal`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `coin` ADD CONSTRAINT `coin_country_id_fkey` FOREIGN KEY (`country_id`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `buy` ADD CONSTRAINT `buy_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `buy` ADD CONSTRAINT `buy_country_id_fkey` FOREIGN KEY (`country_id`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `buy` ADD CONSTRAINT `buy_deal_id_fkey` FOREIGN KEY (`deal_id`) REFERENCES `deal`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `address` ADD CONSTRAINT `address_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -207,34 +183,7 @@ ALTER TABLE `address` ADD CONSTRAINT `address_user_id_fkey` FOREIGN KEY (`user_i
 ALTER TABLE `country_non_handling` ADD CONSTRAINT `country_non_handling_country_id_fkey` FOREIGN KEY (`country_id`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `analysis` ADD CONSTRAINT `analysis_sell_id_fkey` FOREIGN KEY (`sell_id`) REFERENCES `sell`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `analysis_detail` ADD CONSTRAINT `analysis_detail_analysis_id_fkey` FOREIGN KEY (`analysis_id`) REFERENCES `analysis`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `analysis_detail` ADD CONSTRAINT `analysis_detail_coin_id_fkey` FOREIGN KEY (`coin_id`) REFERENCES `coin`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `sell` ADD CONSTRAINT `sell_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `sell_detail` ADD CONSTRAINT `sell_detail_coin_id_fkey` FOREIGN KEY (`coin_id`) REFERENCES `coin`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `sell_detail` ADD CONSTRAINT `sell_detail_sell_id_fkey` FOREIGN KEY (`sell_id`) REFERENCES `sell`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `sell_detail` ADD CONSTRAINT `sell_detail_deal_id_fkey` FOREIGN KEY (`deal_id`) REFERENCES `deal`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `delivery` ADD CONSTRAINT `delivery_address_id_fkey` FOREIGN KEY (`address_id`) REFERENCES `address`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `delivery` ADD CONSTRAINT `delivery_sell_id_fkey` FOREIGN KEY (`sell_id`) REFERENCES `sell`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `delivery` ADD CONSTRAINT `delivery_buy_id_fkey` FOREIGN KEY (`buy_id`) REFERENCES `buy`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `wallet` ADD CONSTRAINT `wallet_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

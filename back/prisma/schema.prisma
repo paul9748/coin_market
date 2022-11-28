@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id    String @id @default(uuid())    
   email    String    
@@ -22,18 +21,65 @@ model User {
   phoneNumber    String     @map("phone_number")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  wallets Wallet[]
-  snsLogins SnsLogin[]
-  addresses Address[]
-  buy Buy[]
-  sell Sell[]
+  wallet Wallet[]
+  snsLogin SnsLogin[]
+  address Address[]
+  deal Deal[]
   @@map("user")
 }
 
 enum Role {
   ADMIN   @map("admin")
   USER    @map("user")
-  @@map("_Role")
+}
+
+model Deal {
+  id     String @id @default(uuid())   
+  user     User   @relation(fields: [userId], references: [id])
+  userId     String    @map("user_id")
+  dealStatus    DealStatus    @map("deal_status")
+  imageUrl    String?    @map("image_url")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  orderCoin OrderCoin[]
+  dealDetail DealDetail[]
+  @@map("deal")
+}
+
+enum DealStatus {
+  BUY    @map("buy")
+  SELL    @map("sell")
+}
+
+model OrderCoin {
+  id     String @id @default(uuid())
+  deal    Deal    @relation(fields: [dealId], references: [id])
+  dealId    String    @map("deal_id")
+  coin    Coin   @relation(fields: [coinId], references: [id])
+  coinId     String    @map("coin_id")
+  dealAmount    Int    @map("deal_amount")
+  @@map("order_coin")
+}
+
+model DealDetail {
+  id    String @id @default(uuid())   
+  deal    Deal   @relation(fields: [dealId], references: [id])
+  dealId    String    @map("deal_id")
+  resName    String    @map("res_name")
+  resAddress1    String    @map("res_address1")
+  resAddress2    String    @map("res_address2")
+  resStatus    ResStatus    @map("res_status")
+  company    String?
+  deliveryNumber    String?    @map("delivery_number")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("deal_detail")
+}
+
+enum ResStatus {
+  WAITING    @map("waiting")
+  SHIPPING    @map("shipping")
+  COMPLETION    @map("completion")
 }
 
 model Coin {
@@ -42,48 +88,12 @@ model Coin {
   countryId   String    @map("country_id")
   currencyType    String    @map("currency_type")
   unitAmount    Int    @map("unit_amount")
-  imageUrl    String    @map("image_url")
   isUsed    Boolean    @map("is_used")    @default(true)
   stockAmount    Int    @default(0)
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  sellDetails SellDetail[]
-  analysisDetails AnalysisDetail[]
+  orderCoin    OrderCoin[]
   @@map("coin")
-}
-
-model Deal {
-  id    String @id @default(uuid())    
-  dealCount    Int    @map("deal_count")    
-  exchangeRate    Int    @map("exchange_rate")
-  buy Buy[]
-  sellDetails SellDetail[]
-  @@map("deal")
-}
-
-model Buy {
-  id    String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId   String    @map("user_id")
-  country   Country   @relation(fields: [countryId], references: [id])
-  countryId   String    @map("country_id")
-  deal   Deal   @relation(fields: [dealId], references: [id])
-  dealId   String    @map("deal_id")
-  amount    Float    
-  status    Buytatus    @default(SAVE)
-  createdAt DateTime @default(now())  @map("created_at")   
-  updatedAt DateTime @updatedAt  @map("updated_at")
-  deliveries Delivery[]
-  @@map("buy")
-}
-
-enum Buytatus {
- SAVE    @map("save")
- APPLY    @map("apply")
- WAIT    @map("wait")
- SHIPPING    @map("shipping")
- COMPLETED    @map("completed")
- @@map("_buy_status")
 }
 
 model Country {
@@ -99,8 +109,7 @@ model Country {
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
   countries_non_handling CountryNonHandling[]
-  coins Coin[]
-  buy Buy[]
+  coin Coin[]
   @@map("country")
 }
 
@@ -111,13 +120,12 @@ model Address {
   addressName   String?    @map("address_name")
   name    String    
   phoneUumber    String    @map("phone_number")    
-  postalCode    String?    @map("postal_code")
+  postalCode    String    @map("postal_code")
   address1    String    
-  address2    String?
-  isDefault    Boolean    @default(false)    @map("country_name")
+  address2    String
+  isDefault    Boolean    @default(false)    @map("is_default")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
-  deliveries Delivery[]
   @@map("address")
 }
 
@@ -142,8 +150,6 @@ enum NonHandlingReason {
 
 model Analysis {
   id    String @id @default(uuid())    
-  sell   Sell   @relation(fields: [sellId], references: [id])
-  sellId   String    @map("sell_id")
   imageUrl    String     @map("image_url")
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
@@ -155,95 +161,14 @@ model AnalysisDetail {
   id    String @id @default(uuid())    
   analysis   Analysis   @relation(fields: [analysisId], references: [id])
   analysisId   String    @map("analysis_id")
-  coin   Coin   @relation(fields: [coinId], references: [id])
-  coinId   String    @map("coin_id")
-  coordinate    String 
+  coordinate    String
+  country    String?
+  currencyType    String?    @map("currency_type")
+  amount    Int?
   createdAt DateTime @default(now())  @map("created_at")   
   updatedAt DateTime @updatedAt  @map("updated_at")
   @@map("analysis_detail")
 }
-
-model Sell {
-  id    String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId   String    @map("user_id")
-  status  Selltatus    @default(SAVE)
-  sellerConfirm    SellerConfirm?    @map("seller_confirm")
-  rejectReason    String?    @map("reject_reason")
-  createdAt DateTime @default(now())  @map("created_at")   
-  updatedAt DateTime @updatedAt  @map("updated_at")
-  SellDetails SellDetail[]
-  analyses Analysis[]
-  Deliveries Delivery[]
-  @@map("sell")
-}
-
-enum Selltatus {
-  SAVE    @map("save")
-  APPLY    @map("apply")
-  ENTER_WAYBILL_NUMBER    @map("enter_waybill_number")
-  RECEIVING_CONFIRMATION    @map("Receiving_confirmation")
-  INSPECTION_COMPLETED    @map("Inspection_completed")
-  ON_SELL    @map("on_sell")
-  COMPLETED    @map("completed")
-  @@map("_sell_status") 
-}
-
-enum SellerConfirm {
-  auto    @map("auto")
-  yet    @map("yet")
-  confirmed    @map("confirmed")
-  rejected    @map("rejected")
-  @@map("_seller_confirm") 
-}
-
-model SellDetail {
-  id    String @id @default(uuid())    
-  coin   Coin   @relation(fields: [coinId], references: [id])
-  coinId   String    @map("coin_id")
-  sell   Sell   @relation(fields: [sellId], references: [id])
-  sellId   String    @map("sell_id")
-  deal   Deal   @relation(fields: [dealId], references: [id])
-  dealId   String    @map("deal_id")
-  countAnalyzed    Int    @map("count_analyzed")
-  countEntered    Int    @map("count_entered")
-  countConfirmed    Int?    @map("count_confirmed")
-  createdAt DateTime @default(now())  @map("created_at")   
-  updatedAt DateTime @updatedAt  @map("updated_at")
-  @@map("sell_detail")
-}
-
-model Delivery {
-  id    String @id @default(uuid())
-  address   Address   @relation(fields: [addressId], references: [id])
-  addressId   String    @map("address_id")
-  sell   Sell   @relation(fields: [sellId], references: [id])
-  sellId   String    @map("sell_id")  
-  buy   Buy   @relation(fields: [buyId], references: [id])
-  buyId   String    @map("buy_id")    
-  type    DeliveryType?
-  comapny    String?
-  document_number    Int?
-  status    DeliveryStatus?    @default(PREPARING)
-  @@map("delivery")
-}
-
-enum DeliveryType {
-  SELL    @map("sell")
-  BUY    @map("buy")
-  SELL_RETURN    @map("sell_return")
-  BUY_RETURN    @map("buy_return")
-  @@map("_delivery_type") 
-}
-
-enum DeliveryStatus {
-  PREPARING     @map("preparing")
-  DEPARTURE    @map("departure")
-  SHIPPING    @map("shipping")
-  ARRIVED    @map("arrived")
-  @@map("_delivery_status")
-}
-
 
 model Wallet {
   id    String @id @default(uuid())    
