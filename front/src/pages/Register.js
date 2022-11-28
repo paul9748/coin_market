@@ -1,22 +1,22 @@
 import styled from 'styled-components';
 
-import LoginForm from 'components/User/LoginForm';
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
+import RegisterForm from 'components/User/RegisterForm';
 
-function Login() {
+function Register() {
   return (
     <>
-      <Header backColor="white"></Header>
+      <Header />
       <StyledMain>
-        <LoginForm></LoginForm>
+        <RegisterForm></RegisterForm>
       </StyledMain>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }
 
-export default Login;
+export default Register;
 
 const StyledMain = styled.main`
   display: flex;
