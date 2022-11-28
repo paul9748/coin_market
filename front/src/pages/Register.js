@@ -7,7 +7,7 @@ import RegisterForm from 'components/User/RegisterForm';
 function Register() {
   return (
     <>
-      <Header />
+      <Header backColor="white" />
       <StyledMain>
         <RegisterForm></RegisterForm>
       </StyledMain>
