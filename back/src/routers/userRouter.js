@@ -1,22 +1,39 @@
 import { Router } from "express";
-import { userAuthService } from "../services/userService";
+import { userService } from "../services/userService";
+import { loginRequired } from "../middlewares/loginRequired";
+
 const userAuthRouter = Router();
-userAuthRouter.get("/user", async (req, res, next) => {
+
+//회원가입
+userAuthRouter.post("/users/register", async (req, res, next) => {
   try {
-    const { userId } = req.query;
-    const user = await userAuthService.findUserById(userId);
-    delete user.password;
-    res.json(user);
+    const data = req.body;
+    let user = await userService.creatUser(data);
+
+    res.status(201).json(user);
   } catch (err) {
     next(err);
   }
 });
-userAuthRouter.post("/user", async (req, res, next) => {
+
+//로그인
+userAuthRouter.post("/users/login", async (req, res, next) => {
   try {
-    const data = req.body;
-    let user = await userAuthService.createUserByEmailAndPassword(data);
-    delete user.password;
-    res.json(user);
+    const { email, password } = req.body;
+    const loginUser = await userService.login({ email, password });
+
+    res.status(201).json(loginUser);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//회원정보조회
+userAuthRouter.get("/users", loginRequired, async (req, res, next) => {
+  try {
+    const user = await userService.userInfo(req.userId);
+
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }
