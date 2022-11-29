@@ -2,14 +2,20 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
+import ROUTE from 'utils/ROUTE';
+
 function NavBar(props) {
   const [isToggle, setIsToggle] = useState(false);
 
   return (
     <StyledNav>
       <StyledBtn
-        onClick={() => setIsToggle((preState) => !preState)}
-        onBlur={() => setTimeout(() => setIsToggle(false), 100)}
+        onClick={() => {
+          setIsToggle((preState) => !preState);
+        }}
+        onBlur={() => {
+          setTimeout(() => setIsToggle(false), 100);
+        }}
         color={props.color}>
         <StyledSpread></StyledSpread>
         <StyledSpread></StyledSpread>
@@ -17,25 +23,25 @@ function NavBar(props) {
       </StyledBtn>
       <StyledUl isToggle={isToggle}>
         <li>
-          <StyledLink to="/about" color={props.color}>
+          <StyledLink to={ROUTE.ABOUT} color={props.color}>
             about
           </StyledLink>
         </li>
 
         <li>
-          <StyledLink to="/buy" color={props.color}>
+          <StyledLink to={ROUTE.BUY} color={props.color}>
             구매
           </StyledLink>
         </li>
 
         <li>
-          <StyledLink to="/sell" color={props.color}>
+          <StyledLink to={ROUTE.SELL} color={props.color}>
             판매
           </StyledLink>
         </li>
 
         <li>
-          <StyledLink to="/login" color={props.color}>
+          <StyledLink to={ROUTE.LOGIN} color={props.color}>
             로그인
           </StyledLink>
         </li>
