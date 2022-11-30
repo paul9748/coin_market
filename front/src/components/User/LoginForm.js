@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ROUTE from 'utils/ROUTE';
+import { emailvalidation } from 'utils/validation';
+
+import * as Api from 'api/api';
 
 function LoginForm() {
   const labelIdRef = useRef();
@@ -15,6 +18,26 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [isIdFocus, setIdFocus] = useState(false);
   const [isPwFocus, setPwFocus] = useState(false);
+
+  // const initialValue = { email: '', password: '' };
+  // const [user, SetUser] = useState(initialValue);
+
+  const navigate = useNavigate();
+  const idValidation = emailvalidation(email);
+  const passwordValidation = password.length >= 2 && password.length <= 40;
+
+  const validation = idValidation && passwordValidation;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await Api.post('/login', { email, password });
+      console.log(response.data);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (email.length !== 0 || isIdFocus) {
@@ -47,7 +70,7 @@ function LoginForm() {
   }, [password, isPwFocus]);
 
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit}>
       <StyledDiv>
         <StyledLabel ref={labelIdRef} htmlFor="email">
           이메일
@@ -62,6 +85,11 @@ function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           placeholder="이메일"></StyledInput>
+        {idValidation ? null : (
+          <StyledIdValidationContent>
+            {email.length === 0 ? null : '이메일 형식으로 작성해주세요.'}
+          </StyledIdValidationContent>
+        )}
       </StyledDiv>
       <StyledDiv>
         <StyledLabel ref={labelPwRef} htmlFor="password">
@@ -77,8 +105,13 @@ function LoginForm() {
           onBlur={() => setPwFocus(false)}
           onChange={(e) => setPassword(e.target.value)}
           value={password}></StyledInput>
+        {passwordValidation ? null : (
+          <StyledIdValidationContent>
+            {password.length === 0 ? null : '비밀번호는 2자리 이상 입력해주세요.'}
+          </StyledIdValidationContent>
+        )}
       </StyledDiv>
-      <BtnLogin type="submit">로그인</BtnLogin>
+      <BtnLogin disabled={!validation}>로그인</BtnLogin>
       <BtnLogin>sign in with google</BtnLogin>
       <StyledP>
         아직 회원이 아니신가요?
@@ -142,6 +175,10 @@ const BtnLogin = styled.button`
   &:hover {
     background-color: rgba(42, 193, 188, 0.5);
   }
+
+  &:disabled {
+    cursor: no-drop;
+  }
 `;
 
 const StyledP = styled.p`
@@ -158,25 +195,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-// function loginReducer(userState, action) {
-//   switch (action.type) {
-//     case "LOGIN_SUCCESS":
-//       return {
-//         ...userState,
-//         user: action.payload,
-//       };
-
-//     case "LOGOUT":
-//       return {
-//         ...userState,
-//         user: null,
-//       };
-
-//     default:
-//       return userState;
-//   }
-// }
-
-// const [userState, dispatch] = useReducer(loginReducer, {
-//   user: null,
-// });
+const StyledIdValidationContent = styled.p`
+  margin-top: 10px;
+  text-indent: 10px;
+  color: red;
+`;
