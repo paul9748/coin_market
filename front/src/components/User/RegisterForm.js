@@ -2,17 +2,25 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { emailvalidation, isEmailCheck } from 'utils/validation';
+import { emailvalidation, phoneNumberValidator } from 'utils/validation';
 
 import * as Api from 'api/api';
 import ROUTE from 'utils/ROUTE';
 
 function RegisterForm() {
-  const initialValue = { email: '', password: '', userName: '' };
-  const inputRef = useRef([]);
+  const initialValue = { email: '', password: '', nickName: '', phoneNumber: '' };
+
+  const idRef = useRef(null);
+  const pwRef = useRef(null);
+  const pwCheckRef = useRef(null);
+  const nameRef = useRef(null);
+  const phoneNumberRef = useRef(null);
+
   const navigate = useNavigate();
   const [user, setUser] = useState(initialValue);
   const [passwordCheck, setPasswordCheck] = useState('');
+
+  const [isError, setIsError] = useState({ error: '', errorMessage: '' });
 
   const handleChange = (e) => {
     const newUser = { ...user };
@@ -29,39 +37,36 @@ function RegisterForm() {
     return setPasswordCheck(e.target.value);
   };
 
-  const { email, password, userName } = user;
+  const { email, password, nickName, phoneNumber } = user;
 
   const idValidation =
-    email?.length >= 6 &&
-    email?.length <= 30 &&
-    emailvalidation(email) &&
-    isEmailCheck(email);
-  const passwordValidation = password?.length >= 4 && password?.length <= 30;
-  const userNameValidation = userName?.length >= 2 && userName?.length <= 14;
+    email?.length >= 6 && email?.length <= 30 && emailvalidation(email);
 
-  const validation =
-    idValidation &&
-    passwordValidation &&
-    userNameValidation &&
-    password === passwordCheck;
+  const passwordValidation = password?.length >= 4 && password?.length <= 30;
+  const nickNameValidation = nickName?.length >= 2 && nickName?.length <= 14;
+  const phoneNumberValidation = phoneNumberValidator(phoneNumber);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validation) {
-      if (!idValidation) {
-        return inputRef.current[0].focus();
-      } else if (!passwordValidation) {
-        return inputRef.current[1].focus();
-      } else if (password !== passwordCheck) {
-        return inputRef.current[2].focus();
-      } else if (!userNameValidation) {
-        return inputRef.current[3].focus();
-      }
-    }
+
+    if (!idValidation) return idRef.current.focus();
+    if (!passwordValidation) return pwRef.current.focus();
+    if (!password === passwordCheck) return pwCheckRef.current.focus();
+    if (!nickNameValidation) return nameRef.current.focus();
+    if (!phoneNumberValidation) return phoneNumberRef.current.focus();
+
     try {
       const response = await Api.post('/user/register', user);
-      console.log(response.statusText);
-      navigate(ROUTE.LOGIN);
+
+      const { error, errorMessage } = response.data;
+
+      if (error) {
+        const newError = { ...isError, error, errorMessage };
+        setIsError(newError);
+        return idRef.current.focus();
+      } else {
+        navigate(ROUTE.LOGIN);
+      }
     } catch (error) {
       console.log(error);
       setUser(initialValue);
@@ -75,19 +80,16 @@ function RegisterForm() {
         type="text"
         id="email"
         name="email"
+        placeholder="ooo@ooooo.ooo"
         onChange={handleChange}
-        ref={(el) => (inputRef.current[0] = el)}
+        ref={idRef}
         value={email}></StyledInput>
       {idValidation ? (
         <StyledValidationComment>사용가능한 이메일입니다.</StyledValidationComment>
       ) : (
         <StyledValidationComment color="red">
           &nbsp;
-          {email.length === 0
-            ? null
-            : isEmailCheck
-            ? '6자 이상 이메일 형식으로 입력하세요.'
-            : '이미 존재하는 이메일입니다.'}
+          {email.length === 0 ? null : '6자 이상 이메일 형식으로 입력하세요.'}
         </StyledValidationComment>
       )}
       <StyledLabel htmlFor="password">비밀번호</StyledLabel>
@@ -95,8 +97,9 @@ function RegisterForm() {
         type="password"
         id="password"
         name="password"
+        placeholder="영문/숫자/특수 4자 이상 30자 이하"
         onChange={handleChange}
-        ref={(el) => (inputRef.current[1] = el)}
+        ref={pwRef}
         value={password}></StyledInput>
       {passwordValidation ? (
         <StyledValidationComment>사용가능한 비밀번호입니다.</StyledValidationComment>
@@ -114,7 +117,7 @@ function RegisterForm() {
         id="passwordCheck"
         name="passwordCheck"
         disabled={password.length === 0}
-        ref={(el) => (inputRef.current[2] = el)}
+        ref={pwCheckRef}
         value={password.length === 0 ? '' : passwordCheck}
         onChange={handlePasswordCheck}></StyledInput>
       {password.length !== 0 && passwordCheck === password ? (
@@ -127,22 +130,42 @@ function RegisterForm() {
             : '비밀번호가 일치하지 않습니다.'}
         </StyledValidationComment>
       )}
-      <StyledLabel htmlFor="userName">성명</StyledLabel>
+      <StyledLabel htmlFor="nickName">성명</StyledLabel>
       <StyledInput
         type="text"
-        id="userName"
-        name="userName"
+        id="nickName"
+        name="nickName"
+        placeholder="영문/숫자 2자 이상 14자 이하"
         onChange={handleChange}
-        ref={(el) => (inputRef.current[3] = el)}
-        value={userName}></StyledInput>
-      {userNameValidation ? (
+        ref={nameRef}
+        value={nickName}></StyledInput>
+      {nickNameValidation ? (
         <StyledValidationComment>올바른 형식입니다.</StyledValidationComment>
       ) : (
         <StyledValidationComment color="red">
           &nbsp;
-          {userName.length === 0 ? null : '영문/숫자 2자 이상 14자 이하 입력하세요.'}
+          {nickName.length === 0 ? null : '영문/숫자 2자 이상 14자 이하 입력하세요.'}
         </StyledValidationComment>
       )}
+
+      <StyledLabel htmlFor="phoneNumber">전화번호</StyledLabel>
+      <StyledInput
+        type="tel"
+        id="phoneNumber"
+        name="phoneNumber"
+        placeholder="00(0)-0000-0000"
+        onChange={handleChange}
+        ref={phoneNumberRef}
+        value={phoneNumber}></StyledInput>
+      {phoneNumberValidation ? (
+        <StyledValidationComment>올바른 전화번호입니다.</StyledValidationComment>
+      ) : (
+        <StyledValidationComment color="red">
+          &nbsp;
+          {phoneNumber.length === 0 ? null : '하이픈(-)을 넣어 입력하세요.'}
+        </StyledValidationComment>
+      )}
+
       <BtnLogin>회원가입</BtnLogin>
     </StyledForm>
   );

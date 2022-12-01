@@ -129,7 +129,7 @@ const StyledSecondBannerContent = styled.div``;
 const StyledImg = styled.img`
   width: 400px;
   box-shadow: 23px 16px 23px -20px rgba(0, 0, 0, 0.3);
-  margin-left: 240px;
+  margin-left: 220px;
 
   @media (max-width: 600px) {
     width: 340px;

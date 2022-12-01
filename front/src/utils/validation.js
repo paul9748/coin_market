@@ -16,8 +16,13 @@ export async function isEmailCheck(email) {
         return false;
       }
     });
-    return true;
   } catch (error) {
     console.log(error);
   }
+}
+
+export function phoneNumberValidator(phoneNumber) {
+  const phoneNumberRegex = new RegExp(/^\d{2,3}-\d{3,4}-\d{4}$/);
+
+  return phoneNumberRegex.test(phoneNumber);
 }

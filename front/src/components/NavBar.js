@@ -7,21 +7,31 @@ import ROUTE from 'utils/ROUTE';
 function NavBar(props) {
   const [isToggle, setIsToggle] = useState(false);
 
+  window.addEventListener('click', (e) => {
+    if (document.getElementById('navBar').contains(e.target)) {
+      //Clicked in box
+    } else {
+      //Clicked outside the box
+      setIsToggle(false);
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (isToggle) return setIsToggle(false);
+  });
+
   return (
-    <StyledNav>
+    <StyledNav id="navBar">
       <StyledBtn
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           setIsToggle((preState) => !preState);
-        }}
-        onBlur={() => {
-          setTimeout(() => setIsToggle(false), 100);
         }}
         color={props.color}>
         <StyledSpread></StyledSpread>
         <StyledSpread></StyledSpread>
         <StyledSpread></StyledSpread>
       </StyledBtn>
-      <StyledUl isToggle={isToggle}>
+      <StyledUl isToggle={isToggle} onBlur={(e) => e.stopPropagation()}>
         <li>
           <StyledLink to={ROUTE.ABOUT} color={props.color}>
             about
