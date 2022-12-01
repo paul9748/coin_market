@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(uuid())    
+  email    String    @unique
+  isEmailAuthorized    Boolean    @default(false)    @map("is_email_authorized")
+  password    String    
+  role    Role    @default(USER)
+  nickName    String    @map("nick_name")  
+  name    String    
+  phoneNumber    String     @map("phone_number")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  wallet Wallet[]
+  snsLogin SnsLogin[]
+  address Address[]
+  deal Deal[]
+  @@map("user")
+}
+
+enum Role {
+  ADMIN   @map("admin")
+  USER    @map("user")
+}
+
+model Deal {
+  id     String @id @default(uuid())   
+  user     User   @relation(fields: [userId], references: [id])
+  userId     String    @map("user_id")
+  dealStatus    DealStatus    @map("deal_status")
+  imageUrl    String?    @map("image_url")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  orderCoin OrderCoin[]
+  dealDetail DealDetail[]
+  @@map("deal")
+}
+
+enum DealStatus {
+  BUY    @map("buy")
+  SELL    @map("sell")
+}
+
+model OrderCoin {
+  id     String @id @default(uuid())
+  deal    Deal    @relation(fields: [dealId], references: [id])
+  dealId    String    @map("deal_id")
+  coin    Coin   @relation(fields: [coinId], references: [id])
+  coinId     String    @map("coin_id")
+  dealAmount    Int    @map("deal_amount")
+  @@map("order_coin")
+}
+
+model DealDetail {
+  id    String @id @default(uuid())   
+  deal    Deal   @relation(fields: [dealId], references: [id])
+  dealId    String    @map("deal_id")
+  resName    String    @map("res_name")
+  resAddress1    String    @map("res_address1")
+  resAddress2    String    @map("res_address2")
+  resStatus    ResStatus    @map("res_status")
+  company    String?
+  deliveryNumber    String?    @map("delivery_number")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("deal_detail")
+}
+
+enum ResStatus {
+  WAITING    @map("waiting")
+  SHIPPING    @map("shipping")
+  COMPLETION    @map("completion")
+}
+
+model Coin {
+  id    String @id @default(uuid())    
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId   String    @map("country_id")
+  currencyType    String    @map("currency_type")
+  unitAmount    Int    @map("unit_amount")
+  isUsed    Boolean    @map("is_used")    @default(true)
+  stockAmount    Int    @default(0)
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  orderCoin    OrderCoin[]
+  @@map("coin")
+}
+
+model Country {
+  id    String @id @default(uuid())    
+  countryName    String    @map("country_name")    
+  countryNameEng    String    @map("country_name_eng")    
+  countryCode    String    @map("country_code")    
+  exchangeRateCode    String?    @map("exchange_rate_code")  
+  stockAmount    Int    @default(0)    @map("stock_amount")
+  isHandled   Boolean    @default(true)    @map("is_handled")
+  currencyUnitName   String?    @map("currency_unit_name")
+  currencyUnitAbbr   String?    @map("currency_unit_abbr")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  countries_non_handling CountryNonHandling[]
+  coin Coin[]
+  @@map("country")
+}
+
+model Address {
+  id    String @id @default(uuid())    
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  addressName   String?    @map("address_name")
+  name    String    
+  phoneUumber    String    @map("phone_number")    
+  postalCode    String    @map("postal_code")
+  address1    String    
+  address2    String
+  isDefault    Boolean    @default(false)    @map("is_default")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("address")
+}
+
+model CountryNonHandling {
+  id    String @id @default(uuid())    
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId   String    @map("country_id") 
+  nonHandlingReason    NonHandlingReason    @default(SHORTAGE_DEALS)    @map("non_handling_reason")
+  startDate    Int    @map("start_date")    
+  endDate    Int    @default(99991231)    @map("end_date")
+  stockAmount    Int    @default(0)    @map("stock_amount")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("country_non_handling") 
+}
+
+enum NonHandlingReason {
+  TRAVEL_BAN_COUNTRY    @map("travel_ban_country")
+  SHORTAGE_DEALS    @map("shortage_deals")
+  @@map("_non_handling_reason") 
+}
+
+model Analysis {
+  id    String @id @default(uuid())    
+  imageUrl    String     @map("image_url")
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("analysis")
+  analysisDetails AnalysisDetail[]
+}
+
+model AnalysisDetail {
+  id    String @id @default(uuid())    
+  analysis   Analysis   @relation(fields: [analysisId], references: [id])
+  analysisId   String    @map("analysis_id")
+  coordinate    String
+  country    String?
+  currencyType    String?    @map("currency_type")
+  amount    Int?
+  createdAt DateTime @default(now())  @map("created_at")   
+  updatedAt DateTime @updatedAt  @map("updated_at")
+  @@map("analysis_detail")
+}
+
+model Wallet {
+  id    String @id @default(uuid())    
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  krwAmount    Int    @map("krw_amount")    
+  statement    String    
+  expirationDate    Int    @default(99991231)    @map("expiration_datetime")
+  @@map("wallet")
+}
+
+model SnsLogin {
+  id    String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId   String    @map("user_id")
+  snsType    String    @map("sns_type")    
+  snsName    String    @map("sns_name")
+  snsProfile    String?    @map("sns_profile")
+  snsId    String    @map("sns_id")
+  @@map("sns_login")
+}
