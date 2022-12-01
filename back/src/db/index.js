@@ -1,3 +1,4 @@
 import { User } from "./model/User";
+import { Address } from "./model/Address";
 
-module.exports = { User };
+module.exports = { User, Address };
