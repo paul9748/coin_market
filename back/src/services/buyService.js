@@ -87,9 +87,53 @@ class buyService {
           stockAmount: { increment: -i["dealAmount"] },
         },
       });
+      while (true) {
+        const stockOrder = await db.orderCoin.findMany({
+          where: {
+            coinId: i["coinId"],
+            deal: {
+              is: {
+                dealStatus: "SELL",
+                isActivate: 1,
+              },
+            },
+          },
+          take: 10,
+          orderBy: {
+            deal: {
+              updatedAt: "asc",
+            },
+          },
+        });
+        for (let j of stockOrder) {
+          if (j["stockAmount"] >= i["dealAmount"]) {
+            await db.orderCoin.update({
+              where: {
+                id: j["id"],
+              },
+              data: {
+                stockAmount: { increment: -i["dealAmount"] },
+              },
+            });
+            i["dealAmount"] = 0;
+            break;
+          } else if (j["stockAmount"] < i["dealAmount"]) {
+            await db.orderCoin.update({
+              where: {
+                id: j["id"],
+              },
+              data: {
+                stockAmount: 0,
+              },
+            });
+            i["dealAmount"] = i["dealAmount"] - j["stockAmount"];
+          }
+        }
+        if (i["dealAmount"] == 0) {
+          break;
+        }
+      }
     }
-    //TODO: 이거 이후에 각 판매 코인 날짜순으로 10개 정도 불러와서 총 구매 수량 이랑 거래완료 수량계산해서 판매 된 만큼 해당 유저 환전가능금액 변경 까지 해야함
-
     return "구매가 완료 되었습니다.: " + order["id"];
   }
 
