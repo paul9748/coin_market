@@ -56,8 +56,16 @@ class buyService {
   static async buyOrder(data) {
     let orderData = data["order"];
     let coins = data["coins"];
+    let dealDetail = data["address"];
     if (orderData["dealStatus"] != "BUY") {
       throw new Error("Bad Request");
+    }
+    if (
+      !("resAddress1" in dealDetail) ||
+      !("resAddress2" in dealDetail) ||
+      !("resName" in dealDetail)
+    ) {
+      throw new Error("주소누락");
     }
     for (let i of coins) {
       const stockData = await db.coin.findUnique({
@@ -65,7 +73,7 @@ class buyService {
         select: { stockAmount: true },
       });
       if (i["dealAmount"] > stockData["stockAmount"]) {
-        return "재고부족";
+        throw new Error("재고부족");
       }
     }
     orderData["userId"] = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
@@ -134,15 +142,13 @@ class buyService {
         }
       }
     }
-    return "구매가 완료 되었습니다.: " + order["id"];
-  }
-
-  static async findUserById(id) {
-    return db.user.findUnique({
-      where: {
-        id,
-      },
+    dealDetail["dealId"] = order["id"];
+    dealDetail["resStatus"] = "WAITING";
+    await db.DealDetail.create({
+      data: dealDetail,
     });
+
+    return "구매가 완료 되었습니다.: " + order["id"];
   }
 }
 export { buyService };

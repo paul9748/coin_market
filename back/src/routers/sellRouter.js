@@ -24,5 +24,18 @@ sellRouter.post("/sell/:dealId", async (req, res, next) => {
     next(err);
   }
 });
-
+sellRouter.post("/sell/:dealId/deliveryNumber", async (req, res, next) => {
+  try {
+    const dealId = req.params.dealId;
+    let data = {};
+    data["dealId"] = dealId;
+    data["deliveryNumber"] = req.body["deliveryNumber"];
+    // data에 로그인 유저 정보도 주기
+    let orderData = await sellService.SellOrderAddressesAdd(data);
+    res.json(orderData);
+  } catch (err) {
+    next(err);
+  }
+});
+//deliveryNumber
 export { sellRouter };

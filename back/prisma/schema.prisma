@@ -59,9 +59,9 @@ model OrderCoin {
 model DealDetail {
   id             String               @id @default(uuid())
   dealId         String               @map("deal_id")
-  resName        String               @map("res_name")
-  resAddress1    String               @map("res_address1")
-  resAddress2    String               @map("res_address2")
+  resName        String?              @map("res_name")
+  resAddress1    String?              @map("res_address1")
+  resAddress2    String?              @map("res_address2")
   resStatus      DealDetail_resStatus @map("res_status")
   company        String?
   deliveryNumber String?              @map("delivery_number")

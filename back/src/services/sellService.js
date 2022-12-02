@@ -71,8 +71,49 @@ class sellService {
         isActivate: 1,
       },
     });
+    const dealDetail = {};
 
     return "주문처리가 완료되었습니다 : " + dealId;
+  }
+
+  static async SellOrderAddressesAdd(data) {
+    const userId = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    const deal = await db.deal.findUnique({
+      where: {
+        id: data["dealId"],
+      },
+    });
+    if (deal.userId != userId) {
+      throw new Error("본인 거래가 아닙니다");
+    }
+    if (deal.dealStatus != "SELL") {
+      throw new Error("판매가 아닙니다");
+    }
+    const dealDetail = await db.dealDetail.findFirst({
+      where: {
+        dealId: data["dealId"],
+      },
+    });
+    if (dealDetail == null) {
+      let dealDetail_data = {};
+      dealDetail_data["dealId"] = data["dealId"];
+      dealDetail_data["deliveryNumber"] = data["deliveryNumber"];
+      dealDetail_data["resStatus"] = "WAITING";
+      await db.DealDetail.create({
+        data: dealDetail_data,
+      });
+      return "운송장번호가 업로드 되었습니다";
+    } else {
+      await db.DealDetail.update({
+        where: {
+          id: dealDetail["id"],
+        },
+        data: {
+          deliveryNumber: data["deliveryNumber"],
+        },
+      });
+      return "운송장번호가 변경 되었습니다";
+    }
   }
 }
 export { sellService };
