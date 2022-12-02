@@ -17,29 +17,29 @@ commonRouter.get("/exchangeRate", async (req, res, next) => {
   }
 });
 
-commonRouter.get("/counties", async (req, res, next) => {
+commonRouter.get("/countries/currencyType", async (req, res, next) => {
   try {
-    const { handled } = req.query;
     let data;
-    if (handled == false) {
-      data = await commonService.getCountryNotHandling(userId);
+    if (req.query["countryCode"]) {
+      data = await commonService.getCurrencyInfo(req.query["countryCode"]);
+    } else {
+      data = await commonService.getAllCurrencyInfo();
     }
-    const user = await commonService.getCountryNotHandling(userId);
-    delete user.password;
-    res.json(user);
+    res.json(data);
   } catch (err) {
     next(err);
   }
 });
-// commonRouter.post("/common", async (req, res, next) => {
-//   try {
-//     const data = req.body;
-//     console.log(data);
-//     let user = await commonService.commonOrder(data);
-//     res.json(user);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+
+commonRouter.get("/counties", async (req, res, next) => {
+  try {
+    const data = await commonService.getCountiesInfo(
+      JSON.parse(req.query["isHandled"])
+    );
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
 
 export { commonRouter };

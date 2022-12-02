@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const { db } = require("../db/db");
 import { v4 } from "uuid";
 class buyService {
-  //
   static async getCountryInfo(countryCode) {
     const countryId = await db.Country.findFirst({
       where: {
@@ -53,12 +52,12 @@ class buyService {
     return re_data;
   }
 
-  //todo deal_details 만들기
+  //TODO: deal_details 만들기
   static async buyOrder(data) {
     let orderData = data["order"];
     let coins = data["coins"];
     if (orderData["dealStatus"] != "BUY") {
-      return new err("Bad Request");
+      throw new Error("Bad Request");
     }
     for (let i of coins) {
       const stockData = await db.coin.findUnique({
@@ -69,7 +68,8 @@ class buyService {
         return "재고부족";
       }
     }
-    orderData["userId"] = "12345678";
+    orderData["userId"] = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    orderData["isActivate"] = 1;
     let order = await db.deal.create({
       data: orderData,
     });
@@ -88,8 +88,9 @@ class buyService {
         },
       });
     }
+    //TODO: 이거 이후에 각 판매 코인 날짜순으로 10개 정도 불러와서 총 구매 수량 이랑 거래완료 수량계산해서 판매 된 만큼 해당 유저 환전가능금액 변경 까지 해야함
 
-    return "Complete purchase order : " + order["id"];
+    return "구매가 완료 되었습니다.: " + order["id"];
   }
 
   static async findUserById(id) {

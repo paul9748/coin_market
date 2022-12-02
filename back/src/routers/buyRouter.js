@@ -18,7 +18,6 @@ buyRouter.get("/countries/currencyType", async (req, res, next) => {
 buyRouter.post("/buy", async (req, res, next) => {
   try {
     const data = req.body;
-    console.log(data);
     let user = await buyService.buyOrder(data);
     res.json(user);
   } catch (err) {

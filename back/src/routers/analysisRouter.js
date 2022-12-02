@@ -8,7 +8,7 @@ analysisRouter.put(
   async (req, res, next) => {
     try {
       const { path, filename } = req.file;
-      res.json(path);
+      res.json(filename);
     } catch (err) {
       next(err);
     }

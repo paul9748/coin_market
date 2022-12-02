@@ -3,7 +3,7 @@ const { db } = require("../db/db");
 import { v4 } from "uuid";
 class commonService {
   //
-  static async getCountryInfo(countryCode) {
+  static async getCurrencyInfo(countryCode) {
     const countryId = await db.Country.findFirst({
       where: {
         countryCode: countryCode,
@@ -25,7 +25,7 @@ class commonService {
     });
   }
 
-  static async getAllInfo() {
+  static async getAllCurrencyInfo() {
     let data = await db.coin.findMany({
       select: {
         country: {
@@ -53,49 +53,10 @@ class commonService {
     return re_data;
   }
 
-  //todo deal_details 만들기
-  static async commonOrder(data) {
-    let orderData = data["order"];
-    let coins = data["coins"];
-    if (orderData["dealStatus"] != "common") {
-      return new err("Bad Request");
-    }
-    for (let i of coins) {
-      const stockData = await db.coin.findUnique({
-        where: { id: i["coinId"] },
-        select: { stockAmount: true },
-      });
-      if (i["dealAmount"] > stockData["stockAmount"]) {
-        return "재고부족";
-      }
-    }
-    orderData["userId"] = "12345678";
-    let order = await db.deal.create({
-      data: orderData,
-    });
-
-    for (let i of coins) {
-      i["dealId"] = order["id"];
-      await db.OrderCoin.create({
-        data: i,
-      });
-      await db.coin.update({
-        where: {
-          id: i["coinId"],
-        },
-        data: {
-          stockAmount: { increment: -i["dealAmount"] },
-        },
-      });
-    }
-
-    return "Complete purchase order : " + order["id"];
-  }
-
-  static async findUserById(id) {
-    return db.user.findUnique({
+  static async getCountiesInfo(isHandled) {
+    return db.country.findMany({
       where: {
-        id,
+        isHandled: isHandled,
       },
     });
   }
