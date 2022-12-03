@@ -8,7 +8,7 @@ import * as Api from 'api/api';
 import ROUTE from 'utils/ROUTE';
 
 function RegisterForm() {
-  const initialValue = { email: '', password: '', nickName: '', phoneNumber: '' };
+  const initialValue = { email: '', password: '', userName: '', phoneNumber: '' };
 
   const idRef = useRef(null);
   const pwRef = useRef(null);
@@ -19,8 +19,6 @@ function RegisterForm() {
   const navigate = useNavigate();
   const [user, setUser] = useState(initialValue);
   const [passwordCheck, setPasswordCheck] = useState('');
-
-  const [isError, setIsError] = useState({ error: '', errorMessage: '' });
 
   const handleChange = (e) => {
     const newUser = { ...user };
@@ -37,13 +35,13 @@ function RegisterForm() {
     return setPasswordCheck(e.target.value);
   };
 
-  const { email, password, nickName, phoneNumber } = user;
+  const { email, password, userName, phoneNumber } = user;
 
   const idValidation =
     email?.length >= 6 && email?.length <= 30 && emailvalidation(email);
 
   const passwordValidation = password?.length >= 4 && password?.length <= 30;
-  const nickNameValidation = nickName?.length >= 2 && nickName?.length <= 14;
+  const userNameValidation = userName?.length >= 2 && userName?.length <= 14;
   const phoneNumberValidation = phoneNumberValidator(phoneNumber);
 
   const handleSubmit = async (e) => {
@@ -52,23 +50,16 @@ function RegisterForm() {
     if (!idValidation) return idRef.current.focus();
     if (!passwordValidation) return pwRef.current.focus();
     if (!password === passwordCheck) return pwCheckRef.current.focus();
-    if (!nickNameValidation) return nameRef.current.focus();
+    if (!userNameValidation) return nameRef.current.focus();
     if (!phoneNumberValidation) return phoneNumberRef.current.focus();
 
     try {
-      const response = await Api.post('/user/register', user);
-
-      const { error, errorMessage } = response.data;
-
-      if (error) {
-        const newError = { ...isError, error, errorMessage };
-        setIsError(newError);
-        return idRef.current.focus();
-      } else {
-        navigate(ROUTE.LOGIN);
-      }
+      const response = await Api.post('users/register', user);
+      console.log(response.data);
+      setUser(initialValue);
+      navigate(ROUTE.LOGIN);
     } catch (error) {
-      console.log(error);
+      alert(error.response.data);
       setUser(initialValue);
     }
   };
@@ -130,21 +121,21 @@ function RegisterForm() {
             : '비밀번호가 일치하지 않습니다.'}
         </StyledValidationComment>
       )}
-      <StyledLabel htmlFor="nickName">성명</StyledLabel>
+      <StyledLabel htmlFor="userName">성명</StyledLabel>
       <StyledInput
         type="text"
-        id="nickName"
-        name="nickName"
+        id="userName"
+        name="userName"
         placeholder="영문/숫자 2자 이상 14자 이하"
         onChange={handleChange}
         ref={nameRef}
-        value={nickName}></StyledInput>
-      {nickNameValidation ? (
+        value={userName}></StyledInput>
+      {userNameValidation ? (
         <StyledValidationComment>올바른 형식입니다.</StyledValidationComment>
       ) : (
         <StyledValidationComment color="red">
           &nbsp;
-          {nickName.length === 0 ? null : '영문/숫자 2자 이상 14자 이하 입력하세요.'}
+          {userName.length === 0 ? null : '영문/숫자 2자 이상 14자 이하 입력하세요.'}
         </StyledValidationComment>
       )}
 

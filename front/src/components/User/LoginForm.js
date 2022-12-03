@@ -31,11 +31,15 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await Api.post('/login', { email, password });
+      const response = await Api.post('users/login', { email, password });
       console.log(response.data);
+
       navigate('/');
     } catch (error) {
       console.log(error);
+      alert(error.response.data);
+      // setEmail('');
+      // setPassword('');
     }
   };
 
