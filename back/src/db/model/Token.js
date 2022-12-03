@@ -19,6 +19,15 @@ class Token {
     return token;
   }
 
+  static async findTokenByToken(refreshToken) {
+    const data = db.userToken.findUnique({
+      where: {
+        refreshToken,
+      },
+    });
+    return data;
+  }
+
   static async updateToken(userId, refreshToken) {
     const updatedToken = db.userToken.update({
       where: {
