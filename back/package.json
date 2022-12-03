@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/",
   "dependencies": {
-    "@prisma/client": "^4.6.1",
+    "@prisma/client": "^4.7.1",
     "@sindresorhus/is": "^4.2.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.20.2",
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
-    "prisma": "^4.6.1"
+    "prisma": "^4.7.1"
   },
   "jest": {
     "testEnvironment": "node",
