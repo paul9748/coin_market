@@ -30,14 +30,13 @@ class User {
     return user;
   }
 
-  static async updateUser({ id, name, nickName, phoneNumber }) {
+  static async updateUser({ id, userName, phoneNumber }) {
     const user = db.user.update({
       where: {
         id,
       },
       data: {
-        name,
-        nickName,
+        userName,
         phoneNumber,
       },
     });

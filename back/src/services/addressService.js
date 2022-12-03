@@ -1,5 +1,5 @@
-import { User } from "../db/index";
-import { Address } from "../db/index";
+import { User } from "../db/model/User";
+import { Address } from "../db/model/Address";
 
 class addressService {
   //주소등록

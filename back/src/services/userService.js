@@ -1,6 +1,6 @@
-import { User } from "../db/index";
+import { User } from "../db/model/User";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { tokenService } from "./tokenService";
 
 class userService {
   //회원가입
@@ -26,7 +26,7 @@ class userService {
       throw new Error("가입되어있지 않은 이메일입니다.");
     }
 
-    if (user.role == "WITHDRAWAL") {
+    if (user.role == "withdrawal") {
       throw new Error("탈퇴한 유저입니다.");
     }
 
@@ -36,10 +36,24 @@ class userService {
       throw new Error("비밀번호가 틀렸습니다.");
     }
 
-    const secretKey = process.env.JWT_SECRET_KEY;
-    const token = jwt.sign({ id: user.id }, secretKey);
+    const newToken = tokenService.createToken(user.id);
+    const data = {
+      userId: user.id,
+      refreshToken: (await newToken).refresh_token,
+    };
 
-    return token;
+    const findToken = await tokenService.findToken(user.id);
+    if (findToken) {
+      const updateToken = await tokenService.updateToken(
+        user.id,
+        data.refreshToken
+      );
+      return newToken;
+    } else {
+      const createDb = await tokenService.createdTokenDb(data);
+
+      return newToken;
+    }
   }
 
   //회원정보조회
@@ -54,7 +68,7 @@ class userService {
     return user;
   }
 
-  //회원정보수정
+  //회원정보수정 , 회원탈퇴
   static async userUpdate(id, body) {
     const user = await User.findUserById(id);
     if (!user) {
@@ -62,13 +76,11 @@ class userService {
     }
 
     if (!body.role) {
-      const name = body.name;
-      const nickName = body.nickName;
+      const userName = body.userName;
       const phoneNumber = body.phoneNumber;
       const updatedUser = await User.updateUser({
         id,
-        name,
-        nickName,
+        userName,
         phoneNumber,
       });
       delete updatedUser.password;

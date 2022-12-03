@@ -91,7 +91,7 @@ userAuthRouter.put(
   loginRequired,
   async (req, res, next) => {
     try {
-      const body = { role: "WITHDRAWAL" };
+      const body = { role: "withdrawal" };
       const user = await userService.userUpdate(req.userId, body);
 
       res.status(204).send("회원탈퇴 신청이 완료되었습니다.");
@@ -100,5 +100,7 @@ userAuthRouter.put(
     }
   }
 );
+
+//
 
 export { userAuthRouter };
