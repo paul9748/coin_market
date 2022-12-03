@@ -9,7 +9,7 @@ class sellService {
       throw new Error("Bad Request");
     }
     let coins = data["coins"];
-    orderData["userId"] = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    orderData["userId"] = data["userId"];
     let order = await db.deal.create({
       data: orderData,
     });
@@ -26,7 +26,7 @@ class sellService {
   static async fixSellOrder(data) {
     //TODO: 로그인 서비스랑 연결 해야함
     const dealId = data["dealId"];
-    const userId = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    const userId = data["userId"];
     const deal = await db.deal.findUnique({
       where: {
         id: dealId,
@@ -77,7 +77,7 @@ class sellService {
   }
 
   static async SellOrderAddressesAdd(data) {
-    const userId = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    const userId = data["userId"];
     const deal = await db.deal.findUnique({
       where: {
         id: data["dealId"],

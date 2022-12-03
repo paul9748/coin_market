@@ -76,7 +76,7 @@ class buyService {
         throw new Error("재고부족");
       }
     }
-    orderData["userId"] = "4dc026c8-30b3-4510-a8d1-3dd6df8ba43e";
+    orderData["userId"] = data["userId"];
     orderData["isActivate"] = 1;
     let order = await db.deal.create({
       data: orderData,
