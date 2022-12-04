@@ -29,6 +29,12 @@ class tokenService {
     return token;
   }
 
+  //유저 확인
+  static async findUser(refreshToken) {
+    const data = await Token.findTokenByToken(refreshToken);
+    return data.userId;
+  }
+
   //토큰 갱신
   static async updateToken(userId, refreshToken) {
     const updatedToken = await Token.updateToken(userId, refreshToken);
