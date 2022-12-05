@@ -10,9 +10,9 @@ function Header(props) {
       <div>
         <Link to="/">
           {props.logoImage === 'white' ? (
-            <StyledImg src={logo_white} alt={'logo'}></StyledImg>
+            <StyledImg src={logo_white} alt="logo"></StyledImg>
           ) : (
-            <StyledImg src={logo_mint} alt={'logo'}></StyledImg>
+            <StyledImg src={logo_mint} alt="logo"></StyledImg>
           )}
         </Link>
       </div>

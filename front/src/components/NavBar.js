@@ -1,22 +1,42 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ROUTE from 'utils/ROUTE';
+import useProvideAuth from 'hooks/useProvideAuth';
+import InfoModal from './InfoModal';
 
 function NavBar(props) {
   const [isToggle, setIsToggle] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
-  window.addEventListener('click', (e) => {
-    if (document.getElementById('navBar').contains(e.target)) {
-      //Clicked in box
-    } else {
-      //Clicked outside the box
-      setIsToggle(false);
-    }
-  });
-  window.addEventListener('resize', () => {
-    if (isToggle) return setIsToggle(false);
+  const isLogin = useProvideAuth();
+
+  useEffect(() => {
+    window.addEventListener('click', (e) => {
+      if (document.getElementById('navBar').contains(e.target)) {
+        //Clicked in box
+      } else {
+        //Clicked outside the box
+        setIsToggle(false);
+        setIsModal(false);
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (isToggle) return setIsToggle(false), setIsModal(false);
+    });
+
+    return () => {
+      window.removeEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+
+      window.removeEventListener('resize', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    };
   });
 
   return (
@@ -25,6 +45,7 @@ function NavBar(props) {
         onClick={(e) => {
           e.stopPropagation();
           setIsToggle((preState) => !preState);
+          setIsModal(false);
         }}
         color={props.color}>
         <StyledSpread></StyledSpread>
@@ -50,12 +71,24 @@ function NavBar(props) {
           </StyledLink>
         </li>
 
-        <li>
-          <StyledLink to={ROUTE.LOGIN} color={props.color}>
-            로그인
-          </StyledLink>
-        </li>
+        {isLogin ? (
+          <StyledMyinfoBtn
+            color={props.color}
+            onClick={() => {
+              setIsModal((preState) => !preState);
+              setIsToggle(false);
+            }}>
+            내정보
+          </StyledMyinfoBtn>
+        ) : (
+          <li>
+            <StyledLink to={ROUTE.LOGIN} color={props.color}>
+              로그인
+            </StyledLink>
+          </li>
+        )}
       </StyledUl>
+      {isModal ? <InfoModal color={props.color}></InfoModal> : null}
     </StyledNav>
   );
 }
@@ -136,5 +169,23 @@ const StyledLink = styled(Link)`
 
   @media (max-width: 600px) {
     color: black;
+  }
+`;
+
+const StyledMyinfoBtn = styled.button`
+  height: 60px;
+  padding: 10px 20px;
+  display: block;
+  border: none;
+  color: ${(props) => props.color};
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 600px) {
+    margin: 0 auto;
   }
 `;

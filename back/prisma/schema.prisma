@@ -94,6 +94,7 @@ model Coin {
   dealAmount   Int         @default(0)
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
+  dealAmount   Int         @default(0)
   country      Country     @relation(fields: [countryId], references: [id])
   orderCoin    OrderCoin[]
 

@@ -5,6 +5,7 @@ const ROUTE = {
   REGISTER: '/register',
   SELL: '/sell',
   BUY: '/buy',
+  MYPAGE: '/mypage',
 };
 
 export default ROUTE;
