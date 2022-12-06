@@ -1,14 +1,18 @@
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
+
+import * as Api from 'api/api';
 
 import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
-import { useEffect, useState } from 'react';
 
 function SelectCoin() {
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
+  const [exchangeRate, setExchangeRate] = useState();
 
   const handleClick = (e) => {
     if (selectNation.length === 0) {
@@ -20,27 +24,39 @@ function SelectCoin() {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const respose = await Api.get(`exchangeRate?countryCode=${selectNation}`);
+        setExchangeRate(respose.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (selectNation.length !== 0 && selectNation !== 'korea') {
+      fetchData();
+    }
+  }, [selectNation]);
 
   return (
     <StyledWrapper>
       <StyledDiv>국가를 선택하세요.</StyledDiv>
       <StyledDiv>
         <StyledSelectWrapper isClick={isClick}>
-          {selectNation === 'japan' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="japan" onClick={handleClick}>
+          {selectNation === 'JPY' || selectNation.length === 0 ? (
+            <StyeldSelectContent id="JPY" onClick={handleClick}>
               <StyledImg src={japan}></StyledImg>
               <span>일본</span>
             </StyeldSelectContent>
           ) : null}
-          {selectNation === 'china' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="china" onClick={handleClick}>
+          {selectNation === 'CNY' || selectNation.length === 0 ? (
+            <StyeldSelectContent id="CNY" onClick={handleClick}>
               <StyledImg src={china}></StyledImg>
               <span>중국</span>
             </StyeldSelectContent>
           ) : null}
-          {selectNation === 'usa' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="usa" onClick={handleClick}>
+          {selectNation === 'USD' || selectNation.length === 0 ? (
+            <StyeldSelectContent id="USD" onClick={handleClick}>
               <StyledImg src={usa}></StyledImg>
               <span>미국</span>
             </StyeldSelectContent>
@@ -63,7 +79,7 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* height: 700px; */
+  height: 700px;
   flex-wrap: wrap;
 
   @media (max-width: 820px) {
