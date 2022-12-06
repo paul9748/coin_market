@@ -9,7 +9,7 @@ class commonService {
   }
 
   static async getAllCurrencyInfo() {
-    return findAllCoinsSlotByCountry();
+    return Common.findAllCoinsSlotByCountry();
   }
 
   static async getCountiesInfo(isHandled) {
