@@ -13,10 +13,10 @@ model User {
   isEmailAuthorized Boolean    @default(false) @map("is_email_authorized")
   password          String
   role              User_role  @default(user)
-  userName          String
   phoneNumber       String     @map("phone_number")
   createdAt         DateTime   @default(now()) @map("created_at")
   updatedAt         DateTime   @updatedAt @map("updated_at")
+  userName          String
   address           Address[]
   deal              Deal[]
   snsLogin          SnsLogin[]
@@ -55,13 +55,13 @@ model Deal {
 }
 
 model OrderCoin {
-  id           String @id @default(uuid())
-  dealId       String @map("deal_id")
-  coinId       String @map("coin_id")
-  dealAmount   Int    @map("deal_amount")
+  id          String @id @default(uuid())
+  dealId      String @map("deal_id")
+  coinId      String @map("coin_id")
+  dealAmount  Int    @map("deal_amount")
   stockAmount Int    @default(0) @map("stock Amount")
-  coin         Coin   @relation(fields: [coinId], references: [id])
-  deal         Deal   @relation(fields: [dealId], references: [id])
+  coin        Coin   @relation(fields: [coinId], references: [id])
+  deal        Deal   @relation(fields: [dealId], references: [id])
 
   @@index([coinId], map: "order_coin_coin_id_fkey")
   @@index([dealId], map: "order_coin_deal_id_fkey")
@@ -92,9 +92,9 @@ model Coin {
   unitAmount   Int         @map("unit_amount")
   isUsed       Boolean     @default(true) @map("is_used")
   stockAmount  Int         @default(0)
-  dealAmount   Int         @default(0)
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
+  dealAmount   Int         @default(0)
   country      Country     @relation(fields: [countryId], references: [id])
   orderCoin    OrderCoin[]
 
