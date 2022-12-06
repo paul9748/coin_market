@@ -47,7 +47,7 @@ model Deal {
   updatedAt  DateTime        @updatedAt @map("updated_at")
   isActivate Int             @db.TinyInt
   user       User            @relation(fields: [userId], references: [id])
-  dealDetail DealDetail[]
+  delivery   delivery?
   orderCoin  OrderCoin[]
 
   @@index([userId], map: "deal_user_id_fkey")
@@ -66,23 +66,6 @@ model OrderCoin {
   @@index([coinId], map: "order_coin_coin_id_fkey")
   @@index([dealId], map: "order_coin_deal_id_fkey")
   @@map("order_coin")
-}
-
-model DealDetail {
-  id             String               @id @default(uuid())
-  dealId         String               @map("deal_id")
-  resName        String               @map("res_name")
-  resAddress1    String               @map("res_address1")
-  resAddress2    String               @map("res_address2")
-  resStatus      DealDetail_resStatus @map("res_status")
-  company        String?
-  deliveryNumber String?              @map("delivery_number")
-  createdAt      DateTime             @default(now()) @map("created_at")
-  updatedAt      DateTime             @updatedAt @map("updated_at")
-  deal           Deal                 @relation(fields: [dealId], references: [id])
-
-  @@index([dealId], map: "deal_detail_deal_id_fkey")
-  @@map("deal_detail")
 }
 
 model Coin {
@@ -203,19 +186,34 @@ model SnsLogin {
   @@map("sns_login")
 }
 
+model delivery {
+  id             String               @id @default(uuid())
+  dealId         String               @map("deal_id")@unique
+  resName        String               @map("res_name")
+  resAddress1    String               @map("res_address1")
+  resAddress2    String               @map("res_address2")
+  resStatus      delivery_res_status @map("res_status")
+  company        String?
+  deliveryNumber String?              @map("delivery_number")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  Deal            Deal                @relation(fields: [dealId], references: [id])
+
+
+
+
+  @@index([dealId], map: "delivery_deal_id_fkey")
+
+
+
+  
+}
+
 enum Deal_dealStatus {
   BUY  @map("buy")
   SELL @map("sell")
 
   @@map("DealStatus")
-}
-
-enum DealDetail_resStatus {
-  WAITING    @map("waiting")
-  SHIPPING   @map("shipping")
-  COMPLETION @map("completion")
-
-  @@map("ResStatus")
 }
 
 enum CountryNonHandling_nonHandlingReason {
@@ -231,4 +229,10 @@ enum User_role {
   withdrawal
 
   @@map("user_role")
+}
+
+enum delivery_res_status {
+  waiting
+  delivery
+  completion
 }

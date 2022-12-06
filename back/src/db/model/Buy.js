@@ -58,8 +58,8 @@ class Buy {
       },
     });
   }
-  static async createOrderCoin(dealId, coinId, dealAmount) {
-    return await db.OrderCoin.create({
+  static createOrderCoin(dealId, coinId, dealAmount) {
+    return db.OrderCoin.create({
       data: {
         dealId: dealId,
         coinId: coinId,
@@ -67,8 +67,8 @@ class Buy {
       },
     });
   }
-  static async coinStockUpdate(coinId, dealAmount) {
-    return await db.coin.update({
+  static coinStockUpdate(coinId, dealAmount) {
+    return db.coin.update({
       where: {
         id: coinId,
       },
@@ -97,8 +97,8 @@ class Buy {
     });
   }
 
-  static async orderCoinUpdate(id, stockAmount) {
-    return await db.orderCoin.update({
+  static orderCoinUpdate(id, stockAmount) {
+    return db.orderCoin.update({
       where: {
         id: id,
       },
@@ -108,7 +108,7 @@ class Buy {
     });
   }
   static async dealDetailCreate(dealDetail) {
-    return await db.DealDetail.create({
+    return await db.delivery.create({
       data: dealDetail,
     });
   }

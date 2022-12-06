@@ -105,12 +105,12 @@ class Sell {
     });
   }
   static async dealDetailCreate(dealDetail) {
-    return await db.DealDetail.create({
+    return await db.delivery.create({
       data: dealDetail,
     });
   }
   static async dealDetailUpdateDeliveryNumber(dealDetail) {
-    return await db.DealDetail.update({
+    return await db.delivery.update({
       where: {
         id: dealDetail["id"],
       },
@@ -132,7 +132,7 @@ class Sell {
   }
 
   static async findDealDetailByDealId(dealId) {
-    return await db.dealDetail.findFirst({
+    return await db.delivery.findFirst({
       where: {
         dealId,
       },
