@@ -52,8 +52,14 @@ class addressService {
   }
 
   //주소 기본배송지 설정
-  static async defaultAddress(id) {
-    const defaultAddress = await Address.defaultAddress(id);
+  static async defaultAddress(userId, id) {
+    const findAddress = await Address.findAddressesByUserId(userId);
+    // 주소 리스트에서 디폴트 1인값 걸러줘야함
+    console.log(findAddress);
+    // if (findAddress.filter({isDefault : true})) {
+
+    // }
+    // const defaultAddress = await Address.defaultAddress(id);
 
     return defaultAddress;
   }

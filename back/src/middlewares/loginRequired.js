@@ -16,10 +16,19 @@ const loginRequired = (req, res, next) => {
 
   try {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    const jwtDecoded = jwt.verify(userToken, secretKey);
-    const id = jwtDecoded.id;
-    req.userId = id;
-    next();
+    const jwtDecoded = jwt.verify(userToken, secretKey, (err, decoded) => {
+      if (err) {
+        const newError = {
+          name: err.name,
+          message: err.message,
+          expiredAt: err.expiredAt,
+        };
+        console.log(newError);
+      }
+      const id = decoded.id;
+      req.userId = id;
+      next();
+    });
   } catch (error) {
     res.status(490).json({
       result: "forbidden-approach",

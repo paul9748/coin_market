@@ -117,5 +117,12 @@ class userService {
 
     return user;
   }
+
+  //메일 인증 처리
+  static async authMailUpdate(userId) {
+    const user = await User.authMailUpdate(userId);
+
+    return user;
+  }
 }
 export { userService };

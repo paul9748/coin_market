@@ -2,18 +2,10 @@ import { db } from "../db";
 import { v4 } from "uuid";
 
 class Wallet {
-  static async createWallet(data) {
-    data.id = v4();
-    const wallet = db.wallet.create({
-      data,
-    });
-    return wallet;
-  }
-
-  static async findWalletByUserId(id) {
-    const wallet = db.wallet.findUnique({
+  static async findWalletByUserId(userId) {
+    const wallet = db.wallet.findMany({
       where: {
-        id,
+        userId,
       },
     });
     return wallet;
