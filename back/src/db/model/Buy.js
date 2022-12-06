@@ -108,7 +108,7 @@ class Buy {
     });
   }
   static async dealDetailCreate(dealDetail) {
-    return await db.DealDetail.create({
+    return await db.delivery.create({
       data: dealDetail,
     });
   }

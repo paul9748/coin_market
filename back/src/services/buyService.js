@@ -90,7 +90,7 @@ class buyService {
       }
     }
     dealDetail["dealId"] = order["id"];
-    dealDetail["resStatus"] = "WAITING";
+    dealDetail["resStatus"] = "waiting";
     await Buy.dealDetailCreate(dealDetail);
 
     return "구매가 완료 되었습니다.: " + order["id"];

@@ -6,9 +6,6 @@ const commonRouter = Router();
 
 commonRouter.get("/exchangeRate", async (req, res, next) => {
   try {
-    setTimeout(() => {
-      throw new Error("Timeout");
-    }, 500);
     const secretKey = process.env.JWT_SECRET_KEY;
     let url =
       "https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRW" +
