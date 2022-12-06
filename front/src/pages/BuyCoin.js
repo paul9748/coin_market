@@ -30,7 +30,7 @@ function BuyCoin() {
           )}
           <StyledBtn
             onClick={() => {
-              currentStep < 5 && setCurrentStep((preState) => preState + 1);
+              currentStep < 3 && setCurrentStep((preState) => preState + 1);
             }}>
             {currentStep === 0 ? '구매하기' : '다음'}
           </StyledBtn>

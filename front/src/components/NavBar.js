@@ -187,5 +187,6 @@ const StyledMyinfoBtn = styled.button`
   }
   @media (max-width: 600px) {
     margin: 0 auto;
+    color: black;
   }
 `;

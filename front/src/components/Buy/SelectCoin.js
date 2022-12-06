@@ -8,11 +8,12 @@ import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
+import SelectCoinCount from './SelectCoinCount';
 
 function SelectCoin() {
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
-  const [exchangeRate, setExchangeRate] = useState();
+  const [coinStock, setCoinStock] = useState();
 
   const handleClick = (e) => {
     if (selectNation.length === 0) {
@@ -27,20 +28,28 @@ function SelectCoin() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const respose = await Api.get(`exchangeRate?countryCode=${selectNation}`);
-        setExchangeRate(respose.data);
+        const response = await Api.get(
+          `countries/currencyType?countryCode=${selectNation}`
+        );
+        setCoinStock(response.data);
       } catch (err) {
         console.log(err);
       }
     };
-    if (selectNation.length !== 0 && selectNation !== 'korea') {
+    if (selectNation.length !== 0 && selectNation !== 'KRW') {
       fetchData();
     }
   }, [selectNation]);
 
   return (
     <StyledWrapper>
-      <StyledDiv>국가를 선택하세요.</StyledDiv>
+      {selectNation.length === 0 ? (
+        <StyledDiv>국가를 선택하세요.</StyledDiv>
+      ) : (
+        <SelectCoinCount
+          selectNation={selectNation}
+          coinStock={coinStock}></SelectCoinCount>
+      )}
       <StyledDiv>
         <StyledSelectWrapper isClick={isClick}>
           {selectNation === 'JPY' || selectNation.length === 0 ? (
@@ -61,8 +70,8 @@ function SelectCoin() {
               <span>미국</span>
             </StyeldSelectContent>
           ) : null}
-          {selectNation === 'korea' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="korea" onClick={handleClick}>
+          {selectNation === 'KRW' || selectNation.length === 0 ? (
+            <StyeldSelectContent id="KRW" onClick={handleClick}>
               <StyledImg src={korea}></StyledImg>
               <span>한국</span>
             </StyeldSelectContent>
@@ -79,11 +88,10 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 700px;
   flex-wrap: wrap;
 
   @media (max-width: 820px) {
-    flex-direction: column;
+    flex-wrap: wrap-reverse;
   }
 `;
 const StyledDiv = styled.div`
@@ -91,7 +99,7 @@ const StyledDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: 350px;
 `;
 
 const StyledSelectWrapper = styled.div`
@@ -102,8 +110,11 @@ const StyledSelectWrapper = styled.div`
   border: 10px solid rgba(42, 193, 188, 0.5);
   margin: 10px 20px;
   border-radius: 15px;
-  width: 340px;
+  width: 300px;
   height: 320px;
+  @media (max-width: 600px) {
+    width: 400px;
+  }
 `;
 
 const StyeldSelectContent = styled.div`
