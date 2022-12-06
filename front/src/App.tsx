@@ -5,22 +5,26 @@ import ROUTE from 'utils/ROUTE';
 
 import Login from 'pages/Login';
 import Main from 'pages/Main';
+import BuyCoin from 'pages/BuyCoin';
 import SellCoin from 'pages/SellCoin';
 import NotFound from 'pages/NotFound';
 import Register from 'pages/Register';
 import MyPage from 'pages/MyPage';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import About from 'pages/About';
 
 function App() {
   return (
     <div className="App">
       <GlobalStyle />
       <Router>
-        <GoogleOAuthProvider clientId="602643910111-25m9cjpo5k0l08s9j1fuf37fan016slb.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={`${process.env.REACT_APP_CLIENT_ID}`}>
           <Routes>
             <Route path={ROUTE.MAIN} element={<Main />}></Route>
             <Route path={ROUTE.LOGIN} element={<Login />}></Route>
+            <Route path={ROUTE.ABOUT} element={<About />}></Route>
+            <Route path={ROUTE.BUY} element={<BuyCoin />}></Route>
             <Route path={ROUTE.SELL} element={<SellCoin />}></Route>
             <Route path={ROUTE.REGISTER} element={<Register />}></Route>
             <Route path={ROUTE.MYPAGE} element={<MyPage />}></Route>

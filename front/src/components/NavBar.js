@@ -37,7 +37,7 @@ function NavBar(props) {
         e.stopPropagation();
       });
     };
-  });
+  }, [isToggle]);
 
   return (
     <StyledNav id="navBar">

@@ -8,7 +8,6 @@ import { emailvalidation } from 'utils/validation';
 
 import * as Api from 'api/api';
 
-// import GoogleButton from './GoogleButton';
 import GoogleLogIn from './GoogleLogin';
 
 function LoginForm() {

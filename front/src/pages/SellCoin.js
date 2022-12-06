@@ -58,7 +58,7 @@ export default SellCoin;
 const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 
   min-height: calc(100vh - 200px);
   min-width: 600px;
