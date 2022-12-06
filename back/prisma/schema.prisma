@@ -20,7 +20,7 @@ model User {
   address           Address[]
   deal              Deal[]
   snsLogin          SnsLogin[]
-  userToken         UserToken[]
+  userToken         UserToken?
   wallet            Wallet[]
 
   @@map("user")
@@ -39,15 +39,15 @@ model UserToken {
 }
 
 model Deal {
-  id              String           @id @default(uuid())
-  userId          String           @map("user_id")
-  dealStatus      Deal_dealStatus  @map("deal_status")
-  imageUrl        String?          @map("image_url")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  isActivate      Int              @db.TinyInt
-  user            User             @relation(fields: [userId], references: [id])
-  delivery_detail deliveryDetail[]
+  id              String          @id @default(uuid())
+  userId          String          @map("user_id")
+  dealStatus      Deal_dealStatus @map("deal_status")
+  imageUrl        String?         @map("image_url")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  isActivate      Int             @db.TinyInt
+  user            User            @relation(fields: [userId], references: [id])
+  delivery_detail deliveryDetail?
   orderCoin       OrderCoin[]
 
   @@index([userId], map: "deal_user_id_fkey")
@@ -187,17 +187,17 @@ model SnsLogin {
 }
 
 model deliveryDetail {
-  id              String           @id  @default(uuid())
-  deal_id         String           @unique @map("deal_id")
+  id              String         @id @default(uuid())
+  deal_id         String         @unique @map("deal_id")
   res_name        String
   res_address1    String
   res_address2    String
   res_status      deliveryStatus
   company         String?
   delivery_number String?
-  created_at      DateTime         @default(now())
+  created_at      DateTime       @default(now())
   updated_at      DateTime
-  Deal            Deal             @relation(fields: [deal_id], references: [id])
+  Deal            Deal           @relation(fields: [deal_id], references: [id])
 
   @@index([deal_id], map: "delivery_detail_deal_id_fkey")
   @@map("delivery_detail")

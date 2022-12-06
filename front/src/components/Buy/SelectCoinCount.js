@@ -24,7 +24,7 @@ function SelectCoinCount(props) {
         </StyledContent>
         <StyledContent>
           <span>재고수량</span>
-          <span>3개</span>
+          <span>{props.coinStock?.[0]?.stockAmount || 0}개</span>
         </StyledContent>
         <StyledContent>
           <span>구매수량</span>
@@ -39,7 +39,7 @@ function SelectCoinCount(props) {
           </StyledContent>
           <StyledContent>
             <span>재고수량</span>
-            <span>3개</span>
+            <span>{props.coinStock?.[1]?.stockAmount || 0}개</span>
           </StyledContent>
           <StyledContent>
             <span>구매수량</span>

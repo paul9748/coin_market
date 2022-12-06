@@ -3,13 +3,27 @@ import Footer from 'components/UI/Footer';
 
 import styled from 'styled-components';
 
+import { useNavigate } from 'react-router-dom';
+
 import Payment from 'components/Buy/Payment';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StartBuy from 'components/Buy/StartBuy';
 import SelectCoin from 'components/Buy/SelectCoin';
 
+import ROUTE from 'utils/ROUTE';
+
 function BuyCoin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+      return;
+    }
+  }, [navigate]);
+
   const [currentStep, setCurrentStep] = useState(0);
 
   return (

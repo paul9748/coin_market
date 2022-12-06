@@ -3,13 +3,25 @@ import Footer from 'components/UI/Footer';
 
 import styled from 'styled-components';
 
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useState, useEffect } from 'react';
 
 import StartSell from 'components/Sell/StartSell';
 import UploadImage from 'components/Sell/UploadImage';
 import SellStepOne from 'components/Sell/SellStepOne';
+import ROUTE from 'utils/ROUTE';
 
 function SellCoin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+  }, [navigate]);
+
   const [currentStep, setCurrentStep] = useState(0);
   const stepComment = [
     '판매하실 동전 사진을 찍어주세요.',
