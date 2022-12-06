@@ -7,229 +7,203 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                String     @id @default(uuid())
-  email             String     @unique
-  isEmailAuthorized Boolean    @default(false) @map("is_email_authorized")
-  password          String
-  role              User_role  @default(user)
-  userName          String
-  phoneNumber       String     @map("phone_number")
-  createdAt         DateTime   @default(now()) @map("created_at")
-  updatedAt         DateTime   @updatedAt @map("updated_at")
-  address           Address[]
-  deal              Deal[]
-  snsLogin          SnsLogin[]
-  userToken         UserToken?
-  wallet            Wallet[]
+model address {
+  id           String   @id
+  user_id      String
+  address_name String?
+  name         String
+  phone_number String
+  postal_code  String
+  address1     String
+  address2     String
+  is_default   Boolean  @unique @default(false)
+  created_at   DateTime @default(now())
+  updated_at   DateTime
+  user         user     @relation(fields: [user_id], references: [id])
 
-  @@map("user")
+  @@index([user_id], map: "address_user_id_fkey")
 }
 
-model UserToken {
-  id           String   @id @default(uuid())
-  userId       String   @unique @map("user_id")
-  refreshToken String   @unique @map("refresh_token")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  user         User     @relation(fields: [userId], references: [id])
-
-  @@index([userId], map: "user_token_user_id_fkey")
-  @@map("user_token")
+model analysis {
+  id              String            @id
+  image_url       String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime
+  analysis_detail analysis_detail[]
 }
 
-model Deal {
-  id         String          @id @default(uuid())
-  userId     String          @map("user_id")
-  dealStatus Deal_dealStatus @map("deal_status")
-  imageUrl   String?         @map("image_url")
-  createdAt  DateTime        @default(now()) @map("created_at")
-  updatedAt  DateTime        @updatedAt @map("updated_at")
-  isActivate Int             @db.TinyInt
-  user       User            @relation(fields: [userId], references: [id])
-  dealDetail DealDetail[]
-  orderCoin  OrderCoin[]
+model analysis_detail {
+  id            String   @id
+  analysis_id   String
+  coordinate    String
+  country       String?
+  currency_type String?
+  amount        Int?
+  created_at    DateTime @default(now())
+  updated_at    DateTime
+  analysis      analysis @relation(fields: [analysis_id], references: [id])
 
-  @@index([userId], map: "deal_user_id_fkey")
-  @@map("deal")
+  @@index([analysis_id], map: "analysis_detail_analysis_id_fkey")
 }
 
-model OrderCoin {
-  id           String @id @default(uuid())
-  dealId       String @map("deal_id")
-  coinId       String @map("coin_id")
-  dealAmount   Int    @map("deal_amount")
-  stockAmount Int    @default(0) @map("stock Amount")
-  coin         Coin   @relation(fields: [coinId], references: [id])
-  deal         Deal   @relation(fields: [dealId], references: [id])
+model coin {
+  id            String       @id
+  country_id    String
+  currency_type String
+  unit_amount   Int
+  is_used       Boolean      @default(true)
+  stockAmount   Int          @default(0)
+  created_at    DateTime     @default(now())
+  updated_at    DateTime
+  country       country      @relation(fields: [country_id], references: [id])
+  order_coin    order_coin[]
 
-  @@index([coinId], map: "order_coin_coin_id_fkey")
-  @@index([dealId], map: "order_coin_deal_id_fkey")
-  @@map("order_coin")
+  @@index([country_id], map: "coin_country_id_fkey")
 }
 
-model DealDetail {
-  id             String               @id @default(uuid())
-  dealId         String               @map("deal_id")
-  resName        String               @map("res_name")
-  resAddress1    String               @map("res_address1")
-  resAddress2    String               @map("res_address2")
-  resStatus      DealDetail_resStatus @map("res_status")
-  company        String?
-  deliveryNumber String?              @map("delivery_number")
-  createdAt      DateTime             @default(now()) @map("created_at")
-  updatedAt      DateTime             @updatedAt @map("updated_at")
-  deal           Deal                 @relation(fields: [dealId], references: [id])
-
-  @@index([dealId], map: "deal_detail_deal_id_fkey")
-  @@map("deal_detail")
+model country {
+  id                   String                 @id
+  country_name         String
+  country_name_eng     String
+  country_code         String
+  exchange_rate_code   String?
+  stock_amount         Int                    @default(0)
+  is_handled           Boolean                @default(true)
+  currency_unit_name   String?
+  currency_unit_abbr   String?
+  created_at           DateTime               @default(now())
+  updated_at           DateTime
+  coin                 coin[]
+  country_non_handling country_non_handling[]
 }
 
-model Coin {
-  id           String      @id @default(uuid())
-  countryId    String      @map("country_id")
-  currencyType String      @map("currency_type")
-  unitAmount   Int         @map("unit_amount")
-  isUsed       Boolean     @default(true) @map("is_used")
-  stockAmount  Int         @default(0)
-  dealAmount   Int         @default(0)
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
-  dealAmount   Int         @default(0)
-  country      Country     @relation(fields: [countryId], references: [id])
-  orderCoin    OrderCoin[]
+model country_non_handling {
+  id                  String                                   @id
+  country_id          String
+  non_handling_reason country_non_handling_non_handling_reason @default(shortage_deals)
+  start_date          Int
+  end_date            Int                                      @default(99991231)
+  stock_amount        Int                                      @default(0)
+  created_at          DateTime                                 @default(now())
+  updated_at          DateTime
+  country             country                                  @relation(fields: [country_id], references: [id])
 
-  @@index([countryId], map: "coin_country_id_fkey")
-  @@map("coin")
+  @@index([country_id], map: "country_non_handling_country_id_fkey")
 }
 
-model Country {
-  id                     String               @id @default(uuid())
-  countryName            String               @map("country_name")
-  countryNameEng         String               @map("country_name_eng")
-  countryCode            String               @map("country_code")
-  exchangeRateCode       String?              @map("exchange_rate_code")
-  stockAmount            Int                  @default(0) @map("stock_amount")
-  isHandled              Boolean              @default(true) @map("is_handled")
-  currencyUnitName       String?              @map("currency_unit_name")
-  currencyUnitAbbr       String?              @map("currency_unit_abbr")
-  createdAt              DateTime             @default(now()) @map("created_at")
-  updatedAt              DateTime             @updatedAt @map("updated_at")
-  coin                   Coin[]
-  countries_non_handling CountryNonHandling[]
+model deal {
+  id          String           @id
+  user_id     String
+  deal_status deal_deal_status
+  image_url   String?
+  created_at  DateTime         @default(now())
+  updated_at  DateTime
+  isActivate  Int              @db.TinyInt
+  user        user             @relation(fields: [user_id], references: [id])
+  deal_detail deal_detail[]
+  order_coin  order_coin[]
 
-  @@map("country")
+  @@index([user_id], map: "deal_user_id_fkey")
 }
 
-model Address {
-  id          String   @id @default(uuid())
-  userId      String   @map("user_id")
-  addressName String?  @map("address_name")
-  name        String
-  phoneNumber String   @map("phone_number")
-  postalCode  String   @map("postal_code")
-  address1    String
-  address2    String
-  isDefault   Boolean  @unique @default(false) @map("is_default")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  user        User     @relation(fields: [userId], references: [id])
+model deal_detail {
+  id              String                 @id
+  deal_id         String
+  res_name        String
+  res_address1    String
+  res_address2    String
+  res_status      deal_detail_res_status
+  company         String?
+  delivery_number String?
+  created_at      DateTime               @default(now())
+  updated_at      DateTime
+  deal            deal                   @relation(fields: [deal_id], references: [id])
 
-  @@index([userId], map: "address_user_id_fkey")
-  @@map("address")
+  @@index([deal_id], map: "deal_detail_deal_id_fkey")
 }
 
-model CountryNonHandling {
-  id                String                               @id @default(uuid())
-  countryId         String                               @map("country_id")
-  nonHandlingReason CountryNonHandling_nonHandlingReason @default(SHORTAGE_DEALS) @map("non_handling_reason")
-  startDate         Int                                  @map("start_date")
-  endDate           Int                                  @default(99991231) @map("end_date")
-  stockAmount       Int                                  @default(0) @map("stock_amount")
-  createdAt         DateTime                             @default(now()) @map("created_at")
-  updatedAt         DateTime                             @updatedAt @map("updated_at")
-  country           Country                              @relation(fields: [countryId], references: [id])
+model order_coin {
+  id           String @id
+  deal_id      String
+  coin_id      String
+  deal_amount  Int
+  stock_Amount Int    @default(0) @map("stock Amount")
+  coin         coin   @relation(fields: [coin_id], references: [id])
+  deal         deal   @relation(fields: [deal_id], references: [id])
 
-  @@index([countryId], map: "country_non_handling_country_id_fkey")
-  @@map("country_non_handling")
+  @@index([coin_id], map: "order_coin_coin_id_fkey")
+  @@index([deal_id], map: "order_coin_deal_id_fkey")
 }
 
-model Analysis {
-  id              String           @id @default(uuid())
-  imageUrl        String           @map("image_url")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  analysisDetails AnalysisDetail[]
+model sns_login {
+  id          String  @id
+  user_id     String
+  sns_type    String
+  sns_name    String
+  sns_profile String?
+  sns_id      String
+  user        user    @relation(fields: [user_id], references: [id])
 
-  @@map("analysis")
+  @@index([user_id], map: "sns_login_user_id_fkey")
 }
 
-model AnalysisDetail {
-  id           String   @id @default(uuid())
-  analysisId   String   @map("analysis_id")
-  coordinate   String
-  country      String?
-  currencyType String?  @map("currency_type")
-  amount       Int?
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  analysis     Analysis @relation(fields: [analysisId], references: [id])
-
-  @@index([analysisId], map: "analysis_detail_analysis_id_fkey")
-  @@map("analysis_detail")
+model user {
+  id                  String      @id
+  email               String      @unique
+  is_email_authorized Boolean     @default(false)
+  password            String
+  role                user_role   @default(user)
+  userName            String
+  phone_number        String
+  created_at          DateTime    @default(now())
+  updated_at          DateTime
+  address             address[]
+  deal                deal[]
+  sns_login           sns_login[]
+  user_token          user_token?
+  wallet              wallet[]
 }
 
-model Wallet {
-  id             String @id @default(uuid())
-  userId         String @map("user_id")
-  krwAmount      Int    @map("krw_amount")
-  statement      String
-  expirationDate Int    @default(99991231) @map("expiration_datetime")
-  user           User   @relation(fields: [userId], references: [id])
+model user_token {
+  id            String   @id
+  user_id       String   @unique
+  refresh_token String   @unique
+  created_at    DateTime @default(now())
+  updated_at    DateTime
+  user          user     @relation(fields: [user_id], references: [id])
 
-  @@index([userId], map: "wallet_user_id_fkey")
-  @@map("wallet")
+  @@index([user_id], map: "user_token_user_id_fkey")
 }
 
-model SnsLogin {
-  id         String  @id @default(uuid())
-  userId     String  @map("user_id")
-  snsType    String  @map("sns_type")
-  snsName    String  @map("sns_name")
-  snsProfile String? @map("sns_profile")
-  snsId      String  @map("sns_id")
-  user       User    @relation(fields: [userId], references: [id])
+model wallet {
+  id                  String @id
+  user_id             String
+  krw_amount          Int
+  statement           String
+  expiration_datetime Int    @default(99991231)
+  user                user   @relation(fields: [user_id], references: [id])
 
-  @@index([userId], map: "sns_login_user_id_fkey")
-  @@map("sns_login")
+  @@index([user_id], map: "wallet_user_id_fkey")
 }
 
-enum Deal_dealStatus {
-  BUY  @map("buy")
-  SELL @map("sell")
-
-  @@map("DealStatus")
+enum country_non_handling_non_handling_reason {
+  travel_ban_country
+  shortage_deals
 }
 
-enum DealDetail_resStatus {
-  WAITING    @map("waiting")
-  SHIPPING   @map("shipping")
-  COMPLETION @map("completion")
-
-  @@map("ResStatus")
+enum deal_deal_status {
+  buy
+  sell
 }
 
-enum CountryNonHandling_nonHandlingReason {
-  TRAVEL_BAN_COUNTRY @map("travel_ban_country")
-  SHORTAGE_DEALS     @map("shortage_deals")
-
-  @@map("_non_handling_reason")
-}
-
-enum User_role {
+enum user_role {
   admin
   user
   withdrawal
+}
 
-  @@map("user_role")
+enum deal_detail_res_status {
+  waiting
+  shipping
+  completion
 }
