@@ -8,6 +8,9 @@ import { emailvalidation } from 'utils/validation';
 
 import * as Api from 'api/api';
 
+// import GoogleButton from './GoogleButton';
+import GoogleLogIn from './GoogleLogin';
+
 function LoginForm() {
   const labelIdRef = useRef();
   const inputIdRef = useRef();
@@ -32,14 +35,20 @@ function LoginForm() {
     e.preventDefault();
     try {
       const response = await Api.post('users/login', { email, password });
-      console.log(response.data);
+
+      const { access_token, refresh_token } = response.data;
+
+      sessionStorage.setItem('ACCESS_TOKEN', access_token);
+      sessionStorage.setItem('REFRESH_TOKEN', refresh_token);
+      setEmail('');
+      setPassword('');
 
       navigate('/');
     } catch (error) {
       console.log(error);
       alert(error.response.data);
-      // setEmail('');
-      // setPassword('');
+      setEmail('');
+      setPassword('');
     }
   };
 
@@ -116,7 +125,7 @@ function LoginForm() {
         )}
       </StyledDiv>
       <BtnLogin disabled={!validation}>로그인</BtnLogin>
-      <BtnLogin>sign in with google</BtnLogin>
+      <GoogleLogIn />
       <StyledP>
         아직 회원이 아니신가요?
         <StyledLink to={ROUTE.REGISTER}>등록</StyledLink>

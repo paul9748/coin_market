@@ -203,29 +203,3 @@ const StyledBtn = styled.button`
     background-color: rgba(92, 92, 224, 0.2);
   }
 `;
-
-const Loading = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: 420px;
-  height: 370px;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-const LoadingMark = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;

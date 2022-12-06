@@ -1,5 +1,6 @@
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
+
 import styled from 'styled-components';
 
 import { useState } from 'react';

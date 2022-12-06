@@ -57,6 +57,7 @@ function RegisterForm() {
       const response = await Api.post('users/register', user);
       console.log(response.data);
       setUser(initialValue);
+      alert('회원가입에 성공하셨습니다.');
       navigate(ROUTE.LOGIN);
     } catch (error) {
       alert(error.response.data);
