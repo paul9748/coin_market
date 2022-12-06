@@ -55,12 +55,13 @@ model Deal {
 }
 
 model OrderCoin {
-  id         String @id @default(uuid())
-  dealId     String @map("deal_id")
-  coinId     String @map("coin_id")
-  dealAmount Int    @map("deal_amount")
-  coin       Coin   @relation(fields: [coinId], references: [id])
-  deal       Deal   @relation(fields: [dealId], references: [id])
+  id           String @id @default(uuid())
+  dealId       String @map("deal_id")
+  coinId       String @map("coin_id")
+  dealAmount   Int    @map("deal_amount")
+  stockAmount Int    @default(0) @map("stock Amount")
+  coin         Coin   @relation(fields: [coinId], references: [id])
+  deal         Deal   @relation(fields: [dealId], references: [id])
 
   @@index([coinId], map: "order_coin_coin_id_fkey")
   @@index([dealId], map: "order_coin_deal_id_fkey")
@@ -128,7 +129,7 @@ model Address {
   postalCode  String   @map("postal_code")
   address1    String
   address2    String
-  isDefault   Boolean  @default(false) @map("is_default")
+  isDefault   Boolean  @unique @default(false) @map("is_default")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   user        User     @relation(fields: [userId], references: [id])

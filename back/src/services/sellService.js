@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
 const { db } = require("../db/db");
+import { Sell } from "../db/model/Sell";
 import { v4 } from "uuid";
+import { Buy } from "../db/model/Buy";
 class sellService {
-  //TODO 테스트 해야함
   static async sellOrder(data) {
     let orderData = data["order"];
     if (orderData["dealStatus"] != "SELL") {
@@ -10,15 +11,18 @@ class sellService {
     }
     let coins = data["coins"];
     orderData["userId"] = data["userId"];
-    let order = await db.deal.create({
-      data: orderData,
-    });
+    let { userId, dealStatus, imageUrl } = orderData;
+    let order = await Sell.createDeal(
+      data["userId"],
+      orderData["dealStatus"],
+      orderData["imageUrl"],
+      0
+    );
 
     for (let i of coins) {
       i["dealId"] = order["id"];
-      await db.OrderCoin.create({
-        data: i,
-      });
+      let { dealId, coinId, dealAmount } = i;
+      await Sell.createOrderCoin(dealId, coinId, dealAmount);
     }
 
     return "주문신청이 완료 되었습니다 : " + order["id"];
@@ -27,11 +31,7 @@ class sellService {
     //TODO: 로그인 서비스랑 연결 해야함
     const dealId = data["dealId"];
     const userId = data["userId"];
-    const deal = await db.deal.findUnique({
-      where: {
-        id: dealId,
-      },
-    });
+    const deal = await Sell.findDeal(dealId);
 
     if (deal.userId != userId) {
       throw new Error("본인 거래가 아닙니다");
@@ -40,78 +40,39 @@ class sellService {
       throw new Error("이미 활성화된 주문 입니다");
     }
     //여기즘 거래 상태 조회 해서 주문처리대기 상태 인지 보고 판매중 으로 넘겨줘야함
-    let coins = await db.OrderCoin.findMany({
-      where: {
-        dealId: dealId,
-      },
-    });
+    let coins = await Sell.findOrderCoinsByDealId(dealId);
     for (let i of coins) {
-      await db.OrderCoin.update({
-        where: {
-          id: i["id"],
-        },
-        data: {
-          stockAmount: i["dealAmount"],
-        },
-      });
-      await db.coin.update({
-        where: {
-          id: i["coinId"],
-        },
-        data: {
-          stockAmount: { increment: +i["dealAmount"] },
-        },
-      });
+      await Sell.orderCoinUpdate(i["id"], i["dealAmount"]);
+      await Sell.coinStockUpdate(i["coinId"], i["dealAmount"]);
     }
-    await db.deal.update({
-      where: {
-        id: dealId,
-      },
-      data: {
-        isActivate: 1,
-      },
-    });
-    const dealDetail = {};
+    await Sell.setDealActive(dealId);
 
     return "주문처리가 완료되었습니다 : " + dealId;
   }
 
   static async SellOrderAddressesAdd(data) {
     const userId = data["userId"];
-    const deal = await db.deal.findUnique({
-      where: {
-        id: data["dealId"],
-      },
-    });
+    const deal = Sell.findDeal(data["dealId"]);
+
     if (deal.userId != userId) {
       throw new Error("본인 거래가 아닙니다");
     }
     if (deal.dealStatus != "SELL") {
       throw new Error("판매가 아닙니다");
     }
-    const dealDetail = await db.dealDetail.findFirst({
-      where: {
-        dealId: data["dealId"],
-      },
-    });
+
+    const dealDetail = Sell.findDealDetailByDealId(data["dealId"]);
+
     if (dealDetail == null) {
       let dealDetail_data = {};
       dealDetail_data["dealId"] = data["dealId"];
       dealDetail_data["deliveryNumber"] = data["deliveryNumber"];
       dealDetail_data["resStatus"] = "WAITING";
-      await db.DealDetail.create({
-        data: dealDetail_data,
-      });
+      await Sell.dealDetailCreate(dealDetail_data);
       return "운송장번호가 업로드 되었습니다";
     } else {
-      await db.DealDetail.update({
-        where: {
-          id: dealDetail["id"],
-        },
-        data: {
-          deliveryNumber: data["deliveryNumber"],
-        },
-      });
+      dealDetail["deliveryNumber"] = data["deliveryNumber"];
+      await Sell.dealDetailUpdateDeliveryNumber(dealDetail);
       return "운송장번호가 변경 되었습니다";
     }
   }
