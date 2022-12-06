@@ -20,7 +20,7 @@ model User {
   address           Address[]
   deal              Deal[]
   snsLogin          SnsLogin[]
-  userToken         UserToken?
+  userToken         UserToken[]
   wallet            Wallet[]
 
   @@map("user")
@@ -39,29 +39,29 @@ model UserToken {
 }
 
 model Deal {
-  id         String          @id @default(uuid())
-  userId     String          @map("user_id")
-  dealStatus Deal_dealStatus @map("deal_status")
-  imageUrl   String?         @map("image_url")
-  createdAt  DateTime        @default(now()) @map("created_at")
-  updatedAt  DateTime        @updatedAt @map("updated_at")
-  isActivate Int             @db.TinyInt
-  user       User            @relation(fields: [userId], references: [id])
-  delivery   delivery?
-  orderCoin  OrderCoin[]
+  id              String           @id @default(uuid())
+  userId          String           @map("user_id")
+  dealStatus      Deal_dealStatus  @map("deal_status")
+  imageUrl        String?          @map("image_url")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  isActivate      Int              @db.TinyInt
+  user            User             @relation(fields: [userId], references: [id])
+  delivery_detail deliveryDetail[]
+  orderCoin       OrderCoin[]
 
   @@index([userId], map: "deal_user_id_fkey")
   @@map("deal")
 }
 
 model OrderCoin {
-  id          String @id @default(uuid())
-  dealId      String @map("deal_id")
-  coinId      String @map("coin_id")
-  dealAmount  Int    @map("deal_amount")
-  stockAmount Int    @default(0) @map("stock Amount")
-  coin        Coin   @relation(fields: [coinId], references: [id])
-  deal        Deal   @relation(fields: [dealId], references: [id])
+  id           String @id @default(uuid())
+  dealId       String @map("deal_id")
+  coinId       String @map("coin_id")
+  dealAmount   Int    @map("deal_amount")
+  stock_Amount Int    @default(0) @map("stock Amount")
+  coin         Coin   @relation(fields: [coinId], references: [id])
+  deal         Deal   @relation(fields: [dealId], references: [id])
 
   @@index([coinId], map: "order_coin_coin_id_fkey")
   @@index([dealId], map: "order_coin_deal_id_fkey")
@@ -186,27 +186,21 @@ model SnsLogin {
   @@map("sns_login")
 }
 
-model delivery {
-  id             String               @id @default(uuid())
-  dealId         String               @map("deal_id")@unique
-  resName        String               @map("res_name")
-  resAddress1    String               @map("res_address1")
-  resAddress2    String               @map("res_address2")
-  resStatus      delivery_res_status @map("res_status")
-  company        String?
-  deliveryNumber String?              @map("delivery_number")
-  createdAt      DateTime             @default(now()) @map("created_at")
-  updatedAt      DateTime             @updatedAt @map("updated_at")
-  Deal            Deal                @relation(fields: [dealId], references: [id])
+model deliveryDetail {
+  id              String           @id  @default(uuid())
+  deal_id         String           @unique @map("deal_id")
+  res_name        String
+  res_address1    String
+  res_address2    String
+  res_status      deliveryStatus
+  company         String?
+  delivery_number String?
+  created_at      DateTime         @default(now())
+  updated_at      DateTime
+  Deal            Deal             @relation(fields: [deal_id], references: [id])
 
-
-
-
-  @@index([dealId], map: "delivery_deal_id_fkey")
-
-
-
-  
+  @@index([deal_id], map: "delivery_detail_deal_id_fkey")
+  @@map("delivery_detail")
 }
 
 enum Deal_dealStatus {
@@ -231,7 +225,7 @@ enum User_role {
   @@map("user_role")
 }
 
-enum delivery_res_status {
+enum deliveryStatus {
   waiting
   delivery
   completion

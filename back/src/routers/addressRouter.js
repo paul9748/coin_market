@@ -50,11 +50,13 @@ addressRouter.put("/users/addresses/:addressId", async (req, res, next) => {
 //주소 기본배송지 설정
 addressRouter.put(
   "/users/addresses/default/:addressId",
+  loginRequired,
   async (req, res, next) => {
     try {
+      const userId = req.userId;
       const id = req.params.addressId;
 
-      const defaultAddress = await addressService.defaultAddress(id);
+      const defaultAddress = await addressService.defaultAddress(userId, id);
 
       res.status(201).json(defaultAddress);
     } catch (err) {
