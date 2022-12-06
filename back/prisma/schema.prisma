@@ -92,7 +92,6 @@ model Coin {
   unitAmount   Int         @map("unit_amount")
   isUsed       Boolean     @default(true) @map("is_used")
   stockAmount  Int         @default(0)
-  dealAmount   Int         @default(0)
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
   country      Country     @relation(fields: [countryId], references: [id])

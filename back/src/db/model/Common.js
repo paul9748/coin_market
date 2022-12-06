@@ -9,6 +9,7 @@ class Common {
         isUsed: true,
       },
       select: {
+        id: true,
         currencyType: true,
         stockAmount: true,
       },

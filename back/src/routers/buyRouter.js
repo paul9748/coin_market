@@ -16,7 +16,7 @@ buyRouter.get("/countries/currencyType", async (req, res, next) => {
     next(err);
   }
 });
-//TODO: 나중에 로그인 서비스랑 붙여야함, 결제 서비스랑 붙여서 결제 검증도 해야함, 결제시 기준 환율 넣을 칼럼 필요
+//TODO:  결제 서비스랑 붙여서 결제 검증도 해야함, 결제시 기준 환율 넣을 칼럼 필요
 buyRouter.post("/buy", loginRequired, async (req, res, next) => {
   try {
     const data = req.body;
