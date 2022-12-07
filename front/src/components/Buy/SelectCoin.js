@@ -39,17 +39,10 @@ function SelectCoin() {
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
       fetchData();
     }
-  }, [selectNation]);
+  }, [selectNation, isClick]);
 
   return (
     <StyledWrapper>
-      {selectNation.length === 0 ? (
-        <StyledDiv>국가를 선택하세요.</StyledDiv>
-      ) : (
-        <SelectCoinCount
-          selectNation={selectNation}
-          coinStock={coinStock}></SelectCoinCount>
-      )}
       <StyledDiv>
         <StyledSelectWrapper isClick={isClick}>
           {selectNation === 'JPY' || selectNation.length === 0 ? (
@@ -78,6 +71,10 @@ function SelectCoin() {
           ) : null}
         </StyledSelectWrapper>
       </StyledDiv>
+
+      <SelectCoinCount
+        selectNation={selectNation}
+        coinStock={coinStock}></SelectCoinCount>
     </StyledWrapper>
   );
 }
@@ -89,10 +86,6 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-
-  @media (max-width: 820px) {
-    flex-wrap: wrap-reverse;
-  }
 `;
 const StyledDiv = styled.div`
   display: flex;
