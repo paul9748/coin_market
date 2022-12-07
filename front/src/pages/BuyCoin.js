@@ -20,7 +20,6 @@ function BuyCoin() {
     if (!sessionStorage.getItem('ACCESS_TOKEN')) {
       alert('로그인이 필요합니다.');
       navigate(ROUTE.LOGIN);
-      return;
     }
   }, [navigate]);
 
