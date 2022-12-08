@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String     @id @default(uuid())
+  email             String     @unique
+  isEmailAuthorized Boolean    @default(false) @map("is_email_authorized")
+  password          String
+  role              User_role  @default(user)
+  userName          String
+  phoneNumber       String     @map("phone_number")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+  address           Address[]
+  deal              Deal[]
+  snsLogin          SnsLogin[]
+  userToken         UserToken?
+  wallet            Wallet[]
+
+  @@map("user")
+}
+
+model UserToken {
+  id           String   @id @default(uuid())
+  userId       String   @unique @map("user_id")
+  refreshToken String   @unique @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "user_token_user_id_fkey")
+  @@map("user_token")
+}
+
+model Deal {
+  id         String          @id @default(uuid())
+  userId     String          @map("user_id")
+  dealStatus Deal_dealStatus @map("deal_status")
+  imageUrl   String?         @map("image_url")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+  isActivate Int             @db.TinyInt
+  user       User            @relation(fields: [userId], references: [id])
+  dealDetail DealDetail[]
+  orderCoin  OrderCoin[]
+
+  @@index([userId], map: "deal_user_id_fkey")
+  @@map("deal")
+}
+
+model OrderCoin {
+  id           String @id @default(uuid())
+  dealId       String @map("deal_id")
+  coinId       String @map("coin_id")
+  dealAmount   Int    @map("deal_amount")
+  stockAmount Int    @default(0) @map("stock Amount")
+  coin         Coin   @relation(fields: [coinId], references: [id])
+  deal         Deal   @relation(fields: [dealId], references: [id])
+
+  @@index([coinId], map: "order_coin_coin_id_fkey")
+  @@index([dealId], map: "order_coin_deal_id_fkey")
+  @@map("order_coin")
+}
+
+model DealDetail {
+  id             String               @id @default(uuid())
+  dealId         String               @map("deal_id")
+  resName        String               @map("res_name")
+  resAddress1    String               @map("res_address1")
+  resAddress2    String               @map("res_address2")
+  resStatus      DealDetail_resStatus @map("res_status")
+  company        String?
+  deliveryNumber String?              @map("delivery_number")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  deal           Deal                 @relation(fields: [dealId], references: [id])
+
+  @@index([dealId], map: "deal_detail_deal_id_fkey")
+  @@map("deal_detail")
+}
+
+model Coin {
+  id           String      @id @default(uuid())
+  countryId    String      @map("country_id")
+  currencyType String      @map("currency_type")
+  unitAmount   Int         @map("unit_amount")
+  isUsed       Boolean     @default(true) @map("is_used")
+  stockAmount  Int         @default(0)
+  dealAmount   Int         @default(0)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  country      Country     @relation(fields: [countryId], references: [id])
+  orderCoin    OrderCoin[]
+
+  @@index([countryId], map: "coin_country_id_fkey")
+  @@map("coin")
+}
+
+model Country {
+  id                     String               @id @default(uuid())
+  countryName            String               @map("country_name")
+  countryNameEng         String               @map("country_name_eng")
+  countryCode            String               @map("country_code")
+  exchangeRateCode       String?              @map("exchange_rate_code")
+  stockAmount            Int                  @default(0) @map("stock_amount")
+  isHandled              Boolean              @default(true) @map("is_handled")
+  currencyUnitName       String?              @map("currency_unit_name")
+  currencyUnitAbbr       String?              @map("currency_unit_abbr")
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              DateTime             @updatedAt @map("updated_at")
+  coin                   Coin[]
+  countries_non_handling CountryNonHandling[]
+
+  @@map("country")
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  addressName String?  @map("address_name")
+  name        String
+  phoneNumber String   @map("phone_number")
+  postalCode  String   @map("postal_code")
+  address1    String
+  address2    String
+  isDefault   Boolean  @unique @default(false) @map("is_default")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "address_user_id_fkey")
+  @@map("address")
+}
+
+model CountryNonHandling {
+  id                String                               @id @default(uuid())
+  countryId         String                               @map("country_id")
+  nonHandlingReason CountryNonHandling_nonHandlingReason @default(SHORTAGE_DEALS) @map("non_handling_reason")
+  startDate         Int                                  @map("start_date")
+  endDate           Int                                  @default(99991231) @map("end_date")
+  stockAmount       Int                                  @default(0) @map("stock_amount")
+  createdAt         DateTime                             @default(now()) @map("created_at")
+  updatedAt         DateTime                             @updatedAt @map("updated_at")
+  country           Country                              @relation(fields: [countryId], references: [id])
+
+  @@index([countryId], map: "country_non_handling_country_id_fkey")
+  @@map("country_non_handling")
+}
+
+model Analysis {
+  id              String           @id @default(uuid())
+  imageUrl        String           @map("image_url")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  analysisDetails AnalysisDetail[]
+
+  @@map("analysis")
+}
+
+model AnalysisDetail {
+  id           String   @id @default(uuid())
+  analysisId   String   @map("analysis_id")
+  coordinate   String
+  country      String?
+  currencyType String?  @map("currency_type")
+  amount       Int?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  analysis     Analysis @relation(fields: [analysisId], references: [id])
+
+  @@index([analysisId], map: "analysis_detail_analysis_id_fkey")
+  @@map("analysis_detail")
+}
+
+model Wallet {
+  id             String @id @default(uuid())
+  userId         String @map("user_id")
+  krwAmount      Int    @map("krw_amount")
+  statement      String
+  expirationDate Int    @default(99991231) @map("expiration_datetime")
+  user           User   @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "wallet_user_id_fkey")
+  @@map("wallet")
+}
+
+model SnsLogin {
+  id         String  @id @default(uuid())
+  userId     String  @map("user_id")
+  snsType    String  @map("sns_type")
+  snsName    String  @map("sns_name")
+  snsProfile String? @map("sns_profile")
+  snsId      String  @map("sns_id")
+  user       User    @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "sns_login_user_id_fkey")
+  @@map("sns_login")
+}
+
+enum Deal_dealStatus {
+  BUY  @map("buy")
+  SELL @map("sell")
+
+  @@map("DealStatus")
+}
+
+enum DealDetail_resStatus {
+  WAITING    @map("waiting")
+  SHIPPING   @map("shipping")
+  COMPLETION @map("completion")
+
+  @@map("ResStatus")
+}
+
+enum CountryNonHandling_nonHandlingReason {
+  TRAVEL_BAN_COUNTRY @map("travel_ban_country")
+  SHORTAGE_DEALS     @map("shortage_deals")
+
+  @@map("_non_handling_reason")
+}
+
+enum User_role {
+  admin
+  user
+  withdrawal
+
+  @@map("user_role")
+}

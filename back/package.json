@@ -1,0 +1,58 @@
+{
+  "name": "cafe-server",
+  "version": "1.0.0",
+  "description": "이 프로젝트는 자기자신의 포트폴리오를 작성하고, 또한 다른 사람의 포트폴리오를 확인할 수 있는 웹 서비스입니다. 제시된 기본 기능 구현 후 팀원들과 의논 결과 결정한 기능들을 추가, 개선하였습니다.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --exec babel-node",
+    "test": "jest --setupFiles dotenv/config"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/"
+  },
+  "homepage": "https://github.com/",
+  "dependencies": {
+    "@prisma/client": "^4.7.1",
+    "@sindresorhus/is": "^4.2.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jest": "^27.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.1",
+    "mongoose-sequence": "^5.3.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.8",
+    "python-shell": "^3.0.1",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "supertest": "^6.1.6",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.2",
+    "@babel/node": "^7.20.2",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.20.2",
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15",
+    "prisma": "^4.7.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "modulePathIgnorePatterns": [
+      "__config__"
+    ]
+  }
+}

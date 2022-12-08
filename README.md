@@ -1,3 +1,0 @@
-# 7zip
-
-AI project
