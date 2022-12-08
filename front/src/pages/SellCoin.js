@@ -11,6 +11,7 @@ import StartSell from 'components/Sell/StartSell';
 import UploadImage from 'components/Sell/UploadImage';
 import SellStepOne from 'components/Sell/SellStepOne';
 import ROUTE from 'utils/ROUTE';
+import CheckCoin from 'components/Sell/CheckCoin';
 
 function SellCoin() {
   const navigate = useNavigate();
@@ -46,6 +47,11 @@ function SellCoin() {
           <UploadImage
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></UploadImage>
+        ) : null}
+        {currentStep === 3 ? (
+          <CheckCoin
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></CheckCoin>
         ) : null}
         {currentStep >= 2 ? null : (
           <StyledBtnWrapper>

@@ -4,10 +4,14 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 
 import * as Api from 'api/api';
 
+import { useImageContext } from 'context/ImageContext';
+
 function UploadImage(props) {
   const [isDragging, setIsDragging] = useState(false);
   const [coinImage, setCoinImage] = useState(null);
   const [imageData, setImageData] = useState(null);
+
+  const { setImageUrl } = useImageContext();
 
   const dragRef = useRef(null);
 
@@ -103,6 +107,7 @@ function UploadImage(props) {
 
     try {
       const response = await Api.put('analysis', formData);
+      setImageUrl(response.data);
       console.log(response.data);
     } catch (err) {
       console.log(err);
@@ -156,10 +161,10 @@ function UploadImage(props) {
         )}
         <StyledBtn
           disabled={!coinImage}
-          onClick={
-            handleSubmit
-            // props.currentStep < 5 && props.setCurrentStep((preState) => preState + 1);
-          }>
+          onClick={() => {
+            handleSubmit();
+            props.currentStep < 5 && props.setCurrentStep((preState) => preState + 1);
+          }}>
           다음
         </StyledBtn>
       </StyledBtnWrapper>
