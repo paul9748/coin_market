@@ -10,7 +10,7 @@ import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
 import SelectCoinCount from './SelectCoinCount';
 
-function SelectCoin() {
+function SelectCoin({ currentStep, setCurrentStep }) {
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
   const [coinStock, setCoinStock] = useState();
@@ -74,7 +74,10 @@ function SelectCoin() {
 
       <SelectCoinCount
         selectNation={selectNation}
-        coinStock={coinStock}></SelectCoinCount>
+        coinStock={coinStock}
+        setCoinStock={setCoinStock}
+        currentStep={currentStep}
+        setCurrentStep={setCurrentStep}></SelectCoinCount>
     </StyledWrapper>
   );
 }
@@ -86,6 +89,15 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  width: 1080px;
+
+  @media (max-width: 1097px) {
+    width: 600px;
+    flex-direction: column;
+  }
+  @media (max-width: 620px) {
+    width: 500px;
+  }
 `;
 const StyledDiv = styled.div`
   display: flex;
@@ -93,6 +105,9 @@ const StyledDiv = styled.div`
   justify-content: center;
   align-items: center;
   width: 350px;
+  @media (max-width: 1097px) {
+    width: 500px;
+  }
 `;
 
 const StyledSelectWrapper = styled.div`
@@ -105,8 +120,8 @@ const StyledSelectWrapper = styled.div`
   border-radius: 15px;
   width: 300px;
   height: 320px;
-  @media (max-width: 600px) {
-    width: 400px;
+  @media (max-width: 1097px) {
+    width: 430px;
   }
 `;
 

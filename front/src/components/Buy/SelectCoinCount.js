@@ -5,12 +5,21 @@ import usa10_f from 'assets/images/usa10_f.png';
 import usa25_f from 'assets/images/usa25_f.png';
 import korea100_f from 'assets/images/korea100_f.png';
 import korea500_f from 'assets/images/korea500_f.png';
+
 import styled from 'styled-components';
 import { useState } from 'react';
 
-import Test from './test';
+import { useCoinContext } from 'context/CoinContext';
 
-function SelectCoinCount(props) {
+import BuyCoinResult from './BuyCoinResult';
+
+function SelectCoinCount({
+  selectNation,
+  coinStock,
+  setCoinStock,
+  currentStep,
+  setCurrentStep,
+}) {
   const nation = {
     JPY: { image: [japan100_f, japan500_f], name: ['일본100엔', '일본500엔'] },
     CNY: { image: [china1_f], name: ['중국1위안'] },
@@ -18,58 +27,75 @@ function SelectCoinCount(props) {
     KRW: { image: [korea100_f, korea500_f], name: ['한국100원', '한국500원'] },
   };
 
-  const initialValue = { Nation: props.selectNation, firstCoin: 0, secondCoin: 0 };
+  const { setCoinList } = useCoinContext();
+
+  const initialValue = { selectNation, firstCoin: 0, secondCoin: 0 };
   const [buyCount, setBuyCount] = useState(initialValue);
 
   const [buyCoinList, setBuyCoinList] = useState([]);
-  const [buyCoin, setBuyCoin] = useState(initialValue);
 
   const handleChange = (e) => {
     const newBuyCount = { ...buyCount };
 
-    const COIN_ORDER = e.target.name === 'firstCoin' ? 0 : 1;
+    const { name, value } = e.target;
 
-    if (e.target.value < 0) {
-      newBuyCount[e.target.name] = 0;
+    const COIN_ORDER = name === 'firstCoin' ? 0 : 1;
+
+    if (value < 0) {
+      newBuyCount[name] = 0;
       return setBuyCount(newBuyCount);
     }
-    if (props.coinStock?.[COIN_ORDER]?.stockAmount >= e.target.value) {
-      newBuyCount[e.target.name] = e.target.value;
+    if (coinStock?.[COIN_ORDER]?.stockAmount >= value) {
+      newBuyCount[name] = value;
       return setBuyCount(newBuyCount);
     } else {
-      newBuyCount[e.target.name] = props.coinStock?.[COIN_ORDER]?.stockAmount || 0;
+      newBuyCount[name] = coinStock?.[COIN_ORDER]?.stockAmount || 0;
       return setBuyCount(newBuyCount);
     }
   };
 
-  const addCoin = () => {
-    const newBuyCoin = { ...buyCoin };
-    newBuyCoin['Nation'] = props.selectNation;
-    newBuyCoin['firstCoin'] = buyCount?.firstCoin;
-    newBuyCoin['secondCoin'] = buyCount?.secondCoin;
-    setBuyCoin(newBuyCoin);
+  const addCoin = (e) => {
+    e.preventDefault();
+
+    const newBuyCount = {
+      ...buyCount,
+      selectNation,
+      firstCoin: buyCount.firstCoin,
+      secondCoin: buyCount.secondCoin,
+    };
+
+    setBuyCount(newBuyCount);
+
+    const newCoinStock = [];
+    newCoinStock.push({ stockAmount: coinStock[0].stockAmount - newBuyCount.firstCoin });
+    newCoinStock.push({ stockAmount: coinStock[1].stockAmount - newBuyCount.secondCoin });
+
+    setCoinStock(newCoinStock);
 
     const newBuyCoinList = [...buyCoinList];
 
-    newBuyCoinList.push(buyCoin);
-
+    if (newBuyCount.firstCoin === 0 && newBuyCount.secondCoin === 0) {
+      return;
+    }
+    newBuyCoinList.push(newBuyCount);
     setBuyCount(initialValue);
+    setCoinList(newBuyCoinList);
 
     return setBuyCoinList(newBuyCoinList);
   };
 
   return (
     <>
-      {props.selectNation.length === 0 ? null : (
+      {selectNation.length === 0 ? null : (
         <StyledWrapper>
           <StyledContentWrapper>
             <StyledContent>
-              <StyledImg src={nation[props.selectNation].image[0]}></StyledImg>
-              <span>{nation[props.selectNation].name[0]}</span>
+              <StyledImg src={nation[selectNation].image[0]}></StyledImg>
+              <span>{nation[selectNation].name[0]}</span>
             </StyledContent>
             <StyledContent>
               <span>재고수량</span>
-              <span>{props.coinStock?.[0]?.stockAmount || 0}개</span>
+              <span>{coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}개</span>
             </StyledContent>
             <StyledContent>
               <span>구매수량</span>
@@ -80,20 +106,20 @@ function SelectCoinCount(props) {
                   onChange={handleChange}
                   value={buyCount.firstCoin}
                   min="0"
-                  max={props.coinStock?.[0]?.stockAmount || 0}></StyledInput>
+                  max={coinStock?.[0]?.stockAmount || 0}></StyledInput>
                 <span> 개</span>
               </p>
             </StyledContent>
           </StyledContentWrapper>
-          {props.selectNation === 'CNY' ? null : (
+          {selectNation === 'CNY' ? null : (
             <StyledContentWrapper>
               <StyledContent>
-                <StyledImg src={nation[props.selectNation].image[1]}></StyledImg>
-                <span>{nation[props.selectNation].name[1]}</span>
+                <StyledImg src={nation[selectNation].image[1]}></StyledImg>
+                <span>{nation[selectNation].name[1]}</span>
               </StyledContent>
               <StyledContent>
                 <span>재고수량</span>
-                <span>{props.coinStock?.[1]?.stockAmount || 0}개</span>
+                <span>{coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}개</span>
               </StyledContent>
               <StyledContent>
                 <span>구매수량</span>
@@ -104,18 +130,39 @@ function SelectCoinCount(props) {
                     onChange={handleChange}
                     value={buyCount.secondCoin}
                     min="0"
-                    max={props.coinStock?.[1]?.stockAmount || 0}></StyledInput>
+                    max={coinStock?.[1]?.stockAmount || 0}></StyledInput>
                   <span> 개</span>
                 </p>
               </StyledContent>
             </StyledContentWrapper>
           )}
-          <StyledBtn onClick={(e) => addCoin(e)}>+</StyledBtn>
+          <StyledAddBtn onClick={addCoin}>+</StyledAddBtn>
         </StyledWrapper>
       )}
       <StyledWrapper>
-        <Test buyCoinList={buyCoinList}></Test>
+        <BuyCoinResult
+          buyCoinList={buyCoinList}
+          coinStock={coinStock}
+          setBuyCoinList={setBuyCoinList}
+          setCoinStock={setCoinStock}></BuyCoinResult>
       </StyledWrapper>
+      <StyledBtnWrapper>
+        {currentStep === 0 ? null : (
+          <StyledBtn
+            onClick={() => {
+              setCurrentStep((preState) => preState - 1);
+            }}>
+            이전
+          </StyledBtn>
+        )}
+        <StyledBtn
+          disabled={buyCoinList.length <= 0}
+          onClick={() => {
+            currentStep < 5 && setCurrentStep((preState) => preState + 1);
+          }}>
+          다음
+        </StyledBtn>
+      </StyledBtnWrapper>
     </>
   );
 }
@@ -127,16 +174,17 @@ const StyledWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 300px;
+  width: 320px;
+  flex-wrap: wrap;
   min-height: 320px;
   border: 10px solid rgb(42, 193, 188);
   border-radius: 15px;
-  @media (max-width: 600px) {
-    width: 400px;
-  }
 
   & + & {
     margin: 15px;
+  }
+  @media (max-width: 1097px) {
+    width: 430px;
   }
 `;
 
@@ -147,7 +195,7 @@ const StyledContentWrapper = styled.div`
   margin-top: 10px;
   justify-content: space-evenly;
   align-items: flex-start;
-  @media (max-width: 600px) {
+  @media (max-width: 1097px) {
     width: 400px;
   }
 `;
@@ -164,7 +212,7 @@ const StyledInput = styled.input`
   width: 50px;
 `;
 
-const StyledBtn = styled.button`
+const StyledAddBtn = styled.button`
   margin-top: 50px;
   width: 50px;
   height: 50px;
@@ -176,8 +224,38 @@ const StyledBtn = styled.button`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+
+  &:active {
+    position: relative;
+    top: 4px;
+  }
 `;
 
 const StyledImg = styled.img`
   width: 50px;
+`;
+
+const StyledBtn = styled.button`
+  width: 100px;
+  height: 50px;
+  border: 0;
+  border-radius: 10px;
+  background-color: rgba(42, 193, 188, 0.5);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(42, 193, 188, 0.3);
+  }
+`;
+
+const StyledBtnWrapper = styled.div`
+  display: flex;
+  width: 600px;
+  justify-content: space-between;
+  margin: 40px 0;
+  @media (max-width: 620px) {
+    width: 400px;
+  }
 `;

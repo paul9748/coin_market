@@ -42,6 +42,7 @@ a {
 	outline:none;
 }
 
+
 `;
 
 export default GlobalStyle;

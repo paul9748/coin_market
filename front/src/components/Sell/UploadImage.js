@@ -6,7 +6,7 @@ import * as Api from 'api/api';
 
 import { useImageContext } from 'context/ImageContext';
 
-function UploadImage(props) {
+function UploadImage({ currentStep, setCurrentStep }) {
   const [isDragging, setIsDragging] = useState(false);
   const [coinImage, setCoinImage] = useState(null);
   const [imageData, setImageData] = useState(null);
@@ -151,10 +151,10 @@ function UploadImage(props) {
         </>
       )}
       <StyledBtnWrapper>
-        {props.currentStep === 0 ? null : (
+        {currentStep === 0 ? null : (
           <StyledBtn
             onClick={() => {
-              props.setCurrentStep((preState) => preState - 1);
+              setCurrentStep((preState) => preState - 1);
             }}>
             이전
           </StyledBtn>
@@ -163,7 +163,7 @@ function UploadImage(props) {
           disabled={!coinImage}
           onClick={() => {
             handleSubmit();
-            props.currentStep < 5 && props.setCurrentStep((preState) => preState + 1);
+            currentStep < 5 && setCurrentStep((preState) => preState + 1);
           }}>
           다음
         </StyledBtn>
