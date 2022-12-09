@@ -5,9 +5,16 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const Container = styled.div`
+  width: 100%;
   overflow: hidden;
   text-align: center;
-  background-color: #2ac1bc;
+  /* background-color: #2ac1bc; */
+  background-color: #ccf2f4;
+`;
+
+const StyledH2 = styled.h2`
+  padding-top: 4vmax;
+  font-size: 1.5vmax;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -64,20 +71,8 @@ export default class SimpleSlider extends Component {
     };
     return (
       <Container>
-        <br></br>
-        <br></br>
-        <h2
-          style={{
-            fontFamily: 'monospace',
-            lineHeight: '50px',
-            fontSize: '50px',
-            fontWeigth: '600px',
-          }}>
-          팀원 소개
-        </h2>
-        <br></br>
-        <br></br>
-        <br></br>
+        {/* <StyledH2>팀원 소개</StyledH2> */}
+
         <StyledSlider {...settings}>
           {items.map((item) => {
             return (

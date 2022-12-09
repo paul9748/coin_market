@@ -34,9 +34,9 @@ const StyledMain = styled.main`
   min-height: calc(100vh - 200px);
   min-height: 500px;
   min-width: 400px;
-  background-color: #ccf2f4;
+  /* background-color: #ccf2f4; */
 
-  @media (max-width: 600px) {
+  /* @media (max-width: 600px) {
     min-width: 440px;
-  }
+  } */
 `;
