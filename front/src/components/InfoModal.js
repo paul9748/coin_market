@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 import ROUTE from 'utils/ROUTE';
 
-function InfoModal(props) {
+function InfoModal({ color }) {
   return (
     <StyledDiv>
       <li>
-        <StyledLink to={ROUTE.MYPAGE} color={props.color}>
+        <StyledLink to={ROUTE.MYPAGE} color={color}>
           마이페이지
         </StyledLink>
       </li>
@@ -20,7 +20,7 @@ function InfoModal(props) {
             sessionStorage.clear(), render(<Main></Main>);
           }}
           to={ROUTE.MAIN}
-          color={props.color}>
+          color={color}>
           로그아웃
         </StyledLink>
       </li>

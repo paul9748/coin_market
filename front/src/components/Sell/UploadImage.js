@@ -2,9 +2,16 @@ import styled from 'styled-components';
 import backImage from 'assets/images/upload_image.png';
 import { useEffect, useState, useRef, useCallback } from 'react';
 
-function UploadImage() {
+import * as Api from 'api/api';
+
+import { useImageContext } from 'context/ImageContext';
+
+function UploadImage({ currentStep, setCurrentStep }) {
   const [isDragging, setIsDragging] = useState(false);
   const [coinImage, setCoinImage] = useState(null);
+  const [imageData, setImageData] = useState(null);
+
+  const { setImageUrl } = useImageContext();
 
   const dragRef = useRef(null);
 
@@ -15,11 +22,12 @@ function UploadImage() {
       if (e.type === 'drop') {
         selectFiles = e.dataTransfer.files[0];
         encodeFile(selectFiles);
+        setImageData(e.dataTransfer.files[0]);
       } else {
         selectFiles = e.target.files[0];
         encodeFile(selectFiles);
       }
-
+      setImageData(e.target.files[0]);
       setCoinImage(selectFiles);
     },
     [coinImage]
@@ -33,7 +41,6 @@ function UploadImage() {
   const handleDragOut = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-
     setIsDragging(false);
   }, []);
 
@@ -93,17 +100,32 @@ function UploadImage() {
     }
   };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append('img', imageData);
+
+    try {
+      const response = await Api.put('analysis', formData);
+      setImageUrl(response.data);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {coinImage ? (
         <>
           <PreviewImage src={coinImage}></PreviewImage>
-          <StyledBtn
+          <StyledUploadBtn
             onClick={() => {
               setCoinImage((preState) => !preState);
+              setImageData((preState) => !preState);
             }}>
             다른 사진으로 업로드하기
-          </StyledBtn>
+          </StyledUploadBtn>
         </>
       ) : (
         <>
@@ -128,6 +150,24 @@ function UploadImage() {
           </StyledComment>
         </>
       )}
+      <StyledBtnWrapper>
+        {currentStep === 0 ? null : (
+          <StyledBtn
+            onClick={() => {
+              setCurrentStep((preState) => preState - 1);
+            }}>
+            이전
+          </StyledBtn>
+        )}
+        <StyledBtn
+          disabled={!coinImage}
+          onClick={() => {
+            handleSubmit();
+            currentStep < 5 && setCurrentStep((preState) => preState + 1);
+          }}>
+          다음
+        </StyledBtn>
+      </StyledBtnWrapper>
     </>
   );
 }
@@ -189,7 +229,7 @@ const PreviewImage = styled.img`
   margin: 30px auto;
 `;
 
-const StyledBtn = styled.button`
+const StyledUploadBtn = styled.button`
   width: 200px;
   height: 50px;
   background-color: rgba(92, 92, 224, 0.3);
@@ -202,4 +242,26 @@ const StyledBtn = styled.button`
   &:hover {
     background-color: rgba(92, 92, 224, 0.2);
   }
+`;
+
+const StyledBtn = styled.button`
+  width: 100px;
+  height: 50px;
+  border: 0;
+  border-radius: 10px;
+  background-color: rgba(42, 193, 188, 0.5);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(42, 193, 188, 0.3);
+  }
+`;
+
+const StyledBtnWrapper = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+
+  margin: 40px 0;
 `;

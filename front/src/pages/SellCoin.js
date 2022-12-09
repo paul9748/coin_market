@@ -11,6 +11,7 @@ import StartSell from 'components/Sell/StartSell';
 import UploadImage from 'components/Sell/UploadImage';
 import SellStepOne from 'components/Sell/SellStepOne';
 import ROUTE from 'utils/ROUTE';
+import CheckCoin from 'components/Sell/CheckCoin';
 
 function SellCoin() {
   const navigate = useNavigate();
@@ -42,23 +43,34 @@ function SellCoin() {
         )}
         {currentStep === 0 ? <StartSell></StartSell> : null}
         {currentStep === 1 ? <SellStepOne></SellStepOne> : null}
-        {currentStep === 2 ? <UploadImage></UploadImage> : null}
-        <StyledBtnWrapper>
-          {currentStep === 0 ? null : (
+        {currentStep === 2 ? (
+          <UploadImage
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></UploadImage>
+        ) : null}
+        {currentStep === 3 ? (
+          <CheckCoin
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></CheckCoin>
+        ) : null}
+        {currentStep >= 2 ? null : (
+          <StyledBtnWrapper>
+            {currentStep === 0 ? null : (
+              <StyledBtn
+                onClick={() => {
+                  currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                }}>
+                이전
+              </StyledBtn>
+            )}
             <StyledBtn
               onClick={() => {
-                currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                currentStep < 3 && setCurrentStep((preState) => preState + 1);
               }}>
-              이전
+              {currentStep === 0 ? '판매하기' : '다음'}
             </StyledBtn>
-          )}
-          <StyledBtn
-            onClick={() => {
-              currentStep < 5 && setCurrentStep((preState) => preState + 1);
-            }}>
-            {currentStep === 0 ? '판매하기' : '다음'}
-          </StyledBtn>
-        </StyledBtnWrapper>
+          </StyledBtnWrapper>
+        )}
       </StyledMain>
       <Footer></Footer>
     </>

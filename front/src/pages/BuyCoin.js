@@ -20,7 +20,6 @@ function BuyCoin() {
     if (!sessionStorage.getItem('ACCESS_TOKEN')) {
       alert('로그인이 필요합니다.');
       navigate(ROUTE.LOGIN);
-      return;
     }
   }, [navigate]);
 
@@ -31,24 +30,33 @@ function BuyCoin() {
       <Header backColor="#2AC1BC" logoImage="white" color="white"></Header>
       <StyledMain>
         {currentStep === 0 ? <StartBuy></StartBuy> : null}
-        {currentStep === 1 ? <SelectCoin></SelectCoin> : null}
-        {currentStep === 2 ? <Payment></Payment> : null}
-        <StyledBtnWrapper>
-          {currentStep === 0 ? null : (
+        {currentStep === 1 ? (
+          <SelectCoin
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></SelectCoin>
+        ) : null}
+        {currentStep === 2 ? (
+          <Payment currentStep={currentStep} setCurrentStep={setCurrentStep}></Payment>
+        ) : null}
+
+        {currentStep >= 1 ? null : (
+          <StyledBtnWrapper>
+            {currentStep === 0 ? null : (
+              <StyledBtn
+                onClick={() => {
+                  currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                }}>
+                이전
+              </StyledBtn>
+            )}
             <StyledBtn
               onClick={() => {
-                currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                currentStep < 3 && setCurrentStep((preState) => preState + 1);
               }}>
-              이전
+              {currentStep === 0 ? '구매하기' : '다음'}
             </StyledBtn>
-          )}
-          <StyledBtn
-            onClick={() => {
-              currentStep < 3 && setCurrentStep((preState) => preState + 1);
-            }}>
-            {currentStep === 0 ? '구매하기' : '다음'}
-          </StyledBtn>
-        </StyledBtnWrapper>
+          </StyledBtnWrapper>
+        )}
       </StyledMain>
       <Footer></Footer>
     </>
@@ -61,6 +69,7 @@ const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   min-height: calc(100vh - 200px);
   min-width: 600px;

@@ -21,9 +21,6 @@ function LoginForm() {
   const [isIdFocus, setIdFocus] = useState(false);
   const [isPwFocus, setPwFocus] = useState(false);
 
-  // const initialValue = { email: '', password: '' };
-  // const [user, SetUser] = useState(initialValue);
-
   const navigate = useNavigate();
   const idValidation = emailvalidation(email);
   const passwordValidation = password.length >= 2 && password.length <= 40;

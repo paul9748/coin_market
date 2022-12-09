@@ -4,19 +4,19 @@ import logo_white from '../../assets/images/coin_market(6).png';
 import logo_mint from '../../assets/images/coin_market(5).png';
 import NavBar from '../NavBar';
 
-function Header(props) {
+function Header({ backColor, logoImage, color }) {
   return (
-    <StyledHeader backColor={props.backColor}>
+    <StyledHeader backColor={backColor}>
       <div>
         <Link to="/">
-          {props.logoImage === 'white' ? (
+          {logoImage === 'white' ? (
             <StyledImg src={logo_white} alt="logo"></StyledImg>
           ) : (
             <StyledImg src={logo_mint} alt="logo"></StyledImg>
           )}
         </Link>
       </div>
-      <NavBar color={props.color}></NavBar>
+      <NavBar color={color}></NavBar>
     </StyledHeader>
   );
 }

@@ -10,7 +10,7 @@ import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
 import SelectCoinCount from './SelectCoinCount';
 
-function SelectCoin() {
+function SelectCoin({ currentStep, setCurrentStep }) {
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
   const [coinStock, setCoinStock] = useState();
@@ -39,17 +39,10 @@ function SelectCoin() {
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
       fetchData();
     }
-  }, [selectNation]);
+  }, [selectNation, isClick]);
 
   return (
     <StyledWrapper>
-      {selectNation.length === 0 ? (
-        <StyledDiv>국가를 선택하세요.</StyledDiv>
-      ) : (
-        <SelectCoinCount
-          selectNation={selectNation}
-          coinStock={coinStock}></SelectCoinCount>
-      )}
       <StyledDiv>
         <StyledSelectWrapper isClick={isClick}>
           {selectNation === 'JPY' || selectNation.length === 0 ? (
@@ -78,6 +71,13 @@ function SelectCoin() {
           ) : null}
         </StyledSelectWrapper>
       </StyledDiv>
+
+      <SelectCoinCount
+        selectNation={selectNation}
+        coinStock={coinStock}
+        setCoinStock={setCoinStock}
+        currentStep={currentStep}
+        setCurrentStep={setCurrentStep}></SelectCoinCount>
     </StyledWrapper>
   );
 }
@@ -89,9 +89,14 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  width: 1080px;
 
-  @media (max-width: 820px) {
-    flex-wrap: wrap-reverse;
+  @media (max-width: 1097px) {
+    width: 600px;
+    flex-direction: column;
+  }
+  @media (max-width: 620px) {
+    width: 500px;
   }
 `;
 const StyledDiv = styled.div`
@@ -100,6 +105,9 @@ const StyledDiv = styled.div`
   justify-content: center;
   align-items: center;
   width: 350px;
+  @media (max-width: 1097px) {
+    width: 500px;
+  }
 `;
 
 const StyledSelectWrapper = styled.div`
@@ -112,8 +120,8 @@ const StyledSelectWrapper = styled.div`
   border-radius: 15px;
   width: 300px;
   height: 320px;
-  @media (max-width: 600px) {
-    width: 400px;
+  @media (max-width: 1097px) {
+    width: 430px;
   }
 `;
 
