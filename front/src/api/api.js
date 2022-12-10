@@ -12,7 +12,11 @@ async function get(endpoint, params = '') {
 }
 
 async function post(endpoint, data) {
-  return axios.post(url + endpoint, data);
+  return axios.post(url + endpoint, data, {
+    headers: {
+      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+    },
+  });
 }
 
 async function put(endpoint, data) {

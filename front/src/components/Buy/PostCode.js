@@ -22,8 +22,6 @@ function PostCode({ userInfo, setUserInfo }) {
       fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
     }
 
-    console.log(fullAddress);
-
     const newUserInfo = {
       ...userInfo,
       buyer_addr: data.address,

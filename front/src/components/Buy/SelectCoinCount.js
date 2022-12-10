@@ -68,7 +68,11 @@ function SelectCoinCount({
 
     const newCoinStock = [];
     newCoinStock.push({ stockAmount: coinStock[0].stockAmount - newBuyCount.firstCoin });
-    newCoinStock.push({ stockAmount: coinStock[1].stockAmount - newBuyCount.secondCoin });
+    newCoinStock.push({
+      stockAmount: coinStock[1]
+        ? coinStock[1].stockAmount - newBuyCount.secondCoin
+        : null,
+    });
 
     setCoinStock(newCoinStock);
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import * as Api from 'api/api';
 
-function PayButton() {
+function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
   useEffect(() => {
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -19,38 +19,73 @@ function PayButton() {
   }, []);
 
   const onClickPayment = () => {
+    if (
+      userInfo.buyer_addr.length < 1 ||
+      userInfo.buyer_name.length < 1 ||
+      userInfo.buyer_postcode.length < 1 ||
+      userInfo.buyer_tel < 1
+    ) {
+      return alert('배송 정보를 입력해주시기바랍니다.');
+    }
+
     const { IMP } = window;
     IMP.init('imp17132202'); // 결제 데이터 정의
     const data = {
       pg: 'kakaopay',
       pay_method: 'card',
       merchant_uid: 'merchant_' + new Date().getTime(),
-      name: 'ffff',
-      amount: 64900,
+      name: '동전',
+      amount: sumBuyCoin,
       buyer_email: '',
-      buyer_name: '',
-      buyer_tel: '',
-      buyer_addr: '',
-      buyer_postcode: '',
+      buyer_name: userInfo.buyer_name,
+      buyer_tel: userInfo.buyer_tel,
+      buyer_addr: userInfo.buyer_addr + userInfo.detailAddress,
+      buyer_postcode: userInfo.buyer_postcode,
     };
     IMP.request_pay(data, callback);
   };
 
-  const callback = (response) => {
+  const callback = async (response) => {
     const { success, error_msg, imp_uid, merchant_uid, pay_method, paid_amount, status } =
       response;
 
-    const data = {};
+    console.log(imp_uid);
+    const data = {
+      order: {
+        dealStatus: 'BUY',
+      },
+      address: {
+        resAddress1: userInfo.buyer_addr,
+        resAddress2: userInfo.detailAddress,
+        resName: userInfo.buyer_name,
+      },
+      coin: reportCoinList,
+      pay: {
+        amount: sumBuyCoin,
+        exchangeRateToken: rateToken,
+        payCode: imp_uid,
+      },
+    };
+    console.log(data);
 
     if (success) {
-      Api.post('buy', { imp_uid, merchant_uid });
-      console.log(imp_uid);
+      try {
+        const response = await Api.post('buy', data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+        alert('결제가 완료되지 못했습니다.');
+      }
     } else {
       alert(`결제 실패 : ${error_msg}`);
     }
   };
 
-  return <StyledBtn onClick={onClickPayment}>{'2010원'} 결제하기</StyledBtn>;
+  return (
+    <StyledBtn onClick={onClickPayment}>
+      {sumBuyCoin.toLocaleString()}원 결제하기
+    </StyledBtn>
+  );
 }
 
 export default PayButton;

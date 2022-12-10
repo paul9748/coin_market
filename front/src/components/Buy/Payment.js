@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useCoinContext } from 'context/CoinContext';
-
-import * as Api from 'api/api';
 
 import useRate from 'hooks/useRate';
 import PostCode from 'components/Buy/PostCode';
@@ -21,10 +19,82 @@ const Payment = () => {
     buyer_postcode: '',
   });
 
-  console.log(process.env.REACT_APP_JPY100);
-  console.log(coinList);
-  console.log(jpyRate, cnyRate, usdRate);
-  console.log(userInfo);
+  let jpy100 = 0;
+  let jpy500 = 0;
+  let cny1 = 0;
+  let usd25 = 0;
+  let usd10 = 0;
+  let krw100 = 0;
+  let krw500 = 0;
+
+  coinList.map((el) => {
+    if (el.selectNation === 'JPY') {
+      jpy100 += parseInt(el.firstCoin);
+      jpy500 += parseInt(el.secondCoin);
+      return;
+    }
+    if (el.selectNation === 'CNY') {
+      cny1 += parseInt(el.firstCoin);
+      return;
+    }
+    if (el.selectNation === 'USD') {
+      usd10 += parseInt(el.firstCoin);
+      usd25 += parseInt(el.secondCoin);
+      return;
+    }
+    if (el.selectNation === 'KRW') {
+      krw100 += parseInt(el.firstCoin);
+      krw500 += parseInt(el.secondCoin);
+      return;
+    }
+  });
+
+  const reportCoinList = [];
+
+  if (jpy100 > 0) {
+    reportCoinList.push({
+      coinId: process.env.REACT_APP_JPY100,
+      dealAmount: jpy100,
+    });
+  }
+  if (jpy500 > 0) {
+    reportCoinList.push({
+      coinId: process.env.REACT_APP_JPY500,
+      dealAmount: jpy500,
+    });
+  }
+  if (cny1 > 0) {
+    reportCoinList.push({
+      coinId: process.env.REACT_APP_CNY1,
+      dealAmount: cny1,
+    });
+  }
+  if (usd10 > 0) {
+    reportCoinList.push({
+      coinId: process.env.REACT_APP_USD10,
+      dealAmount: usd10,
+    });
+  }
+  if (usd25 > 0) {
+    reportCoinList.push({
+      coinId: process.env.REACT_APP_USD25,
+      dealAmount: usd25,
+    });
+  }
+
+  const rateToken = [];
+
+  if (jpy100 > 0 || jpy500 > 0) rateToken.push(jpyRate);
+  if (cny1 > 0) rateToken.push(cnyRate);
+  if (usd10 > 0 || usd25 > 0) rateToken.push(usdRate);
+
+  const sumBuyCoin = Math.floor(
+    (jpy100 + jpy500 * 5) * jpyRate?.[0].basePrice +
+      cny1 * cnyRate?.[0].basePrice +
+      (usd25 * 0.4 + usd10 * 0.1) * usdRate?.[0].basePrice +
+      krw100 * 100 +
+      krw500 * 500
+  );
 
   return (
     <StyledLayout>
@@ -36,18 +106,98 @@ const Payment = () => {
         </StyledAddressWrapper>
         <StyledCoinList>
           <StyledContentTitle>구매품목</StyledContentTitle>
-          {/*  // [{selectNation: 'JPY', firstCoin: '4', secondCoin: '4'},{selectNation: 'JPY', firstCoin: '2', secondCoin: '4'}]
-  // coinList.map((el) => ) */}
-          {coinList.map((el, idx) => {
-            return <></>;
-          })}
+          <div>
+            {jpy100 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/JPY100.png"></StyledImg>
+                <span>일본 100엔(¥100)</span>
+                <span>{jpy100}개</span>
+                <span>
+                  <strong>
+                    {Math.floor(jpy100 * jpyRate?.[0].basePrice).toLocaleString()}
+                  </strong>
+                  원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {jpy500 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/JPY500.png"></StyledImg>
+                <span>일본 500엔(¥500)</span>
+                <span>{jpy500}개</span>
+                <span>
+                  <strong>
+                    {Math.floor(jpy500 * 5 * jpyRate?.[0].basePrice).toLocaleString()}
+                  </strong>
+                  원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {cny1 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/CNY1.png"></StyledImg>
+                <span>중국 1위안(¥1)</span>
+                <span>{cny1}개</span>
+                <span>
+                  <strong>
+                    {Math.floor(cny1 * cnyRate?.[0].basePrice).toLocaleString()}
+                  </strong>
+                  원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {usd10 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/USD10.png"></StyledImg>
+                <span>미국 10센트(10¢)</span>
+                <span>{usd10}개</span>
+                <span>
+                  <strong>
+                    {Math.floor(usd10 * usdRate?.[0].basePrice * 0.1).toLocaleString()}
+                  </strong>
+                  원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {usd25 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/USD25.png"></StyledImg>
+                <span>미국 25센트(25¢)</span>
+                <span>{usd25}개</span>
+                <span>
+                  <strong>
+                    {Math.floor(usd25 * usdRate?.[0].basePrice * 0.25).toLocaleString()}
+                  </strong>
+                  원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {krw100 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/KRW100.png"></StyledImg>
+                <span>한국 100원(₩100)</span>
+                <span>{krw100}개</span>
+                <span>
+                  <strong>{(krw100 * 100).toLocaleString()}</strong>원
+                </span>
+              </StyledCoinWrapper>
+            ) : null}
+            {krw100 ? (
+              <StyledCoinWrapper>
+                <StyledImg src="/KRW500.png"></StyledImg>
+                <span>한국 500원(₩500)</span>
+                <span>{krw500}개</span>
+                <span>{krw500 * 500}원</span>
+              </StyledCoinWrapper>
+            ) : null}
+          </div>
         </StyledCoinList>
       </StyledWrapper>
       <StyledPayWrapper>
         <StyledContentTitle>결제 예정금액</StyledContentTitle>
         <StyledContent>
           <span>상품금액</span>
-          <span>{0}원</span>
+          <span>{sumBuyCoin.toLocaleString()}원</span>
         </StyledContent>
         <StyledContent>
           <span>배송비</span>
@@ -59,10 +209,14 @@ const Payment = () => {
         </StyledContent>
         <StyledResultContent>
           <span>합계</span>
-          <span>{0}원</span>
+          <span>{sumBuyCoin.toLocaleString()}원</span>
         </StyledResultContent>
 
-        <PayButton></PayButton>
+        <PayButton
+          userInfo={userInfo}
+          sumBuyCoin={sumBuyCoin}
+          reportCoinList={reportCoinList}
+          rateToken={rateToken}></PayButton>
       </StyledPayWrapper>
     </StyledLayout>
   );
@@ -88,7 +242,9 @@ const StyledPageTitle = styled.h1`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
-const StyledCoinList = styled.div``;
+const StyledCoinList = styled.div`
+  margin-bottom: 50px;
+`;
 
 const StyledContentTitle = styled.h2`
   font-size: 20px;
@@ -108,7 +264,6 @@ const StyledPayWrapper = styled.div`
   top: -70px;
   padding-top: 170px;
   width: 200px;
-  /* border: 2px solid black; */
 `;
 
 const StyledContent = styled.div`
@@ -129,5 +284,27 @@ const StyledResultContent = styled.div`
   & span + span {
     font-size: 30px;
     font-weight: bold;
+  }
+`;
+
+const StyledImg = styled.img`
+  width: 90px;
+`;
+
+const StyledCoinWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+
+  & span:nth-child(2),
+  & span:nth-child(3),
+  & span:nth-child(4) {
+    width: 130px;
+    text-align: right;
+  }
+
+  & span:nth-child(4) strong {
+    font-size: 25px;
   }
 `;
