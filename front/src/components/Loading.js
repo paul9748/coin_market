@@ -3,7 +3,7 @@ function Loading() {
   return (
     <StyledDiv>
       <StyledText>로딩중...</StyledText>
-      <img src="/spinner"></img>
+      <img src="/spinner" alt="로딩"></img>
     </StyledDiv>
   );
 }

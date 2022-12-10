@@ -29,19 +29,19 @@ function BuyCoin() {
     <>
       <Header backColor="#2AC1BC" logoImage="white" color="white"></Header>
       <StyledMain>
-        {currentStep === 0 ? <StartBuy></StartBuy> : null}
-        {currentStep === 1 ? (
+        {currentStep === 0 && <StartBuy></StartBuy>}
+        {currentStep === 1 && (
           <SelectCoin
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></SelectCoin>
-        ) : null}
-        {currentStep === 2 ? (
+        )}
+        {currentStep === 2 && (
           <Payment currentStep={currentStep} setCurrentStep={setCurrentStep}></Payment>
-        ) : null}
+        )}
 
-        {currentStep >= 1 ? null : (
+        {currentStep < 1 && (
           <StyledBtnWrapper>
-            {currentStep === 0 ? null : (
+            {currentStep !== 0 && (
               <StyledBtn
                 onClick={() => {
                   currentStep > 0 && setCurrentStep((preState) => preState - 1);

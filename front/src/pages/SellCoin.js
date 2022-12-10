@@ -35,27 +35,27 @@ function SellCoin() {
     <>
       <Header backColor="#2AC1BC" logoImage="white" color="white"></Header>
       <StyledMain>
-        {currentStep === 0 || currentStep > 4 ? null : (
+        {currentStep !== 0 && currentStep <= 4 && (
           <StyledTitle>
             <TitleLabel>STEP {currentStep}</TitleLabel>
             <TitleContent>{stepComment[currentStep - 1]}</TitleContent>
           </StyledTitle>
         )}
-        {currentStep === 0 ? <StartSell></StartSell> : null}
-        {currentStep === 1 ? <SellStepOne></SellStepOne> : null}
-        {currentStep === 2 ? (
+        {currentStep === 0 && <StartSell></StartSell>}
+        {currentStep === 1 && <SellStepOne></SellStepOne>}
+        {currentStep === 2 && (
           <UploadImage
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></UploadImage>
-        ) : null}
-        {currentStep === 3 ? (
+        )}
+        {currentStep === 3 && (
           <CheckCoin
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></CheckCoin>
-        ) : null}
-        {currentStep >= 2 ? null : (
+        )}
+        {currentStep < 2 && (
           <StyledBtnWrapper>
-            {currentStep === 0 ? null : (
+            {currentStep !== 0 && (
               <StyledBtn
                 onClick={() => {
                   currentStep > 0 && setCurrentStep((preState) => preState - 1);
