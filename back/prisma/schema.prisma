@@ -13,10 +13,10 @@ model User {
   isEmailAuthorized Boolean    @default(false) @map("is_email_authorized")
   password          String
   role              User_role  @default(user)
+  userName          String
   phoneNumber       String     @map("phone_number")
   createdAt         DateTime   @default(now()) @map("created_at")
   updatedAt         DateTime   @updatedAt @map("updated_at")
-  userName          String
   address           Address[]
   deal              Deal[]
   snsLogin          SnsLogin[]
@@ -39,16 +39,16 @@ model UserToken {
 }
 
 model Deal {
-  id              String          @id @default(uuid())
-  userId          String          @map("user_id")
-  dealStatus      Deal_dealStatus @map("deal_status")
-  imageUrl        String?         @map("image_url")
-  createdAt       DateTime        @default(now()) @map("created_at")
-  updatedAt       DateTime        @updatedAt @map("updated_at")
-  isActivate      Int             @db.TinyInt
-  user            User            @relation(fields: [userId], references: [id])
-  delivery_detail deliveryDetail?
-  orderCoin       OrderCoin[]
+  id         String          @id @default(uuid())
+  userId     String          @map("user_id")
+  dealStatus Deal_dealStatus @map("deal_status")
+  imageUrl   String?         @map("image_url")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+  isActivate Int             @db.TinyInt
+  user       User            @relation(fields: [userId], references: [id])
+  delivery   delivery?
+  orderCoin  OrderCoin[]
 
   @@index([userId], map: "deal_user_id_fkey")
   @@map("deal")
@@ -77,7 +77,6 @@ model Coin {
   stockAmount  Int         @default(0)
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
-  dealAmount   Int         @default(0)
   country      Country     @relation(fields: [countryId], references: [id])
   orderCoin    OrderCoin[]
 
@@ -186,21 +185,27 @@ model SnsLogin {
   @@map("sns_login")
 }
 
-model deliveryDetail {
-  id              String         @id @default(uuid())
-  deal_id         String         @unique @map("deal_id")
-  res_name        String
-  res_address1    String
-  res_address2    String
-  res_status      deliveryStatus
-  company         String?
-  delivery_number String?
-  created_at      DateTime       @default(now())
-  updated_at      DateTime
-  Deal            Deal           @relation(fields: [deal_id], references: [id])
+model delivery {
+  id             String               @id @default(uuid())
+  dealId         String               @map("deal_id")@unique
+  resName        String               @map("res_name")
+  resAddress1    String               @map("res_address1")
+  resAddress2    String               @map("res_address2")
+  resStatus      delivery_res_status @map("res_status")
+  company        String?
+  deliveryNumber String?              @map("delivery_number")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  Deal            Deal                @relation(fields: [dealId], references: [id])
 
-  @@index([deal_id], map: "delivery_detail_deal_id_fkey")
-  @@map("delivery_detail")
+
+
+
+  @@index([dealId], map: "delivery_deal_id_fkey")
+
+
+
+  
 }
 
 enum Deal_dealStatus {
@@ -225,7 +230,7 @@ enum User_role {
   @@map("user_role")
 }
 
-enum deliveryStatus {
+enum delivery_res_status {
   waiting
   delivery
   completion
