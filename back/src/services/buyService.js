@@ -45,7 +45,7 @@ class buyService {
       throw new Error("주소누락");
     }
     for (let i of coins) {
-      const stockData = Buy.findCoin(i["coinId"]);
+      const stockData = await Buy.findCoin(i["coinId"]);
       if (i["dealAmount"] > stockData["stockAmount"]) {
         throw new Error("재고부족");
       }
