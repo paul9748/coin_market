@@ -6,21 +6,24 @@ import styled from 'styled-components';
 
 import ROUTE from 'utils/ROUTE';
 
-function InfoModal(props) {
+function InfoModal({ color }) {
   return (
     <StyledDiv>
-      <StyledLink to={ROUTE.MYPAGE} color={props.color}>
-        마이페이지
-      </StyledLink>
-
-      <StyledLink
-        onClick={() => {
-          sessionStorage.clear(), render(<Main></Main>);
-        }}
-        to={ROUTE.MAIN}
-        color={props.color}>
-        로그아웃
-      </StyledLink>
+      <li>
+        <StyledLink to={ROUTE.MYPAGE} color={color}>
+          마이페이지
+        </StyledLink>
+      </li>
+      <li>
+        <StyledLink
+          onClick={() => {
+            sessionStorage.clear(), render(<Main></Main>);
+          }}
+          to={ROUTE.MAIN}
+          color={color}>
+          로그아웃
+        </StyledLink>
+      </li>
     </StyledDiv>
   );
 }

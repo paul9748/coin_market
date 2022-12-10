@@ -6,7 +6,7 @@ import ROUTE from 'utils/ROUTE';
 import useProvideAuth from 'hooks/useProvideAuth';
 import InfoModal from './InfoModal';
 
-function NavBar(props) {
+function NavBar({ color }) {
   const [isToggle, setIsToggle] = useState(false);
   const [isModal, setIsModal] = useState(false);
 
@@ -37,7 +37,7 @@ function NavBar(props) {
         e.stopPropagation();
       });
     };
-  });
+  }, [isToggle]);
 
   return (
     <StyledNav id="navBar">
@@ -47,33 +47,33 @@ function NavBar(props) {
           setIsToggle((preState) => !preState);
           setIsModal(false);
         }}
-        color={props.color}>
+        color={color}>
         <StyledSpread></StyledSpread>
         <StyledSpread></StyledSpread>
         <StyledSpread></StyledSpread>
       </StyledBtn>
       <StyledUl isToggle={isToggle} onBlur={(e) => e.stopPropagation()}>
         <li>
-          <StyledLink to={ROUTE.ABOUT} color={props.color}>
+          <StyledLink to={ROUTE.ABOUT} color={color}>
             about
           </StyledLink>
         </li>
 
         <li>
-          <StyledLink to={ROUTE.BUY} color={props.color}>
+          <StyledLink to={ROUTE.BUY} color={color}>
             구매
           </StyledLink>
         </li>
 
         <li>
-          <StyledLink to={ROUTE.SELL} color={props.color}>
+          <StyledLink to={ROUTE.SELL} color={color}>
             판매
           </StyledLink>
         </li>
 
         {isLogin ? (
           <StyledMyinfoBtn
-            color={props.color}
+            color={color}
             onClick={() => {
               setIsModal((preState) => !preState);
               setIsToggle(false);
@@ -82,13 +82,13 @@ function NavBar(props) {
           </StyledMyinfoBtn>
         ) : (
           <li>
-            <StyledLink to={ROUTE.LOGIN} color={props.color}>
+            <StyledLink to={ROUTE.LOGIN} color={color}>
               로그인
             </StyledLink>
           </li>
         )}
       </StyledUl>
-      {isModal ? <InfoModal color={props.color}></InfoModal> : null}
+      {isModal ? <InfoModal color={color}></InfoModal> : null}
     </StyledNav>
   );
 }
@@ -187,5 +187,6 @@ const StyledMyinfoBtn = styled.button`
   }
   @media (max-width: 600px) {
     margin: 0 auto;
+    color: black;
   }
 `;

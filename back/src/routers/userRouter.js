@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userService } from "../services/userService";
 import { loginRequired } from "../middlewares/loginRequired";
+import { mailAuthService } from "../services/mailAuthService";
 
 const userAuthRouter = Router();
 
@@ -101,6 +102,46 @@ userAuthRouter.put(
   }
 );
 
-//
+//메일인증
+userAuthRouter.post(
+  "/users/authMail",
+  loginRequired,
+  async (req, res, next) => {
+    const user = await userService.userInfo(req.userId);
+    const email = user.email;
+
+    const generateRandom = (min, max) => {
+      const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+      return randomNumber;
+    };
+
+    const randomNumber = generateRandom(111111, 999999);
+
+    try {
+      const sendMail = await mailAuthService.sendMail({ email, randomNumber });
+
+      res.status(200).json(randomNumber);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+//메일인증 완료
+userAuthRouter.put(
+  "/users/authMail/success",
+  loginRequired,
+  async (req, res, next) => {
+    try {
+      const authMail = await userService.authMailUpdate(req.userId);
+      res.status(201).send("메일인증이 완료되었습니다.");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+//구글 로그인
+// userAuthRouter.get('/google',passpo)
 
 export { userAuthRouter };

@@ -1,10 +1,22 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import LoginForm from 'components/User/LoginForm';
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 
+import ROUTE from 'utils/ROUTE';
+import { useEffect } from 'react';
+
 function Login() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem('ACCESS_TOKEN')) {
+      navigate(ROUTE.MAIN);
+    }
+  }, [navigate]);
+
   return (
     <>
       <Header backColor="white"></Header>

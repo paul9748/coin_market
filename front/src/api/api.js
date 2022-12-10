@@ -4,9 +4,9 @@ const portNum = 3000;
 const url = 'http://' + window.location.hostname + ':' + portNum + '/';
 
 async function get(endpoint, params = '') {
-  return axios.get(url + endpoint + '/' + params, {
+  return await axios.get(url + endpoint + params, {
     headers: {
-      Authentication: `${sessionStorage.getItem('accessToken')}`,
+      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
@@ -18,7 +18,7 @@ async function post(endpoint, data) {
 async function put(endpoint, data) {
   return axios.put(url + endpoint, data, {
     headers: {
-      Authentication: `${sessionStorage.getItem('accessToken')}`,
+      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
@@ -26,7 +26,7 @@ async function put(endpoint, data) {
 async function del(endpoint) {
   return axios.delete(url + endpoint, {
     headers: {
-      Authentication: `${sessionStorage.getItem('accessToken')}`,
+      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }

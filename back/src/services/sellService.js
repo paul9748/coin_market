@@ -28,7 +28,6 @@ class sellService {
     return "주문신청이 완료 되었습니다 : " + order["id"];
   }
   static async fixSellOrder(data) {
-    //TODO: 로그인 서비스랑 연결 해야함
     const dealId = data["dealId"];
     const userId = data["userId"];
     const deal = await Sell.findDeal(dealId);

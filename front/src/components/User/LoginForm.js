@@ -8,7 +8,6 @@ import { emailvalidation } from 'utils/validation';
 
 import * as Api from 'api/api';
 
-// import GoogleButton from './GoogleButton';
 import GoogleLogIn from './GoogleLogin';
 
 function LoginForm() {
@@ -21,9 +20,6 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [isIdFocus, setIdFocus] = useState(false);
   const [isPwFocus, setPwFocus] = useState(false);
-
-  // const initialValue = { email: '', password: '' };
-  // const [user, SetUser] = useState(initialValue);
 
   const navigate = useNavigate();
   const idValidation = emailvalidation(email);

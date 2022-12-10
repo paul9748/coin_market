@@ -58,8 +58,8 @@ class Buy {
       },
     });
   }
-  static async createOrderCoin(dealId, coinId, dealAmount) {
-    return await db.OrderCoin.create({
+  static createOrderCoin(dealId, coinId, dealAmount) {
+    return db.OrderCoin.create({
       data: {
         dealId: dealId,
         coinId: coinId,
@@ -67,8 +67,8 @@ class Buy {
       },
     });
   }
-  static async coinStockUpdate(coinId, dealAmount) {
-    return await db.coin.update({
+  static coinStockUpdate(coinId, dealAmount) {
+    return db.coin.update({
       where: {
         id: coinId,
       },
@@ -97,8 +97,8 @@ class Buy {
     });
   }
 
-  static async orderCoinUpdate(id, stockAmount) {
-    return await db.orderCoin.update({
+  static orderCoinUpdate(id, stockAmount) {
+    return db.orderCoin.update({
       where: {
         id: id,
       },
@@ -108,9 +108,77 @@ class Buy {
     });
   }
   static async dealDetailCreate(dealDetail) {
-    return await db.DealDetail.create({
+    return await db.delivery.create({
       data: dealDetail,
     });
+  }
+
+  static async createDealTest(
+    userId,
+    dealStatus,
+    imageUrl,
+    isActivate,
+    delivery,
+    createOrderCoinList,
+    updateDealCoinList
+  ) {
+    let orderTransactionList = [];
+    const createDeal = db.deal.create({
+      data: {
+        userId,
+        dealStatus,
+        imageUrl,
+        isActivate,
+        delivery: {
+          create: delivery,
+        },
+        orderCoin: {
+          create: createOrderCoinList,
+        },
+      },
+    });
+    orderTransactionList.push(createDeal);
+    let dateCoinStocks;
+    for (let i of createOrderCoinList) {
+      dateCoinStocks = db.coin.update({
+        where: {
+          id: i["coinId"],
+        },
+        data: {
+          stockAmount: { increment: -i["dealAmount"] },
+        },
+      });
+      orderTransactionList.push(dateCoinStocks);
+    }
+
+    if (updateDealCoinList["idList"].length != 1) {
+      const bulkUpdateOrderCoinStocks = db.orderCoin.updateMany({
+        where: {
+          id: {
+            in: updateDealCoinList["idList"],
+          },
+        },
+        data: {
+          stockAmount: 0,
+        },
+      });
+      orderTransactionList.push(bulkUpdateOrderCoinStocks);
+    }
+    if (Object.keys(updateDealCoinList["notZero"]) != []) {
+      let lastUpdateOrderCoinStocks;
+      for (let i of Object.keys(updateDealCoinList["notZero"])) {
+        lastUpdateOrderCoinStocks = db.orderCoin.update({
+          where: {
+            id: i,
+          },
+          data: {
+            stockAmount: updateDealCoinList["notZero"][i],
+          },
+        });
+        orderTransactionList.push(lastUpdateOrderCoinStocks);
+      }
+    }
+    return await db.$transaction(orderTransactionList);
   }
 }
 

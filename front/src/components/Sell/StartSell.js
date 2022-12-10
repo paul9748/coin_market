@@ -7,7 +7,8 @@ function StartSell() {
     <StyledWrapper>
       <StyledImg src={penguin}></StyledImg>
       <StyledP>
-        여행 후 남은 동전을 <strong>4단계</strong>로 손쉽게 판매해 보세요!
+        여행 후 남은 동전을 <strong>4단계</strong>로 손쉽게 <strong>판매</strong>해
+        보세요!
       </StyledP>
     </StyledWrapper>
   );

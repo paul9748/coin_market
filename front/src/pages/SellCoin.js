@@ -3,13 +3,26 @@ import Footer from 'components/UI/Footer';
 
 import styled from 'styled-components';
 
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useState, useEffect } from 'react';
 
 import StartSell from 'components/Sell/StartSell';
 import UploadImage from 'components/Sell/UploadImage';
 import SellStepOne from 'components/Sell/SellStepOne';
+import ROUTE from 'utils/ROUTE';
+import CheckCoin from 'components/Sell/CheckCoin';
 
 function SellCoin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+  }, [navigate]);
+
   const [currentStep, setCurrentStep] = useState(0);
   const stepComment = [
     '판매하실 동전 사진을 찍어주세요.',
@@ -30,23 +43,34 @@ function SellCoin() {
         )}
         {currentStep === 0 ? <StartSell></StartSell> : null}
         {currentStep === 1 ? <SellStepOne></SellStepOne> : null}
-        {currentStep === 2 ? <UploadImage></UploadImage> : null}
-        <StyledBtnWrapper>
-          {currentStep === 0 ? null : (
+        {currentStep === 2 ? (
+          <UploadImage
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></UploadImage>
+        ) : null}
+        {currentStep === 3 ? (
+          <CheckCoin
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}></CheckCoin>
+        ) : null}
+        {currentStep >= 2 ? null : (
+          <StyledBtnWrapper>
+            {currentStep === 0 ? null : (
+              <StyledBtn
+                onClick={() => {
+                  currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                }}>
+                이전
+              </StyledBtn>
+            )}
             <StyledBtn
               onClick={() => {
-                currentStep > 0 && setCurrentStep((preState) => preState - 1);
+                currentStep < 3 && setCurrentStep((preState) => preState + 1);
               }}>
-              이전
+              {currentStep === 0 ? '판매하기' : '다음'}
             </StyledBtn>
-          )}
-          <StyledBtn
-            onClick={() => {
-              currentStep < 5 && setCurrentStep((preState) => preState + 1);
-            }}>
-            {currentStep === 0 ? '판매하기' : '다음'}
-          </StyledBtn>
-        </StyledBtnWrapper>
+          </StyledBtnWrapper>
+        )}
       </StyledMain>
       <Footer></Footer>
     </>
@@ -58,7 +82,7 @@ export default SellCoin;
 const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 
   min-height: calc(100vh - 200px);
   min-width: 600px;

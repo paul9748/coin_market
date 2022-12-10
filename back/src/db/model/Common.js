@@ -9,8 +9,13 @@ class Common {
         isUsed: true,
       },
       select: {
+        id: true,
         currencyType: true,
+        unitAmount: true,
         stockAmount: true,
+      },
+      orderBy: {
+        unitAmount: "asc",
       },
     });
   }
@@ -25,7 +30,11 @@ class Common {
         },
         id: true,
         currencyType: true,
+        unitAmount: true,
         stockAmount: true,
+      },
+      orderBy: {
+        unitAmount: "asc",
       },
     });
     let re_data = {};

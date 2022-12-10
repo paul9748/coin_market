@@ -3,7 +3,6 @@ import { sellService } from "../services/sellService";
 import { loginRequired } from "../middlewares/loginRequired";
 
 const sellRouter = Router();
-//TODO: 테스트 해야함
 sellRouter.post("/sell", loginRequired, async (req, res, next) => {
   try {
     const data = req.body;

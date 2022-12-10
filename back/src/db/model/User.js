@@ -68,5 +68,17 @@ class User {
     });
     return user;
   }
+
+  static async authMailUpdate(id) {
+    const user = db.user.update({
+      where: {
+        id,
+      },
+      data: {
+        isEmailAuthorized: true,
+      },
+    });
+    return user;
+  }
 }
 export { User };

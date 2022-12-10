@@ -7,7 +7,19 @@ import { buyRouter } from "./routers/buyRouter";
 import { analysisRouter } from "./routers/analysisRouter";
 import { commonRouter } from "./routers/commonRouter";
 import { sellRouter } from "./routers/sellRouter";
+import { walletRouter } from "./routers/walletRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
+// import {passport} from "passport"
+// import { GoogleStrategy} from "passport-google-oauth20"
+
+// passport.use(new GoogleStrategy({
+//   clientId: process.env.client_id,
+//   clientSecret: process.env.client_secret,
+//   callbackURL : "http://localhost:3000/google/callback"
+// },
+// function(accessToken, refreshToken, porfile, cb) {
+//   U
+// }))
 
 const app = express();
 
@@ -32,6 +44,7 @@ app.use(analysisRouter);
 app.use(commonRouter);
 app.use(buyRouter);
 app.use(sellRouter);
+app.use(walletRouter);
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
 
