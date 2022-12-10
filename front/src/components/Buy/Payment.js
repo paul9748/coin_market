@@ -187,7 +187,9 @@ const Payment = () => {
                 <StyledImg src="/KRW500.png"></StyledImg>
                 <span>한국 500원(₩500)</span>
                 <span>{krw500}개</span>
-                <span>{krw500 * 500}원</span>
+                <span>
+                  <strong>{(krw500 * 500).toLocaleString()}</strong>원
+                </span>
               </StyledCoinWrapper>
             ) : null}
           </div>

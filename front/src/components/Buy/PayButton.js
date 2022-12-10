@@ -59,7 +59,7 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
         resAddress2: userInfo.detailAddress,
         resName: userInfo.buyer_name,
       },
-      coin: reportCoinList,
+      coins: reportCoinList,
       pay: {
         amount: sumBuyCoin,
         exchangeRateToken: rateToken,

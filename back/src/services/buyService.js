@@ -34,7 +34,7 @@ class buyService {
 
     orderData["userId"] = data["userId"];
     orderData["isActivate"] = 1;
-    if (orderData["dealStatus"] != "BUY") {
+    if (orderData["dealStatus"] !== "BUY") {
       throw new Error("Bad Request");
     }
     if (

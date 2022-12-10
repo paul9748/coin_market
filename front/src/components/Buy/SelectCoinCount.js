@@ -99,7 +99,12 @@ function SelectCoinCount({
             </StyledContent>
             <StyledContent>
               <span>재고수량</span>
-              <span>{coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}개</span>
+              <span>
+                {selectNation === 'KRW'
+                  ? 0
+                  : coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}
+                개
+              </span>
             </StyledContent>
             <StyledContent>
               <span>구매수량</span>
@@ -123,7 +128,12 @@ function SelectCoinCount({
               </StyledContent>
               <StyledContent>
                 <span>재고수량</span>
-                <span>{coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}개</span>
+                <span>
+                  {selectNation === 'KRW'
+                    ? 0
+                    : coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}
+                  개
+                </span>
               </StyledContent>
               <StyledContent>
                 <span>구매수량</span>
