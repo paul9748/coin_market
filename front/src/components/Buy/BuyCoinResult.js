@@ -104,7 +104,7 @@ const StyledDiv = styled.div`
 
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  width: 280px;
+  width: 290px;
   height: 60px;
   background-color: rgba(0, 0, 0, 0.07);
 

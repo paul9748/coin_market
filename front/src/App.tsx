@@ -15,6 +15,7 @@ import About from 'pages/About';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ImageContextProvider } from 'context/ImageContext';
 import { CoinContextProvider } from 'context/CoinContext';
+import BuyCompletion from 'pages/BuyCompletion';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path={ROUTE.MAIN} element={<Main />}></Route>
                 <Route path={ROUTE.LOGIN} element={<Login />}></Route>
                 <Route path={ROUTE.ABOUT} element={<About />}></Route>
+                <Route path={ROUTE.BUYEND} element={<BuyCompletion />}></Route>
                 <Route path={ROUTE.BUY} element={<BuyCoin />}></Route>
                 <Route path={ROUTE.SELL} element={<SellCoin />}></Route>
                 <Route path={ROUTE.REGISTER} element={<Register />}></Route>

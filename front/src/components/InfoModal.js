@@ -1,12 +1,10 @@
-import { render } from '@testing-library/react';
-import Main from 'pages/Main';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import ROUTE from 'utils/ROUTE';
 
-function InfoModal({ color }) {
+function InfoModal({ color, setIsLogin, setIsModal }) {
   return (
     <StyledDiv>
       <li>
@@ -17,7 +15,9 @@ function InfoModal({ color }) {
       <li>
         <StyledLink
           onClick={() => {
-            sessionStorage.clear(), render(<Main></Main>);
+            sessionStorage.clear();
+            setIsLogin(false);
+            setIsModal(false);
           }}
           to={ROUTE.MAIN}
           color={color}>

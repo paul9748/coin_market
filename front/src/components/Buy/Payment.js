@@ -7,7 +7,7 @@ import useRate from 'hooks/useRate';
 import PostCode from 'components/Buy/PostCode';
 import PayButton from './PayButton';
 
-const Payment = () => {
+function Payment() {
   const { coinList } = useCoinContext();
   const { jpyRate, cnyRate, usdRate } = useRate();
 
@@ -222,14 +222,13 @@ const Payment = () => {
       </StyledPayWrapper>
     </StyledLayout>
   );
-};
+}
 
 export default Payment;
 
 const StyledLayout = styled.div`
   display: flex;
 `;
-
 const StyledWrapper = styled.div`
   width: 620px;
   padding: 40px;
