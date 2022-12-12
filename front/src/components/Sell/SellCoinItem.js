@@ -4,13 +4,6 @@ import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
-import japan100_f from 'assets/images/japan100_f.png';
-import japan500_f from 'assets/images/japan500_f.png';
-import china1_f from 'assets/images/china1_f.png';
-import usa10_f from 'assets/images/usa10_f.png';
-import usa25_f from 'assets/images/usa25_f.png';
-import korea100_f from 'assets/images/korea100_f.png';
-import korea500_f from 'assets/images/korea500_f.png';
 
 function SellCoinItem() {
   const RATE = 942;
@@ -30,7 +23,7 @@ function SellCoinItem() {
           </StyledCoinListTitle>
           <StyledCoinListContent>
             <StyledCoin>
-              <StyledCoinImg src={japan100_f} />
+              <StyledCoinImg src="JPY100.png" />
               <div>
                 <div>100엔 x {10}개 =</div>
                 <div>{RATE * 10}원</div>
@@ -41,7 +34,7 @@ function SellCoinItem() {
               </div>
             </StyledCoin>
             <StyledCoin>
-              <StyledCoinImg src={japan100_f} />
+              <StyledCoinImg src="/JPY500.png" />
               <div>
                 <div>500엔 x {10}개 =</div>
                 <div>{RATE * 5 * 10}원</div>
