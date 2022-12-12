@@ -1,14 +1,7 @@
 import { Deal } from "../db/model/Deal";
 
 class dealService {
-  //deal조회
-  static async findDealList(userId) {
-    const dealList = await Deal.findDealByUserId(userId);
-
-    return dealList;
-  }
-
-  //상태별deal조회
+  //상태별deal or deal 전체 조회
   static async findeDealByStatus(status) {
     const dealListByStatus = await Deal.findDealByStatus(status);
 

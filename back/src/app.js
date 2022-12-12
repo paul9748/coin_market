@@ -8,6 +8,7 @@ import { analysisRouter } from "./routers/analysisRouter";
 import { commonRouter } from "./routers/commonRouter";
 import { sellRouter } from "./routers/sellRouter";
 import { dealRouter } from "./routers/dealRouter";
+import { deliveryRouter } from "./routers/deliveryRouter";
 import { walletRouter } from "./routers/walletRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 // import {passport} from "passport"
@@ -47,6 +48,7 @@ app.use(commonRouter);
 app.use(buyRouter);
 app.use(sellRouter);
 app.use(dealRouter);
+app.use(deliveryRouter);
 app.use(walletRouter);
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);

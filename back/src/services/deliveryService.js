@@ -6,6 +6,12 @@ class deliveryService {
 
     return delivery;
   }
+
+  static async deliveryByStatus(status) {
+    const delivery = await Delivery.findDeliveryByStatus(status);
+
+    return delivery;
+  }
 }
 
 export { deliveryService };

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { loginRequired } from "../middlewares/loginRequired";
 import { dealService } from "../services/dealService";
+import { deliveryService } from "../services/deliveryService";
 
 const dealRouter = Router();
 
@@ -11,12 +12,18 @@ dealRouter.get("/users/deals", loginRequired, async (req, res, next) => {
       const dealList = await dealService.findeDealByStatus();
 
       res.status(200).json(dealList);
-    } else {
+    } else if (req.query.status == "BUY" || req.query.status == "SELL") {
       const dealByStatus = await dealService.findeDealByStatus(
         req.query.status
       );
 
       res.status(200).json(dealByStatus);
+    } else {
+      const deliveryByStatus = await deliveryService.deliveryByStatus(
+        req.query.status
+      );
+
+      res.status(200).json(deliveryByStatus);
     }
   } catch (err) {
     next(err);
@@ -31,8 +38,9 @@ dealRouter.get(
     try {
       const dealId = req.params.dealId;
       const dealDetail = await dealService.findDealDetail(dealId);
+      const delivery = await deliveryService.deliveryDetail(dealId);
 
-      res.status(200).json(dealDetail);
+      res.status(200).json({ dealDetail, delivery });
     } catch (err) {
       next(err);
     }

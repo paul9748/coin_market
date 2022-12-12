@@ -10,6 +10,16 @@ class Delivery {
 
     return delivery;
   }
+
+  static async findDeliveryByStatus(status) {
+    const delivery = db.delivery.findMany({
+      where: {
+        resStatus: status,
+      },
+    });
+
+    return delivery;
+  }
 }
 
 export { Delivery };

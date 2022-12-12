@@ -1,16 +1,6 @@
 import { db } from "../db";
 
 class Deal {
-  static async findDealByUserId(userId) {
-    const dealList = db.deal.findUnique({
-      where: {
-        userId: userId,
-      },
-    });
-
-    return dealList;
-  }
-
   static async findDealByStatus(status) {
     const dealByStatus = db.deal.findMany({
       where: {
