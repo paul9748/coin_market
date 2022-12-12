@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { commonService } from "../services/commonService";
 import jwt from "jsonwebtoken";
-const request = require("request-promise-native");
+import axios from "axios";
 const commonRouter = Router();
 
 commonRouter.get("/exchangeRate", async (req, res, next) => {
@@ -10,10 +10,8 @@ commonRouter.get("/exchangeRate", async (req, res, next) => {
     let url =
       "https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRW" +
       req.query["countryCode"];
-    let data = await request(url, function (err, res, body) {
-      return body.slice(1, -1);
-    });
-    data = JSON.parse(data);
+    let data = await axios.get(url);
+    data = data.data;
 
     data.push(
       jwt.sign(

@@ -48,35 +48,6 @@ class Buy {
     });
   }
 
-  static async createDeal(userId, dealStatus, imageUrl, isActivate) {
-    return await db.deal.create({
-      data: {
-        userId,
-        dealStatus,
-        imageUrl,
-        isActivate,
-      },
-    });
-  }
-  static createOrderCoin(dealId, coinId, dealAmount) {
-    return db.OrderCoin.create({
-      data: {
-        dealId: dealId,
-        coinId: coinId,
-        dealAmount: dealAmount,
-      },
-    });
-  }
-  static coinStockUpdate(coinId, dealAmount) {
-    return db.coin.update({
-      where: {
-        id: coinId,
-      },
-      data: {
-        stockAmount: { increment: -dealAmount },
-      },
-    });
-  }
   static async findStockOrderByCoinId(coinId) {
     return await db.orderCoin.findMany({
       where: {
@@ -97,23 +68,7 @@ class Buy {
     });
   }
 
-  static orderCoinUpdate(id, stockAmount) {
-    return db.orderCoin.update({
-      where: {
-        id: id,
-      },
-      data: {
-        stockAmount: stockAmount,
-      },
-    });
-  }
-  static async dealDetailCreate(dealDetail) {
-    return await db.delivery.create({
-      data: dealDetail,
-    });
-  }
-
-  static async createDealTest(
+  static async createDeal(
     userId,
     dealStatus,
     imageUrl,

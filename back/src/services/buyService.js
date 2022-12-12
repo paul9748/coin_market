@@ -84,7 +84,7 @@ class buyService {
       }
     }
 
-    let order = await Buy.createDealTest(
+    let order = await Buy.createDeal(
       data["userId"],
       orderData["dealStatus"],
       orderData["imageUrl"],
