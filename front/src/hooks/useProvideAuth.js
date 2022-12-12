@@ -11,7 +11,7 @@ function useProvideAuth() {
     }
   }, [isLogin]);
 
-  return isLogin;
+  return { isLogin, setIsLogin };
 }
 
 export default useProvideAuth;

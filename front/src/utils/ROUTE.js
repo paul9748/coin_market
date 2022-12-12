@@ -4,6 +4,7 @@ const ROUTE = {
   LOGIN: '/login',
   REGISTER: '/register',
   SELL: '/sell',
+  BUYEND: '/buyend',
   BUY: '/buy',
   MYPAGE: '/mypage',
 };

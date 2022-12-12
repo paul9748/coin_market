@@ -20,7 +20,7 @@ async function post(endpoint, data) {
 }
 
 async function put(endpoint, data) {
-  return axios.put(url + endpoint, data, {
+  return await axios.put(url + endpoint, data, {
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
@@ -28,37 +28,72 @@ async function put(endpoint, data) {
 }
 
 async function del(endpoint) {
-  return axios.delete(url + endpoint, {
+  return await axios.delete(url + endpoint, {
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
 
-// // 요청 인터셉터 추가하기
-// axios.interceptors.request.use(
-//   function (config) {
-//     // 요청이 전달되기 전에 작업 수행
-//     return config;
-//   },
-//   function (error) {
-//     // 요청 오류가 있는 작업 수행
-//     return Promise.reject(error);
-//   }
-// );
+let isTokenRefreshing = false;
+let refreshSubscribers = [];
 
-// // 응답 인터셉터 추가하기
-// axios.interceptors.response.use(
-//   function (response) {
-//     // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-//     // 응답 데이터가 있는 작업 수행
-//     return response;
-//   },
-//   function (error) {
-//     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-//     // 응답 오류가 있는 작업 수행
-//     return Promise.reject(error);
-//   }
-// );
+const onTokenRefreshed = (accessToken) => {
+  refreshSubscribers.map((callback) => callback(accessToken));
+};
+
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
+
+// 응답 인터셉터 추가하기
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+
+  async (error) => {
+    const {
+      config,
+      response: { message, name, status },
+    } = error;
+
+    console.log(error);
+    const originalRequest = config;
+
+    if (message === 'jwt expired' || name === 'TokenExpiredError' || status === 490) {
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');
+        const { data } = await axios.post(
+          url + 'token',
+          { refreshToken },
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+            },
+          }
+        );
+
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data;
+        sessionStorage.clear();
+        sessionStorage.setItem('ACCESS_TOKEN', newAccessToken);
+        sessionStorage.setItem('REFRESH_TOKEN', newRefreshToken);
+        isTokenRefreshing = false;
+        axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+      }
+
+      const retryOriginalRequest = new Promise((resolve) => {
+        addRefreshSubscriber((accessToken) => {
+          originalRequest.headers.Authorization = 'Bearer ' + accessToken;
+          resolve(axios(originalRequest));
+        });
+      });
+      return retryOriginalRequest;
+    }
+    return Promise.reject(error);
+  }
+);
 
 export { get, post, put, del as delete };

@@ -35,9 +35,7 @@ function BuyCoin() {
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></SelectCoin>
         )}
-        {currentStep === 2 && (
-          <Payment currentStep={currentStep} setCurrentStep={setCurrentStep}></Payment>
-        )}
+        {currentStep === 2 && <Payment></Payment>}
 
         {currentStep < 1 && (
           <StyledBtnWrapper>
