@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import useScrollFadeIn from 'hooks/useScrollFadeIn';
 import useScrollClipPath from 'hooks/useScrollClipPath';
 // const observer = new IntersectionObserver(() => {
