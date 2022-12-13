@@ -9,17 +9,15 @@ const dealRouter = Router();
 dealRouter.get("/users/deals", loginRequired, async (req, res, next) => {
   try {
     if (!req.query.status) {
-      const dealList = await dealService.findeDealByStatus();
+      const dealList = await dealService.findDealByStatus();
 
       res.status(200).json(dealList);
     } else if (req.query.status == "BUY" || req.query.status == "SELL") {
-      const dealByStatus = await dealService.findeDealByStatus(
-        req.query.status
-      );
+      const dealByStatus = await dealService.findDealByStatus(req.query.status);
 
       res.status(200).json(dealByStatus);
     } else {
-      const deliveryByStatus = await deliveryService.deliveryByStatus(
+      const deliveryByStatus = await dealService.findDealByResStatus(
         req.query.status
       );
 
