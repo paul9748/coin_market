@@ -8,7 +8,7 @@ const tokenRouter = Router();
 tokenRouter.post("/token", async function (req, res, next) {
   try {
     const refreshToken = req.body.refreshToken;
-    console.log(refreshToken);
+
     const userId = await tokenService.findUser(refreshToken);
 
     const newToken = await tokenService.createToken(userId);
