@@ -5,10 +5,24 @@ class Deal {
     const dealByStatus = db.deal.findMany({
       where: {
         dealStatus: status,
+        // delivery: {
+        //   resStatus: "waiting",
+        // },
       },
     });
 
     return dealByStatus;
+  }
+
+  static async findDealByDeliveryStatus(resStatus) {
+    const deal = db.deal.findMany({
+      where: {
+        delivery: {
+          resStatus,
+        },
+      },
+    });
+    return deal;
   }
 
   static async findDealByDealId(dealId) {
