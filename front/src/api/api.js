@@ -53,14 +53,12 @@ axios.interceptors.response.use(
   },
 
   async (error) => {
-    const {
-      config,
-      response: { result, reason },
-    } = error;
-
+    const { config } = await error;
     const originalRequest = config;
 
-    if (result === 'forbidden-approach' || reason === '정상적인 토큰이 아닙니다.') {
+    console.log(error);
+
+    if (error) {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');
@@ -73,18 +71,21 @@ axios.interceptors.response.use(
             },
           }
         );
+        console.log(data);
 
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data;
         sessionStorage.clear();
-        sessionStorage.setItem('ACCESS_TOKEN', newAccessToken);
-        sessionStorage.setItem('REFRESH_TOKEN', newRefreshToken);
+        sessionStorage.setItem('ACCESS_TOKEN', data.accessToken);
+        sessionStorage.setItem('REFRESH_TOKEN', data.refreshToken);
         isTokenRefreshing = false;
-        axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(
+          'ACCESS_TOKEN'
+        )}`;
+
+        onTokenRefreshed(sessionStorage.getItem('ACCESS_TOKEN'));
       }
 
       const retryOriginalRequest = new Promise((resolve) => {
-        addRefreshSubscriber((accessToken) => {
+        addRefreshSubscriber(async (accessToken) => {
           originalRequest.headers.Authorization = 'Bearer ' + accessToken;
           resolve(axios(originalRequest));
         });

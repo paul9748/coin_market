@@ -8,13 +8,20 @@ import ROUTE from 'utils/ROUTE';
 function SellButton({ coinData }) {
   const { setSellNumber } = useCoinContext();
   const navigate = useNavigate();
+
+  const coins = [];
+
+  coinData.JPY && coins.push(...coinData.JPY);
+  coinData.CNY && coins.push(...coinData.CNY);
+  coinData.USD && coins.push(...coinData.USD);
+
   const handleClick = async () => {
     const data = {
       order: {
         imageUrl: 'url',
         dealStatus: 'SELL',
       },
-      coins: [...coinData.JPY, ...coinData.CNY, ...coinData.USD],
+      coins,
     };
     try {
       const response = await Api.post('sell', data);
@@ -24,6 +31,7 @@ function SellButton({ coinData }) {
       navigate(ROUTE.SELLEND);
     } catch (err) {
       console.log(err);
+      alert('판매가 완료되지 않았습니다.');
     }
   };
 

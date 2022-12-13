@@ -5,11 +5,9 @@ import styled from 'styled-components';
 
 import * as Api from 'api/api';
 import ROUTE from 'utils/ROUTE';
-import { useCoinContext } from 'context/CoinContext';
 
 function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
   const navigate = useNavigate();
-  const { setBuyNumber } = useCoinContext();
   useEffect(() => {
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -76,8 +74,7 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
       try {
         const response = await Api.post('buy', data);
         console.log(response.data);
-        const result = response.data.split(' ');
-        setBuyNumber(result[result.length - 1]);
+
         navigate(ROUTE.BUYEND);
       } catch (err) {
         console.log(err);

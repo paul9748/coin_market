@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import ROUTE from 'utils/ROUTE';
-import { useCoinContext } from 'context/CoinContext';
+
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 
@@ -11,18 +11,6 @@ import * as Api from 'api/api';
 
 function BuyCompletion() {
   const navigate = useNavigate();
-  const { buyNumber } = useCoinContext();
-  useEffect(() => {
-    const uploadData = async () => {
-      try {
-        const response = await Api.post(`buy/${buyNumber}`);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    uploadData();
-  }, [buyNumber]);
 
   return (
     <>
