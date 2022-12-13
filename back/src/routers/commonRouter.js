@@ -16,7 +16,8 @@ commonRouter.get("/exchangeRate", async (req, res, next) => {
     data.push(
       jwt.sign(
         {
-          exchangeRate: data[0]["basePrice"],
+          currencyCode: data[0]["currencyCode"],
+          exchangeRate: data[0]["basePrice"] / data[0]["currencyUnit"],
           modifiedAt: data[0]["modifiedAt"],
         },
         secretKey,
