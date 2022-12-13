@@ -27,8 +27,7 @@ import china from 'assets/images/china_flag.png';
 import eu from 'assets/images/eu_flag.png';
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
-// 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/krw.json'
+import { useState, useEffect, useRef } from 'react';
 
 function Main() {
   const [date, setDate] = useState('');
@@ -40,7 +39,7 @@ function Main() {
   const getData = async () => {
     await axios
       .get(
-        'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/krw.json'
+        'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/krw.min.json'
       )
       .then((res) => {
         const data = res.data;
@@ -66,11 +65,35 @@ function Main() {
 
   const animatedImage = useScrollClipPath();
 
+  const first = useRef();
+  const second = useRef();
+  const third = useRef();
+  const fourth = useRef();
+  const fifth = useRef();
+
+  const elementNum = [first, second, third, fourth, fifth];
+
+  const goBox = (element) => {
+    return function () {
+      element.current.scrollIntoView({ behavior: 'smooth' });
+    };
+  };
+
+  function NavBtn() {
+    return (
+      <>
+        {elementNum.map((ele, index) => (
+          <div key={index} onClick={goBox(ele)}></div>
+        ))}
+      </>
+    );
+  }
+  console.log('렌더링');
   return (
     <>
       <Header></Header>
       <StyledMain>
-        <StyledBannerWrapper backgroundColor="#5DE1E6">
+        <StyledBannerWrapper backgroundColor="#5DE1E6" position="relative" ref={first}>
           <StyledFirstBannerContent>
             <StyledImg
               src={surpriseImage}
@@ -92,8 +115,11 @@ function Main() {
               </p>
             </div>
           </StyledFirstBannerContent>
+          <NavBar>
+            <NavBtn></NavBtn>
+          </NavBar>
         </StyledBannerWrapper>
-        <StyledBannerWrapper backgroundColor="#F3F4F9">
+        <StyledBannerWrapper backgroundColor="#F3F4F9" position="relative" ref={second}>
           <StyledSecondBannerContent {...animatedItem[0]}>
             <p>
               <strong>외국동전</strong>의 환율은
@@ -114,8 +140,11 @@ function Main() {
               계셨나요?
             </div>
           </StyledSecondBannerContent>
+          <NavBar>
+            <NavBtn></NavBtn>
+          </NavBar>
         </StyledBannerWrapper>
-        <StyledBannerWrapper position="relative">
+        <StyledBannerWrapper position="relative" ref={third}>
           <StyledThirdBannerContent {...animatedItem[1]}>
             <strong>{date} 환율</strong>
             <br />
@@ -139,8 +168,11 @@ function Main() {
           <ThirdBannerStrong>
             유저간의 거래를 통해 <strong>저렴하게</strong> 외화를 구매할 수 있어요
           </ThirdBannerStrong>
+          <NavBar>
+            <NavBtn></NavBtn>
+          </NavBar>
         </StyledBannerWrapper>
-        <StyledBannerWrapper backgroundColor="#CCF2F4">
+        <StyledBannerWrapper backgroundColor="#CCF2F4" position="relative" ref={fourth}>
           <StyledContentWrapper>
             <StyledStepDiv>
               <StyledStepImg src={firstStep}></StyledStepImg>
@@ -165,13 +197,19 @@ function Main() {
               <p>누구나 쉽고 간편하게 4단계로 간편하게 </p>
               <p>판매해보세요! 동전과 사진만 있으면 됩니다</p>
             </StyledCommentDiv>
+            <Link to={ROUTE.BUY}>
+              <StyledBtn color="#db186d">구매하기</StyledBtn>
+            </Link>
             <Link to={ROUTE.SELL}>
               <StyledBtn>판매하기</StyledBtn>
             </Link>
           </StyledContentWrapper>
+          <NavBar>
+            <NavBtn></NavBtn>
+          </NavBar>
         </StyledBannerWrapper>
 
-        <StyledBannerWrapper backgroundColor="#E1FFE1">
+        <StyledBannerWrapper backgroundColor="#E1FFE1" position="relative" ref={fifth}>
           <LastStyledContent>
             <p>함께하는 사람들</p>
             <div>
@@ -181,6 +219,9 @@ function Main() {
               <LogoImage src={tasss}></LogoImage>
             </div>
           </LastStyledContent>
+          <NavBar>
+            <NavBtn></NavBtn>
+          </NavBar>
         </StyledBannerWrapper>
       </StyledMain>
       <Footer></Footer>
@@ -445,13 +486,13 @@ const StyledCommentDiv = styled.div`
 const StyledBtn = styled.button`
   padding: 5px;
   width: 200px;
-  margin-top: 20px;
+  margin: 20px;
   font-size: 20px;
   cursor: pointer;
   border: none;
   border-radius: 20px;
   color: white;
-  background-color: #185adb;
+  background-color: ${(props) => props.color || '#185adb'};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
@@ -466,6 +507,30 @@ const LogoImage = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+
+  animation: 'Bounce' 1s ease infinite;
+  @keyframes Bounce {
+    from,
+    20%,
+    53%,
+    80%,
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+
+    40%,
+    43% {
+      transform: translate3d(0, -30px, 0);
+    }
+
+    70% {
+      transform: translate3d(0, -15px, 0);
+    }
+
+    90% {
+      transform: translate3d(0, -4px, 0);
+    }
+  }
 
   @media (max-width: 1000px) {
     height: 50px;
@@ -599,6 +664,35 @@ const LastStyledContent = styled.div`
   @media (max-width: 600px) {
     & p {
       font-size: 30px;
+    }
+  }
+`;
+
+const NavBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 7.5%;
+
+  & div {
+    margin: 10px;
+    border: 2px solid black;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  & div:hover {
+    background-color: #4b89dc;
+  }
+
+  @media (max-width: 600px) {
+    right: 0%;
+    & div {
+      width: 10px;
+      height: 10px;
     }
   }
 `;
