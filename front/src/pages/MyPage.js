@@ -2,9 +2,9 @@ import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-
-import { useEffect } from 'react';
-
+import Table from '../components/Table';
+import { useEffect, useMemo } from 'react';
+import { useTable } from 'react-table';
 import ROUTE from 'utils/ROUTE';
 
 function MyPage() {
@@ -15,6 +15,53 @@ function MyPage() {
       navigate(ROUTE.LOGIN);
     }
   }, [navigate]);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessor: 'coinName',
+        Header: '동전명',
+      },
+      {
+        accessor: 'dealAmount',
+        Header: '신청수량',
+      },
+      {
+        accessor: 'stockAmount',
+        Header: '남은수량',
+      },
+      {
+        accessor: 'updatedAt',
+        Header: '최근거래시간',
+      },
+      {
+        accessor: 'isActivate',
+        Header: '진행사항',
+      },
+    ],
+    []
+  );
+
+  const data = useMemo(
+    () => [
+      {
+        coinName: '100엔',
+        dealAmount: 10,
+        stockAmount: 10,
+        updatedAt: '2022-12-11 10:10',
+        isActivate: 1,
+      },
+    ],
+    []
+  );
+
+  const {
+    getTableProps, //table props
+    getTableBodyProps, //table body props
+    headerGroups, //헤더들
+    rows, //로우 데이터들
+    prepareRow,
+  } = useTable({ columns, data });
 
   return (
     <>
@@ -63,11 +110,7 @@ function MyPage() {
             </StyledDetailBox>
           </StyledDealBox>
         </StyledInfoBox>
-
-        <dt>Email</dt>
-        {/* <dd>{email}</dd> */}
-        <dt>Name</dt>
-        {/* <dd>{userName}</dd> */}
+        <Table columns={columns} data={data} />
       </StyledMain>
 
       <Footer></Footer>
@@ -78,7 +121,7 @@ function MyPage() {
 const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   min-height: calc(100vh - 200px);
   min-width: 600px;
