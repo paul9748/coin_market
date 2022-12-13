@@ -93,7 +93,10 @@ class buyService {
     }
 
     const paymentData = getPaymentData.data.response;
-    if (pay["amount"] != paymentData["amount"] && pay["amount"] != amount) {
+    if (
+      pay["amount"] != paymentData["amount"] &&
+      pay["amount"] != Math.floor(amount)
+    ) {
       throw new Error("결제금액이상");
     }
 

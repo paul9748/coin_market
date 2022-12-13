@@ -1,42 +1,59 @@
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import Table from '../components/Table';
-import { useEffect, useMemo } from 'react';
-import { useTable } from 'react-table';
 import ROUTE from 'utils/ROUTE';
+import axios from 'axios';
+import * as Api from 'api/api';
+import Table from '../components/Table';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useTable } from 'react-table';
 
 function MyPage() {
   const navigate = useNavigate();
+  const [date, setDate] = useState('');
+  const [BUY, setBUY] = useState();
+  const [SELL, setSELL] = useState();
+  const [delivery, setDelivery] = useState();
+  const [completion, setCompletion] = useState();
+  const [BUYCOMP, setBUYCOMP] = useState();
+  const [SELLCOMP, setSELLCOMP] = useState();
 
-  useEffect(() => {
-    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
-      navigate(ROUTE.LOGIN);
-    }
-  }, [navigate]);
+  const getData = async () => {
+    const newData = await Api.get('users/count');
+    setBUY(newData.data['BUY']);
+    setSELL(newData.data['SELL']);
+    setDelivery(newData.data['delivery']);
+    setCompletion(newData.data['completion']);
+    setBUYCOMP(newData.data['BUYCOMP']);
+    setSELLCOMP(newData.data['SELLCOMP']);
+  };
 
   const columns = useMemo(
     () => [
       {
-        accessor: 'coinName',
-        Header: '동전명',
+        accessor: 'id',
+        Header: '거래ID',
       },
       {
-        accessor: 'dealAmount',
-        Header: '신청수량',
+        accessor: 'dealStatus',
+        Header: '거래종류',
       },
       {
-        accessor: 'stockAmount',
-        Header: '남은수량',
+        accessor: 'imageUrl',
+        Header: '이미지',
+      },
+      {
+        accessor: 'createdAt',
+        Header: '최초신청시간',
       },
       {
         accessor: 'updatedAt',
         Header: '최근거래시간',
       },
       {
-        accessor: 'isActivate',
-        Header: '진행사항',
+        accessor: 'Status',
+        Header: '상태',
       },
     ],
     []
@@ -62,7 +79,12 @@ function MyPage() {
     rows, //로우 데이터들
     prepareRow,
   } = useTable({ columns, data });
-
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      navigate(ROUTE.LOGIN);
+    }
+    getData();
+  }, [navigate]);
   return (
     <>
       <Header></Header>
@@ -80,32 +102,44 @@ function MyPage() {
             <StyledTitle>거래현황</StyledTitle>
             <StyledDetailBox>
               <StyledText>구매신청</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="BUY">
+                {BUY}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>배송중ㅤ</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="delivery">
+                {delivery}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>구매완료</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="BUYCOMP">
+                {BUYCOMP}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>판매신청</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="SELL">
+                {SELL}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>배송완료</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="completion">
+                {completion}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>판매완료</StyledText>
-              <StyledInfoBtn href="#">7</StyledInfoBtn>
+              <StyledInfoBtn href="#" id="SELLCOMP">
+                {SELLCOMP}
+              </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
           </StyledDealBox>
