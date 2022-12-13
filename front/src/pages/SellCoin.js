@@ -53,6 +53,7 @@ function SellCoin() {
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}></CheckCoin>
         )}
+
         {currentStep < 2 && (
           <StyledBtnWrapper>
             {currentStep !== 0 && (

@@ -55,13 +55,12 @@ axios.interceptors.response.use(
   async (error) => {
     const {
       config,
-      response: { message, name, status },
+      response: { result, reason },
     } = error;
 
-    console.log(error);
     const originalRequest = config;
 
-    if (message === 'jwt expired' || name === 'TokenExpiredError' || status === 490) {
+    if (result === 'forbidden-approach' || reason === '정상적인 토큰이 아닙니다.') {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');

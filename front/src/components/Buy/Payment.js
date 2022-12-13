@@ -84,9 +84,9 @@ function Payment() {
 
   const rateToken = [];
 
-  if (jpy100 > 0 || jpy500 > 0) rateToken.push(jpyRate);
-  if (cny1 > 0) rateToken.push(cnyRate);
-  if (usd10 > 0 || usd25 > 0) rateToken.push(usdRate);
+  if (jpy100 > 0 || jpy500 > 0) rateToken.push(jpyRate?.[1]);
+  if (cny1 > 0) rateToken.push(cnyRate?.[1]);
+  if (usd10 > 0 || usd25 > 0) rateToken.push(usdRate?.[1]);
 
   const sumBuyCoin = Math.floor(
     (jpy100 + jpy500 * 5) * jpyRate?.[0].basePrice +

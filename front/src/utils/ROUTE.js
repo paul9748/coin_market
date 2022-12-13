@@ -3,6 +3,7 @@ const ROUTE = {
   ABOUT: '/about',
   LOGIN: '/login',
   REGISTER: '/register',
+  SELLEND: '/sellend',
   SELL: '/sell',
   BUYEND: '/buyend',
   BUY: '/buy',

@@ -9,20 +9,20 @@ import Footer from 'components/UI/Footer';
 
 import * as Api from 'api/api';
 
-function BuyCompletion() {
+function SellCompletion() {
   const navigate = useNavigate();
-  const { buyNumber } = useCoinContext();
+  const { sellNumber } = useCoinContext();
   useEffect(() => {
     const uploadData = async () => {
       try {
-        const response = await Api.post(`buy/${buyNumber}`);
+        const response = await Api.post(`sell/${sellNumber}`);
       } catch (err) {
         console.log(err);
       }
     };
 
     uploadData();
-  }, [buyNumber]);
+  }, [sellNumber]);
 
   return (
     <>
@@ -30,7 +30,7 @@ function BuyCompletion() {
       <StyledMain>
         <StyledDiv>
           <StyledContent>
-            <p>구매신청이 완료되었습니다.</p>
+            <p>판매신청이 완료되었습니다.</p>
             <p>상세내역은 마이페이지에서 확인해주세요.</p>
           </StyledContent>
 
@@ -55,7 +55,7 @@ function BuyCompletion() {
   );
 }
 
-export default BuyCompletion;
+export default SellCompletion;
 
 const StyledBtn = styled.button`
   width: 180px;
