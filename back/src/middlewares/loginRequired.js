@@ -6,10 +6,6 @@ const loginRequired = (req, res, next) => {
   if (!userToken || userToken === "null") {
     console.log("서비스 사용 요청이 있습니다.하지만, Authorization 토큰: 없음");
 
-    // res.status(401).json({
-    //   result: "forbidden-approach",
-    //   reason: "로그인한 유저만 사용할 수 있는 서비스입니다.",
-    // });
     throw new Error(`{
       result: "forbidden-approach",
       reason: "로그인한 유저만 사용할 수 있는 서비스입니다.",
@@ -18,29 +14,17 @@ const loginRequired = (req, res, next) => {
 
   try {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    const jwtDecoded = jwt.verify(userToken, secretKey, (err, decoded) => {
-      if (err) {
-        const newError = {
-          name: err.name,
-          message: err.message,
-          expiredAt: err.expiredAt,
-        };
-        console.log(newError);
-      }
-      const id = decoded.id;
-      req.userId = id;
-      next();
-    });
+    const jwtDecoded = jwt.verify(userToken, secretKey);
+
+    const id = jwtDecoded.id;
+    req.userId = id;
+    next();
   } catch (err) {
-    // res.status(490).json({
-    //   result: "forbidden-approach",
-    //   reason: "정상적인 토큰이 아닙니다.",
-    // });
-    throw new Error(`{
-      result: "forbidden-approach",
-      reason: "정상적인 토큰이 아닙니다.",
-    }`);
-    // throw new Error(err);
+    next({
+      name: err.name,
+      message: err.message,
+      expiredAt: err.expiredAt,
+    });
   }
 };
 

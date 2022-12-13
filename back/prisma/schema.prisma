@@ -40,7 +40,7 @@ model UserToken {
 
 model Deal {
   id         String          @id @default(uuid())
-  userId     String          @unique @map("user_id")
+  userId     String          @map("user_id")
   dealStatus Deal_dealStatus @map("deal_status")
   imageUrl   String?         @map("image_url")
   createdAt  DateTime        @default(now()) @map("created_at")
@@ -161,7 +161,7 @@ model AnalysisDetail {
 }
 
 model Wallet {
-  id             String   @id @default(uuid())
+  id             String   @id @unique(map: "id_UNIQUE") @default(uuid())
   userId         String   @map("user_id")
   krwAmount      Int      @map("krw_amount")
   statement      String
