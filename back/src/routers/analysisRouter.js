@@ -18,7 +18,6 @@ analysisRouter.post("/analysis", async (req, res, next) => {
   try {
     const data = req.body["img"];
     let user = await analysisService.analyses(data);
-    delete user.password;
     res.json(user);
   } catch (err) {
     next(err);

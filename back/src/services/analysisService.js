@@ -13,15 +13,28 @@ class analysisService {
     };
     const pythonFunction = () => {
       return new Promise((data) => {
-        PythonShell.run("./src/test.py", options, function (err, results) {
-          if (err) throw err;
-          console.log("results: %j", results);
-          data(results);
-        });
+        PythonShell.run(
+          "./src/yolo/analysis.py",
+          options,
+          function (err, results) {
+            if (err) {
+              data({ status: 502, Error: err });
+            } else {
+              data(results);
+            }
+          }
+        );
       });
     };
     const data = await pythonFunction();
-    return data;
+    if (data.Error) {
+      throw new Error(data);
+    } else {
+      const coinList = require("./labels.json");
+      const detectCoinList = data.map((number) => coinList[number]);
+      console.log(data[0]);
+      return data;
+    }
   }
 }
 export { analysisService };
