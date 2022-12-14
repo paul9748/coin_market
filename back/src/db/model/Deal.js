@@ -10,6 +10,10 @@ class Deal {
         //   resStatus: "waiting",
         // },
       },
+      include: {
+        orderCoin: true,
+        delivery: true,
+      },
     });
 
     return dealByStatus;
@@ -22,6 +26,10 @@ class Deal {
           resStatus,
         },
         userId: userId,
+      },
+      include: {
+        orderCoin: true,
+        delivery: true,
       },
     });
     return deal;
@@ -98,9 +106,6 @@ class Deal {
       completeDealDict[i["dealStatus"]] = i["_count"];
     }
 
-    console.log(countDataByDealStatusDict);
-    console.log(countDataByDeliveryDict);
-    console.log(completeDealDict);
     let infoData = {};
     const infoKeyList = [
       "BUY",
