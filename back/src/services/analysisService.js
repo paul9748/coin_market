@@ -27,13 +27,13 @@ class analysisService {
       });
     };
     const data = await pythonFunction();
+
     if (data.Error) {
       throw new Error(data);
     } else {
-      const coinList = require("./labels.json");
-      const detectCoinList = data.map((number) => coinList[number]);
-      console.log(data[0]);
-      return data;
+      const objList = JSON.parse(data[1].replaceAll(`'`, `"`));
+      console.log(objList);
+      return objList;
     }
   }
 }
