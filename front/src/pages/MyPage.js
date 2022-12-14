@@ -2,16 +2,16 @@ import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 import styled from 'styled-components';
 import ROUTE from 'utils/ROUTE';
-import axios from 'axios';
 import * as Api from 'api/api';
 import Table from '../components/Table';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
-import { useTable } from 'react-table';
 
 function MyPage() {
   const navigate = useNavigate();
-  const [date, setDate] = useState('');
+  const [TableUrlData, setTableUrlData] = useState('');
+  const [Wallet, setWallet] = useState('');
+  const [ROW, setROW] = useState([]);
   const [BUY, setBUY] = useState();
   const [SELL, setSELL] = useState();
   const [delivery, setDelivery] = useState();
@@ -21,6 +21,8 @@ function MyPage() {
 
   const getData = async () => {
     const newData = await Api.get('users/count');
+    const WalletPoint = await Api.get('users/wallet');
+    setWallet(WalletPoint.data['krwAmount']);
     setBUY(newData.data['BUY']);
     setSELL(newData.data['SELL']);
     setDelivery(newData.data['delivery']);
@@ -29,6 +31,21 @@ function MyPage() {
     setSELLCOMP(newData.data['SELLCOMP']);
   };
 
+  const getRow = async (TableUrlData) => {
+    let newRowdata = await Api.get('users/deals?status=' + TableUrlData);
+    newRowdata = newRowdata.data;
+    newRowdata.map((i) => {
+      i['createdAt'] = i['createdAt'].slice(0, 10) + ' ' + i['createdAt'].slice(11, 19);
+      i['updatedAt'] = i['updatedAt'].slice(0, 10) + ' ' + i['updatedAt'].slice(11, 19);
+      if (i['delivery'] == null && i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
+        i['Status'] = '운송장추가';
+      } else if (i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
+        i['Status'] = '판매확인';
+      }
+      return i;
+    });
+    setROW(newRowdata);
+  };
   const columns = useMemo(
     () => [
       {
@@ -62,29 +79,24 @@ function MyPage() {
   const data = useMemo(
     () => [
       {
-        coinName: '100엔',
+        id: '100엔',
         dealAmount: 10,
         stockAmount: 10,
         updatedAt: '2022-12-11 10:10',
         isActivate: 1,
+        test: '테테테스트',
       },
     ],
     []
   );
 
-  const {
-    getTableProps, //table props
-    getTableBodyProps, //table body props
-    headerGroups, //헤더들
-    rows, //로우 데이터들
-    prepareRow,
-  } = useTable({ columns, data });
   useEffect(() => {
     if (!sessionStorage.getItem('ACCESS_TOKEN')) {
       navigate(ROUTE.LOGIN);
     }
     getData();
-  }, [navigate]);
+    getRow(TableUrlData);
+  }, [navigate, TableUrlData]);
   return (
     <>
       <Header></Header>
@@ -95,21 +107,39 @@ function MyPage() {
         <StyledInfoBox>
           <StyledWalletBox>
             <StyledText>환전가능금액</StyledText>
-            <StyledText>가져온금액</StyledText>
+            <StyledText>{Wallet}</StyledText>
             <StyledBtn>환전하기</StyledBtn>
           </StyledWalletBox>
           <StyledDealBox>
-            <StyledTitle>거래현황</StyledTitle>
+            <StyledTitle
+              onClick={() => {
+                setTableUrlData('');
+                getData(TableUrlData);
+              }}>
+              거래현황
+            </StyledTitle>
             <StyledDetailBox>
               <StyledText>구매신청</StyledText>
-              <StyledInfoBtn href="#" id="BUY">
+              <StyledInfoBtn
+                href="#"
+                id="BUY"
+                onClick={() => {
+                  setTableUrlData('BUY');
+                  getData(TableUrlData);
+                }}>
                 {BUY}
               </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>배송중ㅤ</StyledText>
-              <StyledInfoBtn href="#" id="delivery">
+              <StyledInfoBtn
+                href="#"
+                id="delivery"
+                onClick={() => {
+                  setTableUrlData('delivery');
+                  getData(TableUrlData);
+                }}>
                 {delivery}
               </StyledInfoBtn>
               <StyledText>건</StyledText>
@@ -123,14 +153,26 @@ function MyPage() {
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>판매신청</StyledText>
-              <StyledInfoBtn href="#" id="SELL">
+              <StyledInfoBtn
+                href="#"
+                id="SELL"
+                onClick={() => {
+                  setTableUrlData('SELL');
+                  getData(TableUrlData);
+                }}>
                 {SELL}
               </StyledInfoBtn>
               <StyledText>건</StyledText>
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>배송완료</StyledText>
-              <StyledInfoBtn href="#" id="completion">
+              <StyledInfoBtn
+                href="#"
+                id="completion"
+                onClick={() => {
+                  setTableUrlData('completion');
+                  getData(TableUrlData);
+                }}>
                 {completion}
               </StyledInfoBtn>
               <StyledText>건</StyledText>
@@ -144,7 +186,7 @@ function MyPage() {
             </StyledDetailBox>
           </StyledDealBox>
         </StyledInfoBox>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={ROW} />
       </StyledMain>
 
       <Footer></Footer>
