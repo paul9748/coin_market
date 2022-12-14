@@ -13,7 +13,7 @@ class Address {
   static async findAddressesByUserId(userId) {
     const addresses = db.address.findMany({
       where: {
-        user_id: userId,
+        userId: userId,
       },
     });
     return addresses;

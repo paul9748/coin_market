@@ -103,7 +103,7 @@ model Country {
 }
 
 model Address {
-  id          String   @id @default(uuid())
+  id          String   @id @unique(map: "id_UNIQUE") @default(uuid())
   userId      String   @map("user_id")
   addressName String?  @map("address_name")
   name        String
@@ -111,7 +111,7 @@ model Address {
   postalCode  String   @map("postal_code")
   address1    String
   address2    String
-  isDefault   Boolean  @unique @default(false) @map("is_default")
+  isDefault   Boolean  @default(false) @map("is_default")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   user        User     @relation(fields: [userId], references: [id])
