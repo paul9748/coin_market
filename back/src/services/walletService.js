@@ -11,7 +11,6 @@ class walletService {
   //환전
   static async letChanges(wallet, newChanges) {
     const newKrwAmount = wallet.krwAmount - newChanges;
-
     const updatedChanges = await Wallet.updateData(wallet.id);
 
     wallet.krwAmount = newKrwAmount;
