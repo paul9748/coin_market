@@ -153,7 +153,7 @@ function Payment() {
                 <span>{usd10}개</span>
                 <span>
                   <strong>
-                    {Math.floor(usd10 * usdRate?.[0].basePrice * 0.1).toLocaleString()}
+                    {Math.floor(usd10 * (usdRate?.[0].basePrice * 0.1)).toLocaleString()}
                   </strong>
                   원
                 </span>
@@ -166,7 +166,7 @@ function Payment() {
                 <span>{usd25}개</span>
                 <span>
                   <strong>
-                    {Math.floor(usd25 * usdRate?.[0].basePrice * 0.25).toLocaleString()}
+                    {Math.floor(usd25 * (usdRate?.[0].basePrice * 0.25)).toLocaleString()}
                   </strong>
                   원
                 </span>
