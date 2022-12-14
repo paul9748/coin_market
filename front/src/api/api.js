@@ -35,17 +35,6 @@ async function del(endpoint) {
   });
 }
 
-let isTokenRefreshing = false;
-let refreshSubscribers = [];
-
-const onTokenRefreshed = (accessToken) => {
-  refreshSubscribers.map((callback) => callback(accessToken));
-};
-
-const addRefreshSubscriber = (callback) => {
-  refreshSubscribers.push(callback);
-};
-
 // 응답 인터셉터 추가하기
 axios.interceptors.response.use(
   (response) => {
@@ -53,45 +42,46 @@ axios.interceptors.response.use(
   },
 
   async (error) => {
-    const { config } = await error;
-    const originalRequest = config;
+    const {
+      config,
+      response: { status },
+    } = error;
 
-    console.log(error);
-
-    if (error) {
-      if (!isTokenRefreshing) {
-        isTokenRefreshing = true;
+    if (status === 400) {
+      console.log('여기옴');
+      if (error.response.data.name === 'TokenExpiredError') {
+        console.log('최종');
+        const originalRequest = config;
         const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');
-        const { data } = await axios.post(
-          url + 'token',
-          { refreshToken },
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-            },
-          }
-        );
-        console.log(data);
+        try {
+          const response = await axios.post(
+            url + 'token',
+            { refreshToken: refreshToken },
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+              },
+            }
+          );
+          sessionStorage.clear();
+          sessionStorage.setItem('ACCESS_TOKEN', response.data.access_token);
+          sessionStorage.setItem('REFRESH_TOKEN', response.data.refresh_token);
+        } catch (err) {
+          console.log(err);
+        }
 
-        sessionStorage.clear();
-        sessionStorage.setItem('ACCESS_TOKEN', data.accessToken);
-        sessionStorage.setItem('REFRESH_TOKEN', data.refreshToken);
-        isTokenRefreshing = false;
         axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(
           'ACCESS_TOKEN'
         )}`;
 
-        onTokenRefreshed(sessionStorage.getItem('ACCESS_TOKEN'));
-      }
+        originalRequest.headers.Authorization = `Bearer ${sessionStorage.getItem(
+          `ACCESS_TOKEN`
+        )}`;
 
-      const retryOriginalRequest = new Promise((resolve) => {
-        addRefreshSubscriber(async (accessToken) => {
-          originalRequest.headers.Authorization = 'Bearer ' + accessToken;
-          resolve(axios(originalRequest));
-        });
-      });
-      return retryOriginalRequest;
+        return axios(originalRequest);
+      }
     }
+
     return Promise.reject(error);
   }
 );

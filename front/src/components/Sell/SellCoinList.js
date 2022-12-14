@@ -7,9 +7,11 @@ import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
 import useRate from 'hooks/useRate';
+import AddCoinModal from './AddCoinModal';
 
 function SellCoinList({ coinData, setCoinData }) {
   const { jpyRate, cnyRate, usdRate } = useRate();
+  const [isModal, setIsModal] = useState(false);
 
   let jpyResult = 0;
   let cnyResult = 0;
@@ -109,6 +111,9 @@ function SellCoinList({ coinData, setCoinData }) {
 
   return (
     <StyledWrapper>
+      {isModal && (
+        <AddCoinModal setIsModal={setIsModal} setCoinData={setCoinData}></AddCoinModal>
+      )}
       {coinData.JPY && (
         <StyledNationWrapper>
           <div>기준환율: {jpyRate?.[0].basePrice} KRW/JPY100</div>
@@ -314,7 +319,12 @@ function SellCoinList({ coinData, setCoinData }) {
           </StyledNationContentWrapper>
         </StyledNationWrapper>
       )}
-      <StyledCoinAddBtn>동전추가</StyledCoinAddBtn>
+      <StyledCoinAddBtn
+        onClick={() => {
+          setIsModal((preState) => !preState);
+        }}>
+        동전추가
+      </StyledCoinAddBtn>
     </StyledWrapper>
   );
 }

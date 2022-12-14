@@ -74,8 +74,8 @@ const StyledBtn = styled.button`
 
 const StyledBtnWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  width: 1000px;
+  justify-content: space-between;
+  width: 500px;
   margin: 40px 0;
 
   @media (max-width: 600px) {
@@ -110,7 +110,7 @@ const StyledContent = styled.div`
   justify-content: center;
   align-items: center;
   height: 300px;
-  font-size: 22px;
+  font-size: 20px;
   padding: 30px;
   border-radius: 20px;
   background-color: rgba(42, 193, 188, 0.3);

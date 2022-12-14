@@ -66,6 +66,9 @@ const StyledBtnWrapper = styled.div`
   width: 1000px;
   margin: 40px 0;
 
+  @media (max-width: 1017px) {
+    width: 400px;
+  }
   @media (max-width: 600px) {
     width: 400px;
   }

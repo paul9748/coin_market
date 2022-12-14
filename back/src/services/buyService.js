@@ -97,7 +97,7 @@ class buyService {
       pay["amount"] != paymentData["amount"] &&
       pay["amount"] != Math.floor(amount)
     ) {
-      // throw new Error("결제금액이상");
+      throw new Error("결제금액이상");
     }
 
     orderData["userId"] = data["userId"];
