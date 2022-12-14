@@ -1,16 +1,6 @@
 import styled from 'styled-components/macro';
 import useScrollFadeIn from 'hooks/useScrollFadeIn';
 import useScrollClipPath from 'hooks/useScrollClipPath';
-// const observer = new IntersectionObserver(() => {
-//   console.log('this in div');
-// });
-// const div = document.querySelectorAll('p');
-// observer.observe('p');
-
-// function momo() {
-//   const scrollRef = useRef();
-//   console.log(scrollRef.current);
-// }
 
 function AboutDetail() {
   const animatedItem = {
