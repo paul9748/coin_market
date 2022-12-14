@@ -45,22 +45,24 @@ class sellService {
 
   static async SellOrderAddressesAdd(data) {
     const userId = data["userId"];
-    const deal = Sell.findDeal(data["dealId"]);
-
-    if (deal.userId != userId) {
+    const deal = await Sell.findDeal(data["dealId"]);
+    if (deal["userId"] != userId) {
       throw new Error("본인 거래가 아닙니다");
     }
-    if (deal.dealStatus != "SELL") {
+    if (deal["dealStatus"] != "SELL") {
       throw new Error("판매가 아닙니다");
     }
 
-    const dealDetail = Sell.findDealDetailByDealId(data["dealId"]);
-
+    const dealDetail = await Sell.findDealDetailByDealId(data["dealId"]);
+    console.log(dealDetail);
     if (dealDetail == null) {
       let dealDetail_data = {};
       dealDetail_data["dealId"] = data["dealId"];
       dealDetail_data["deliveryNumber"] = data["deliveryNumber"];
-      dealDetail_data["resStatus"] = "WAITING";
+      dealDetail_data["resStatus"] = "completion";
+      dealDetail_data["resName"] = "";
+      dealDetail_data["resAddress1"] = "";
+      dealDetail_data["resAddress2"] = "";
       await Sell.dealDetailCreate(dealDetail_data);
       return "운송장번호가 업로드 되었습니다";
     } else {

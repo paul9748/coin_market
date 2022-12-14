@@ -9,11 +9,17 @@ class dealService {
   }
 
   static async findDealByResStatus(resStatus, userId) {
-    const dealListByResStatus = await Deal.findDealByDeliveryStatus(
-      resStatus,
-      userId
-    );
-
+    let dealListByResStatus;
+    if (resStatus == "BUYCOMP") {
+      dealListByResStatus = await Deal.findCompletedDeal("BUY", userId);
+    } else if (resStatus == "SELLCOMP") {
+      dealListByResStatus = await Deal.findCompletedDeal("SELL", userId);
+    } else {
+      dealListByResStatus = await Deal.findDealByDeliveryStatus(
+        resStatus,
+        userId
+      );
+    }
     return dealListByResStatus;
   }
 
