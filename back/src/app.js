@@ -33,7 +33,7 @@ app.use(cors());
 // express.urlencoded: 주로 Form submit 에 의해 만들어지는 URL-Encoded 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/img", express.static("userimages"));
+app.use("/img", express.static("images"));
 // 기본 페이지
 app.get("/", (req, res) => {
   res.send("안녕하세요, 레이서 프로젝트 API 입니다.");
