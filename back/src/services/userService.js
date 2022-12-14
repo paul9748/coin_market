@@ -44,8 +44,6 @@ class userService {
       (await newToken).refresh_token,
       12
     );
-    console.log("새로만든거 ===", (await newToken).refresh_token);
-    console.log("암호화한거 ===", hashRefreshToken);
 
     //userId와 암호화한 리프레쉬 토큰을 묶어줌
     const data = {

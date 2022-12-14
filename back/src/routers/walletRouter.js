@@ -25,7 +25,7 @@ walletRouter.post("/users/wallet", loginRequired, async (req, res, next) => {
     const wallet = await walletService.checkChanges(req.userId);
     const changes = req.body.krwAmount;
 
-    const newWallet = await walletService.letChanges(wallet, changes);
+    const newWallet = await walletService.letChanges(wallet[0], changes);
 
     res.status(201).json(newWallet);
   } catch (err) {
