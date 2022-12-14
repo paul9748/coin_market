@@ -17,7 +17,7 @@ analysisRouter.put(
 analysisRouter.post("/analysis", async (req, res, next) => {
   try {
     const data = req.body["img"];
-    let user = await analysisService.analyses(data);
+    let user = await analysisService.analysis(data);
     res.json(user);
   } catch (err) {
     next(err);

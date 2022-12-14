@@ -10,6 +10,10 @@ class Deal {
         //   resStatus: "waiting",
         // },
       },
+      include: {
+        orderCoin: true,
+        delivery: true,
+      },
     });
 
     return dealByStatus;
@@ -22,6 +26,10 @@ class Deal {
           resStatus,
         },
         userId: userId,
+      },
+      include: {
+        orderCoin: true,
+        delivery: true,
       },
     });
     return deal;
