@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-key */
-import React from 'react';
 import styled from 'styled-components';
 import { useTable } from 'react-table';
 
@@ -34,7 +33,7 @@ function Table({ columns, data }) {
                     onClick={() => {
                       console.log(cell.value);
                       console.log(cell);
-                      self.Text = '테테스트';
+                      self.Text = '테스트';
                     }}>
                     {cell.render('Cell')}
                   </td>
@@ -57,7 +56,8 @@ const StyledTable = styled.table`
   margin-top: 2%;
   td,
   th {
-    border: none;
+    height: 35px;
+    vertical-align: middle;
     text-align: center;
   }
 

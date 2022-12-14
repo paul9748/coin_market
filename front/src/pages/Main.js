@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
@@ -25,9 +27,6 @@ import usa from 'assets/images/usa_flag.png';
 import japan from 'assets/images/japan_flag.png';
 import china from 'assets/images/china_flag.png';
 import eu from 'assets/images/eu_flag.png';
-
-import axios from 'axios';
-import { useState, useEffect, useRef } from 'react';
 
 function Main() {
   const [date, setDate] = useState('');
@@ -88,7 +87,7 @@ function Main() {
       </>
     );
   }
-  console.log('렌더링');
+
   return (
     <>
       <Header></Header>

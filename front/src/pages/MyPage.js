@@ -1,50 +1,66 @@
-import Header from 'components/UI/Header';
-import Footer from 'components/UI/Footer';
 import styled from 'styled-components';
-import ROUTE from 'utils/ROUTE';
-import * as Api from 'api/api';
-import Table from '../components/Table';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 
+import Header from 'components/UI/Header';
+import Footer from 'components/UI/Footer';
+import Table from '../components/Table';
+
+import ROUTE from 'utils/ROUTE';
+import * as Api from 'api/api';
+
 function MyPage() {
   const navigate = useNavigate();
+  const initialValue = {
+    BUY: 0,
+    SELL: 0,
+    delivery: 0,
+    completion: 0,
+    BUYCOMP: 0,
+    SELLCOMP: 0,
+  };
   const [TableUrlData, setTableUrlData] = useState('');
   const [Wallet, setWallet] = useState('');
   const [ROW, setROW] = useState([]);
-  const [BUY, setBUY] = useState();
-  const [SELL, setSELL] = useState();
-  const [delivery, setDelivery] = useState();
-  const [completion, setCompletion] = useState();
-  const [BUYCOMP, setBUYCOMP] = useState();
-  const [SELLCOMP, setSELLCOMP] = useState();
 
-  const getData = async () => {
-    const newData = await Api.get('users/count');
-    const WalletPoint = await Api.get('users/wallet');
-    setWallet(WalletPoint.data['krwAmount']);
-    setBUY(newData.data['BUY']);
-    setSELL(newData.data['SELL']);
-    setDelivery(newData.data['delivery']);
-    setCompletion(newData.data['completion']);
-    setBUYCOMP(newData.data['BUYCOMP']);
-    setSELLCOMP(newData.data['SELLCOMP']);
+  const [countData, setCountData] = useState(initialValue);
+
+  const { BUY, SELL, delivery, completion, BUYCOMP, SELLCOMP } = countData;
+
+  const getCountData = async () => {
+    try {
+      const response = await Api.get('users/count');
+      setCountData(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
-
+  const getWalletPoint = async () => {
+    try {
+      const WalletPoint = await Api.get('users/wallet');
+      setWallet(WalletPoint.data['krwAmount']);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const getRow = async (TableUrlData) => {
-    let newRowdata = await Api.get('users/deals?status=' + TableUrlData);
-    newRowdata = newRowdata.data;
-    newRowdata.map((i) => {
-      i['createdAt'] = i['createdAt'].slice(0, 10) + ' ' + i['createdAt'].slice(11, 19);
-      i['updatedAt'] = i['updatedAt'].slice(0, 10) + ' ' + i['updatedAt'].slice(11, 19);
-      if (i['delivery'] == null && i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
-        i['Status'] = '운송장추가';
-      } else if (i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
-        i['Status'] = '판매확인';
-      }
-      return i;
-    });
-    setROW(newRowdata);
+    try {
+      let newRowdata = await Api.get('users/deals?status=' + TableUrlData);
+      newRowdata = newRowdata.data;
+      newRowdata.map((i) => {
+        i['createdAt'] = i['createdAt'].slice(0, 10) + ' ' + i['createdAt'].slice(11, 19);
+        i['updatedAt'] = i['updatedAt'].slice(0, 10) + ' ' + i['updatedAt'].slice(11, 19);
+        if (i['delivery'] == null && i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
+          i['Status'] = '운송장추가';
+        } else if (i['dealStatus'] == 'SELL' && i['isActivate'] == 0) {
+          i['Status'] = '판매확인';
+        }
+        return i;
+      });
+      setROW(newRowdata);
+    } catch (err) {
+      console.log(err);
+    }
   };
   const columns = useMemo(
     () => [
@@ -76,27 +92,15 @@ function MyPage() {
     []
   );
 
-  const data = useMemo(
-    () => [
-      {
-        id: '100엔',
-        dealAmount: 10,
-        stockAmount: 10,
-        updatedAt: '2022-12-11 10:10',
-        isActivate: 1,
-        test: '테테테스트',
-      },
-    ],
-    []
-  );
-
   useEffect(() => {
     if (!sessionStorage.getItem('ACCESS_TOKEN')) {
       navigate(ROUTE.LOGIN);
     }
-    getData();
+    getCountData();
+    getWalletPoint();
     getRow(TableUrlData);
   }, [navigate, TableUrlData]);
+
   return (
     <>
       <Header></Header>
@@ -107,14 +111,13 @@ function MyPage() {
         <StyledInfoBox>
           <StyledWalletBox>
             <StyledText>환전가능금액</StyledText>
-            <StyledText>{Wallet}</StyledText>
-            <StyledBtn>환전하기</StyledBtn>
+            <StyledPointText>{Wallet.toLocaleString() || 0}원</StyledPointText>
+            <StyledBtn onClick={() => navigate(ROUTE.EXCHANGE)}>환전하기</StyledBtn>
           </StyledWalletBox>
           <StyledDealBox>
             <StyledTitle
               onClick={() => {
                 setTableUrlData('');
-                getData(TableUrlData);
               }}>
               거래현황
             </StyledTitle>
@@ -125,7 +128,6 @@ function MyPage() {
                 id="BUY"
                 onClick={() => {
                   setTableUrlData('BUY');
-                  getData(TableUrlData);
                 }}>
                 {BUY}
               </StyledInfoBtn>
@@ -138,7 +140,6 @@ function MyPage() {
                 id="delivery"
                 onClick={() => {
                   setTableUrlData('delivery');
-                  getData(TableUrlData);
                 }}>
                 {delivery}
               </StyledInfoBtn>
@@ -151,7 +152,6 @@ function MyPage() {
                 id="BUYCOMP"
                 onClick={() => {
                   setTableUrlData('BUYCOMP');
-                  getData(TableUrlData);
                 }}>
                 {BUYCOMP}
               </StyledInfoBtn>
@@ -164,7 +164,6 @@ function MyPage() {
                 id="SELL"
                 onClick={() => {
                   setTableUrlData('SELL');
-                  getData(TableUrlData);
                 }}>
                 {SELL}
               </StyledInfoBtn>
@@ -177,7 +176,6 @@ function MyPage() {
                 id="completion"
                 onClick={() => {
                   setTableUrlData('completion');
-                  getData(TableUrlData);
                 }}>
                 {completion}
               </StyledInfoBtn>
@@ -190,7 +188,6 @@ function MyPage() {
                 id="SELLCOMP"
                 onClick={() => {
                   setTableUrlData('SELLCOMP');
-                  getData(TableUrlData);
                 }}>
                 {SELLCOMP}
               </StyledInfoBtn>
@@ -205,11 +202,16 @@ function MyPage() {
     </>
   );
 }
+export default MyPage;
 
 const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  border-top: 20px solid rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  box-sizing: border-box;
 
   min-height: calc(100vh - 200px);
   min-width: 600px;
@@ -217,56 +219,54 @@ const StyledMain = styled.main`
   @media (max-width: 600px) {
     min-width: 300px;
   }
-  margin-left: 5%;
-  margin-right: 5%;
 `;
-const StyledTitleBox = styled.main`
+const StyledTitleBox = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: left;
   justify-content: left;
   width: 100%;
 `;
-const StyledInfoBox = styled.main`
+const StyledInfoBox = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  border-style: solid none solid none;
+  margin: 20px 0 30px 0;
+  padding: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
 `;
-const StyledDealBox = styled.main`
+const StyledDealBox = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   width: 60%;
-  border-style: none solid none none;
   flex-wrap: wrap;
-  padding: 30px 30px 30px 30px;
+  padding: 10px;
+  margin-left: 40px;
 `;
 
-const StyledDetailBox = styled.main`
+const StyledDetailBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 300px;
   height: 30px;
-  border-style: none;
   flex-wrap: wrap;
 `;
 
-const StyledWalletBox = styled.main`
+const StyledWalletBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 200px;
   height: 150px;
   justify-content: center;
   align-items: center;
-  border-style: none solid none none;
-  padding: 30px 30px 30px 30px;
+  padding: 30px;
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
 `;
 
 const StyledTitle = styled.p`
   font-size: 30px;
-  margin: 0 auto 10px;
+  margin-bottom: 25px;
   font-weight: bold;
   float: left;
   width: 100%;
@@ -274,16 +274,23 @@ const StyledTitle = styled.p`
 const StyledText = styled.p`
   font-size: 20px;
   margin: 0 auto 10px;
+  text-align: center;
+  padding: 5px;
+`;
+const StyledPointText = styled.p`
+  font-size: 33px;
+  margin: 0 auto 20px;
   font-weight: bold;
   text-align: center;
   padding: 5px;
 `;
 const StyledBtn = styled.button`
   width: 100px;
-  height: 30px;
+  height: 40px;
   border: 0;
   border-radius: 10px;
-  background-color: rgba(42, 193, 188, 0.5);
+  color: white;
+  background-color: rgba(42, 193, 188, 0.7);
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
@@ -302,4 +309,3 @@ const StyledInfoBtn = styled.a`
   width: 160px;
   color: blue;
 `;
-export default MyPage;

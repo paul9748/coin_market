@@ -48,9 +48,10 @@ axios.interceptors.response.use(
     } = error;
 
     if (status === 400) {
-      console.log('여기옴');
-      if (error.response.data.name === 'TokenExpiredError') {
-        console.log('최종');
+      if (
+        error.response.data.name === 'TokenExpiredError' ||
+        error.response.data === 'jwt expired'
+      ) {
         const originalRequest = config;
         const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');
         try {

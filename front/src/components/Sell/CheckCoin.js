@@ -13,42 +13,35 @@ import SellButton from './SellButton';
 
 function CheckCoin({ currentStep, setCurrentStep }) {
   const { imageUrl } = useImageContext();
-  const mockData = {
-    JPY: [
-      { coinId: 'a1128667-7070-49d3-afac-7ae97c8556a3', dealAmount: 3 },
-      { coinId: 'b5511284-cb43-4862-a65a-95a0885406e2', dealAmount: 2 },
-    ],
-    CNY: [{ coinId: '907beacb-3a81-481f-8bdd-866dec0ae00b', dealAmount: 4 }],
-    USD: [
-      { coinId: '1b660f44-f8f5-4564-d454-399e0005f216', dealAmount: 11 },
-      { coinId: '98205a78-b95d-4023-cb04-e8f0be368cfb', dealAmount: 4 },
-    ],
-  };
+  const portNum = 3000;
+  const url = 'http://' + window.location.hostname + ':' + portNum + '/';
 
   const [loading, setLoading] = useState(false);
-  const [coinData, setCoinData] = useState(mockData);
+  const [coinData, setCoinData] = useState();
+  const [coinImg, setCoinImg] = useState();
 
-  // useEffect(() => {
-  //   const fetchAnalysisData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await Api.post('analysis', { img: imageUrl });
-  //       console.log(response.data);
-  //       setCoinData(response.data);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchAnalysisData();
-  // }, [imageUrl]);
+  useEffect(() => {
+    const fetchAnalysisData = async () => {
+      setLoading(true);
+      try {
+        const response = await Api.post('analysis', { img: imageUrl });
+        console.log(response.data);
+        setCoinData(response.data[0]);
+        setCoinImg(response.data[1]);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAnalysisData();
+  }, [imageUrl]);
 
   return (
     <>
       {loading && <Loading />}
       <StyledDiv>
         <h2>분석결과</h2>
-        <img src={exampleImage} style={{ width: '500px' }}></img>
+        <img src={url + 'img/' + coinImg} style={{ width: '500px' }}></img>
 
         <h2>판매신청 코인</h2>
         <SellCoinList
