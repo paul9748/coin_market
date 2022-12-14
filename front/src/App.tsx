@@ -17,6 +17,7 @@ import { ImageContextProvider } from 'context/ImageContext';
 import { CoinContextProvider } from 'context/CoinContext';
 import BuyCompletion from 'pages/BuyCompletion';
 import SellCompletion from 'pages/SellCompletion';
+import Exchange from 'pages/Exchange';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   element={<SellCompletion></SellCompletion>}></Route>
                 <Route path={ROUTE.SELL} element={<SellCoin />}></Route>
                 <Route path={ROUTE.REGISTER} element={<Register />}></Route>
+                <Route path={ROUTE.EXCHANGE} element={<Exchange />}></Route>
                 <Route path={ROUTE.MYPAGE} element={<MyPage />}></Route>
                 <Route path="*" element={<NotFound />}></Route>
               </Routes>

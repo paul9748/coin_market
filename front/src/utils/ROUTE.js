@@ -8,6 +8,7 @@ const ROUTE = {
   BUYEND: '/buyend',
   BUY: '/buy',
   MYPAGE: '/mypage',
+  EXCHANGE: '/exchange',
 };
 
 export default ROUTE;
