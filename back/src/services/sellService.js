@@ -59,7 +59,7 @@ class sellService {
       let dealDetail_data = {};
       dealDetail_data["dealId"] = data["dealId"];
       dealDetail_data["deliveryNumber"] = data["deliveryNumber"];
-      dealDetail_data["resStatus"] = "waiting";
+      dealDetail_data["resStatus"] = "completion";
       dealDetail_data["resName"] = "";
       dealDetail_data["resAddress1"] = "";
       dealDetail_data["resAddress2"] = "";

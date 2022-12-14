@@ -146,7 +146,13 @@ function MyPage() {
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>구매완료</StyledText>
-              <StyledInfoBtn href="#" id="BUYCOMP">
+              <StyledInfoBtn
+                href="#"
+                id="BUYCOMP"
+                onClick={() => {
+                  setTableUrlData('BUYCOMP');
+                  getData(TableUrlData);
+                }}>
                 {BUYCOMP}
               </StyledInfoBtn>
               <StyledText>건</StyledText>
@@ -179,7 +185,13 @@ function MyPage() {
             </StyledDetailBox>
             <StyledDetailBox>
               <StyledText>판매완료</StyledText>
-              <StyledInfoBtn href="#" id="SELLCOMP">
+              <StyledInfoBtn
+                href="#"
+                id="SELLCOMP"
+                onClick={() => {
+                  setTableUrlData('SELLCOMP');
+                  getData(TableUrlData);
+                }}>
                 {SELLCOMP}
               </StyledInfoBtn>
               <StyledText>건</StyledText>

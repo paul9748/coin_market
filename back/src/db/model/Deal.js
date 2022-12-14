@@ -35,8 +35,39 @@ class Deal {
     return deal;
   }
 
+  static async findCompletedDeal(resStatus, userId) {
+    let dealIdListZeroStock = await db.orderCoin.groupBy({
+      by: ["dealId"],
+      where: {
+        deal: {
+          isActivate: 1,
+          userId: userId,
+          dealStatus: resStatus,
+        },
+      },
+      _sum: {
+        stockAmount: true,
+      },
+      having: {
+        stockAmount: {
+          _sum: { in: 0 },
+        },
+      },
+    });
+    let setData = [];
+
+    for (let i of dealIdListZeroStock) {
+      setData.push(i["dealId"]);
+    }
+    const deal = await db.deal.findMany({
+      where: { id: { in: setData } },
+    });
+
+    return deal;
+  }
+
   static async findDealByDealId(dealId) {
-    const dealDetail = db.deal.findUnique({
+    const dealDetail = await db.deal.findUnique({
       where: {
         id: dealId,
       },
@@ -74,33 +105,36 @@ class Deal {
       countDataByDeliveryDict[i["resStatus"]] = i["_count"];
     }
 
-    let dealIdListZeroStock = await db.orderCoin.findMany({
+    /////////////////////
+    let dealIdListZeroStock = await db.orderCoin.groupBy({
+      by: ["dealId"],
       where: {
-        stockAmount: 0,
         deal: {
           isActivate: 1,
           userId: userId,
         },
       },
-      select: {
-        dealId: true,
+      _sum: {
+        stockAmount: true,
       },
-      distinct: ["dealId"],
-    });
-    dealIdListZeroStock = dealIdListZeroStock.map((i) => {
-      return i["dealId"];
-    });
-
-    const completeDeal = await db.deal.groupBy({
-      by: ["dealStatus"],
-      where: {
-        id: { in: dealIdListZeroStock },
-        delivery: {
-          resStatus: "completion",
+      having: {
+        stockAmount: {
+          _sum: { in: 0 },
         },
       },
+    });
+    let setData = [];
+
+    for (let i of dealIdListZeroStock) {
+      setData.push(i["dealId"]);
+    }
+    const completeDeal = await db.deal.groupBy({
+      by: ["dealStatus"],
+      where: { id: { in: setData } },
       _count: true,
     });
+    ///////////
+
     let completeDealDict = {};
     for (let i of completeDeal) {
       completeDealDict[i["dealStatus"]] = i["_count"];

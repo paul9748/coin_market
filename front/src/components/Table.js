@@ -28,7 +28,17 @@ function Table({ columns, data }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                return (
+                  <td
+                    {...cell.getCellProps()}
+                    onClick={() => {
+                      console.log(cell.value);
+                      console.log(cell);
+                      self.Text = '테테스트';
+                    }}>
+                    {cell.render('Cell')}
+                  </td>
+                );
               })}
             </tr>
           );
