@@ -32,9 +32,12 @@ class analysisService {
       let CoinList = await Analysis.findCoinList();
       let editData = {};
       for (let i of Object.keys(objList)) {
-        editData[i] = {};
+        editData[i] = [];
         for (let j of Object.keys(objList[i])) {
-          editData[i][CoinList[i][j]] = objList[i][j];
+          editData[i].push({
+            coinId: CoinList[i][j],
+            dealAmount: objList[i][j],
+          });
         }
       }
       let setimg = "Detect_" + img;
