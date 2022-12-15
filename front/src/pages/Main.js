@@ -74,7 +74,7 @@ function Main() {
 
   const goBox = (element) => {
     return function () {
-      element.current.scrollIntoView({ behavior: 'smooth' });
+      element.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
   };
 
@@ -107,7 +107,7 @@ function Main() {
               media="none"
               {...animatedItem[4]}></StyledImg>
             <StyledImg src={prideImage} right="15%"></StyledImg>
-            <div {...animatedImage} style={{ opacity: 0.8 }}>
+            <div {...animatedImage}>
               <p>
                 사용하지 않는 <strong>외국동전</strong>
               </p>
@@ -277,7 +277,7 @@ const StyledFirstBannerContent = styled.div`
 
   & div {
     text-align: center;
-    width: 70%;
+    width: 650px;
     margin-right: 100px;
     padding: 20px;
     border-radius: 30px;
@@ -289,7 +289,7 @@ const StyledFirstBannerContent = styled.div`
     border-top: 30px solid white;
     border-left: 40px solid transparent;
     content: '';
-    top: 232px;
+    top: 237.5px;
     right: 35%;
     position: absolute;
   }
@@ -310,10 +310,11 @@ const StyledFirstBannerContent = styled.div`
     & div {
       width: 100%;
       margin-right: 0px;
+      top: 30px;
     }
 
     &:after {
-      top: 130px;
+      top: 174px;
     }
 
     & p {
@@ -390,15 +391,20 @@ const StyledSecondBannerContent = styled.div`
 
 const StyledImg = styled.img`
   width: ${(props) => props.width || '500px'};
-  top: ${(props) => props.top || '200px'};
+  top: ${(props) => props.top || '202px'};
   left: ${(props) => props.left || null};
   right: ${(props) => props.right || null};
   position: absolute;
 
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     width: 340px;
     display: ${(props) => props.media || null};
     right: 0px;
+    width: ${(props) => props.width || '500px'};
+    top: ${(props) => props.top || '201px'};
+    /* left: ${(props) => props.left || null};
+    right: ${(props) => props.right || null};
+    position: absolute; */
   }
 `;
 

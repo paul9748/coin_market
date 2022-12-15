@@ -9,13 +9,28 @@ function Footer() {
         </LogoDiv>
         <CompanyDetail>
           <StyledPtag style={{ textAlign: 'center' }}>
-            상호 : (주)코인마켓 | 대표자 : 엘리스
+            상호 : (주)코인마켓 | 대표자 : 7zip
           </StyledPtag>
           <StyledPtag style={{ textAlign: 'center' }}>
             사업자등록번호 : 000-00-00000
           </StyledPtag>
+          <span
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}>
+            <StyledPtag
+              style={{ textAlign: 'center', marginRight: '5px', marginLeft: '5px' }}>
+              연락처 : 000-0000-0000
+            </StyledPtag>
+            <StyledPtag
+              style={{ textAlign: 'center', marginRight: '5px', marginLeft: '5px' }}>
+              팩스 : 000-000-0000
+            </StyledPtag>
+          </span>
           <StyledPtag style={{ textAlign: 'center' }}>
-            연락처 : 000-0000-0000 | 팩스 : 000-000-0000 | 이메일 : coinmarket@elice.com
+            이메일 : CoinMarket@elice.com
           </StyledPtag>
           <StyledPtag style={{ textAlign: 'center' }}>
             주소 : 서울특별시 송파구 올림픽로 300 롯데월드타워 117F
@@ -72,7 +87,7 @@ const LogoImg = styled.img`
 const CompanyDetail = styled.div`
   text-align: 'center';
   /* align-self: 'center' */
-  padding: 80px 100px 50px 100px;
+  padding: 40px 100px 40px 100px;
   color: white;
   margin: auto;
   @media (max-width: 700px) {
@@ -84,7 +99,7 @@ const StyledPtag = styled.p`
   text-align: 'center';
   line-height: 30px;
   font-size: 20px;
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
     line-height: 19px;
     font-size: 15px;
   }

@@ -18,6 +18,7 @@ import { CoinContextProvider } from 'context/CoinContext';
 import BuyCompletion from 'pages/BuyCompletion';
 import SellCompletion from 'pages/SellCompletion';
 import Exchange from 'pages/Exchange';
+import ScrollToTop from 'components/ScrollRestoration';
 import UserInfo from 'pages/UserInfo';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <GlobalStyle />
           <Router>
             <GoogleOAuthProvider clientId={`${process.env.REACT_APP_CLIENT_ID}`}>
+              <ScrollToTop />
               <Routes>
                 <Route path={ROUTE.MAIN} element={<Main />}></Route>
                 <Route path={ROUTE.LOGIN} element={<Login />}></Route>
