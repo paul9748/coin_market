@@ -7,8 +7,6 @@ import ROUTE from 'utils/ROUTE';
 import Header from 'components/UI/Header';
 import Footer from 'components/UI/Footer';
 
-import * as Api from 'api/api';
-
 function BuyCompletion() {
   const navigate = useNavigate();
 
