@@ -677,13 +677,13 @@ const NavBar = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  right: 7.5%;
+  right: 5%;
 
   & div {
     margin: 10px;
     border: 2px solid blue;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     cursor: pointer;
   }
