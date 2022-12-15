@@ -12,7 +12,7 @@ commonRouter.get("/exchangeRate", async (req, res, next) => {
       req.query["countryCode"];
     let data = await axios.get(url);
     data = data.data;
-
+    data[0]["basePrice"] = (data[0]["basePrice"] * 0.7).toFixed(1);
     data.push(
       jwt.sign(
         {
