@@ -79,8 +79,8 @@ function Main() {
   };
 
   function NavBtn(idx) {
-    let color = ['white', 'white', 'white', 'white', 'white'];
-    color[idx.idx - 1] = 'black';
+    let color = ['none', 'none', 'none', 'none', 'none'];
+    color[idx.idx - 1] = 'blue';
     return (
       <>
         {elementNum.map((ele, index) => (
@@ -214,7 +214,7 @@ function Main() {
           </NavBar>
         </StyledBannerWrapper>
 
-        <StyledBannerWrapper backgroundColor="#E1FFE1" position="relative" ref={fifth}>
+        <StyledBannerWrapper backgroundColor="#E5E8F6" position="relative" ref={fifth}>
           <LastStyledContent>
             <p>함께하는 사람들</p>
             <div>
@@ -681,7 +681,7 @@ const NavBar = styled.div`
 
   & div {
     margin: 10px;
-    border: 2px solid black;
+    border: 2px solid blue;
     width: 20px;
     height: 20px;
     border-radius: 50%;
