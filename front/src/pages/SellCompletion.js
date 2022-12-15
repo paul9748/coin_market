@@ -14,15 +14,27 @@ function SellCompletion() {
   const { sellNumber } = useCoinContext();
   useEffect(() => {
     const uploadData = async () => {
+      await deliveryData();
       try {
         const response = await Api.post(`sell/${sellNumber}`);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    const deliveryData = async () => {
+      try {
+        const response = await Api.post(`sell/${sellNumber}/deliveryNumber`, {
+          deliveryNumber: `${Math.random() * 10}`,
+        });
+        console.log(response.data);
       } catch (err) {
         console.log(err);
       }
     };
 
     uploadData();
-  }, [sellNumber]);
+  }, []);
 
   return (
     <>

@@ -115,7 +115,7 @@ function SelectCoinCount({
                   onChange={handleChange}
                   value={buyCount.firstCoin}
                   min="0"
-                  max={coinStock?.[0]?.stockAmount || 0}></StyledInput>
+                  max={`${coinStock?.[0]?.stockAmount}` || '0'}></StyledInput>
                 <span> 개</span>
               </p>
             </StyledContent>
@@ -144,7 +144,7 @@ function SelectCoinCount({
                     onChange={handleChange}
                     value={buyCount.secondCoin}
                     min="0"
-                    max={coinStock?.[1]?.stockAmount || 0}></StyledInput>
+                    max={`${coinStock?.[1]?.stockAmount}` || '0'}></StyledInput>
                   <span> 개</span>
                 </p>
               </StyledContent>

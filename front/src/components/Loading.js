@@ -12,7 +12,7 @@ export default Loading;
 const StyledDiv = styled.div`
   position: absolute;
   width: 100vw;
-  height: 170vh;
+  height: 100vh;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.2);
