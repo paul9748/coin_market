@@ -8,8 +8,6 @@ import { emailvalidation } from 'utils/validation';
 
 import * as Api from 'api/api';
 
-import GoogleLogIn from './GoogleLogin';
-
 function LoginForm() {
   const labelIdRef = useRef();
   const inputIdRef = useRef();
@@ -121,7 +119,6 @@ function LoginForm() {
         )}
       </StyledDiv>
       <BtnLogin disabled={!validation}>로그인</BtnLogin>
-      <GoogleLogIn />
       <StyledP>
         아직 회원이 아니신가요?
         <StyledLink to={ROUTE.REGISTER}>등록</StyledLink>
