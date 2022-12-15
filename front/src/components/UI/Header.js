@@ -25,6 +25,7 @@ export default Header;
 
 const StyledHeader = styled.header`
   display: flex;
+  background-color: white;
   justify-content: space-between;
   position: sticky;
   top: 0;
