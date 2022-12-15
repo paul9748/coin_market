@@ -35,19 +35,19 @@ function Main() {
   const [CNY, setCNY] = useState();
   const [EUR, setEUR] = useState();
 
+  const URL = 'https://api.manana.kr/exchange/rate/KRW/JPY,USD,CNY,EUR.json';
+
   const getData = async () => {
-    await axios
-      .get(
-        'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/krw.min.json'
-      )
-      .then((res) => {
-        const data = res.data;
-        setDate(data.date);
-        setJPY(data.krw['jpy']);
-        setUSD(data.krw['usd']);
-        setCNY(data.krw['cny']);
-        setEUR(data.krw['eur']);
-      });
+    await axios.get(URL).then((res) => {
+      const data = res.data;
+      const TIME_ZONE = 3240 * 10000;
+      setDate(new Date(+new Date() + TIME_ZONE).toISOString().split('T')[0]);
+
+      setJPY(data[0].rate);
+      setUSD(data[1].rate);
+      setCNY(data[2].rate);
+      setEUR(data[3].rate);
+    });
   };
 
   useEffect(() => {
@@ -78,11 +78,16 @@ function Main() {
     };
   };
 
-  function NavBtn() {
+  function NavBtn(idx) {
+    let color = ['white', 'white', 'white', 'white', 'white'];
+    color[idx.idx - 1] = 'black';
     return (
       <>
         {elementNum.map((ele, index) => (
-          <div key={index} onClick={goBox(ele)}></div>
+          <div
+            key={index}
+            onClick={goBox(ele)}
+            style={{ backgroundColor: color[index] }}></div>
         ))}
       </>
     );
@@ -115,7 +120,7 @@ function Main() {
             </div>
           </StyledFirstBannerContent>
           <NavBar>
-            <NavBtn></NavBtn>
+            <NavBtn idx={1}></NavBtn>
           </NavBar>
         </StyledBannerWrapper>
         <StyledBannerWrapper backgroundColor="#F3F4F9" position="relative" ref={second}>
@@ -140,7 +145,7 @@ function Main() {
             </div>
           </StyledSecondBannerContent>
           <NavBar>
-            <NavBtn></NavBtn>
+            <NavBtn idx={2}></NavBtn>
           </NavBar>
         </StyledBannerWrapper>
         <StyledBannerWrapper position="relative" ref={third}>
@@ -149,26 +154,26 @@ function Main() {
             <br />
             <CountryStyledContent>
               <img src={usa}></img>
-              <p>1 USD: {Math.ceil(1 / USD).toLocaleString('ko-KR')} 원</p>
+              <p>1 USD: {Math.ceil(USD).toLocaleString('ko-KR')} 원</p>
             </CountryStyledContent>
             <CountryStyledContent>
               <img src={japan}></img>
-              <p>100 JPY: {Math.ceil(100 / JPY).toLocaleString('ko-KR')} 원</p>
+              <p>100 JPY: {Math.ceil(JPY * 100).toLocaleString('ko-KR')} 원</p>
             </CountryStyledContent>
             <CountryStyledContent>
               <img src={china}></img>
-              <p>1 CNY: {Math.ceil(1 / CNY).toLocaleString('ko-KR')} 원</p>
+              <p>1 CNY: {Math.ceil(CNY).toLocaleString('ko-KR')} 원</p>
             </CountryStyledContent>
             <CountryStyledContent>
               <img src={eu}></img>
-              <p>1 EUR: {Math.ceil(1 / EUR).toLocaleString('ko-KR')} 원</p>
+              <p>1 EUR: {Math.ceil(EUR).toLocaleString('ko-KR')} 원</p>
             </CountryStyledContent>
           </StyledThirdBannerContent>
           <ThirdBannerStrong>
             유저간의 거래를 통해 <strong>저렴하게</strong> 외화를 구매할 수 있어요
           </ThirdBannerStrong>
           <NavBar>
-            <NavBtn></NavBtn>
+            <NavBtn idx={3}></NavBtn>
           </NavBar>
         </StyledBannerWrapper>
         <StyledBannerWrapper backgroundColor="#CCF2F4" position="relative" ref={fourth}>
@@ -192,9 +197,10 @@ function Main() {
           </StyledContentWrapper>
           <StyledContentWrapper>
             <StyledCommentDiv>
-              <p>1분 안에 동전 판매하기</p>
+              <p>1분 안에 동전 거래하기</p>
               <p>누구나 쉽고 간편하게 4단계로 간편하게 </p>
               <p>판매해보세요! 동전과 사진만 있으면 됩니다</p>
+              <p>구매 또한 쉽고 빠르게!!</p>
             </StyledCommentDiv>
             <Link to={ROUTE.BUY}>
               <StyledBtn color="#db186d">구매하기</StyledBtn>
@@ -204,7 +210,7 @@ function Main() {
             </Link>
           </StyledContentWrapper>
           <NavBar>
-            <NavBtn></NavBtn>
+            <NavBtn idx={4}></NavBtn>
           </NavBar>
         </StyledBannerWrapper>
 
@@ -219,7 +225,7 @@ function Main() {
             </div>
           </LastStyledContent>
           <NavBar>
-            <NavBtn></NavBtn>
+            <NavBtn idx={5}></NavBtn>
           </NavBar>
         </StyledBannerWrapper>
       </StyledMain>
@@ -678,7 +684,6 @@ const NavBar = styled.div`
     border: 2px solid black;
     width: 20px;
     height: 20px;
-    background-color: white;
     border-radius: 50%;
     cursor: pointer;
   }
