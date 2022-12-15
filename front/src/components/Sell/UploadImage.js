@@ -8,8 +8,8 @@ import { useImageContext } from 'context/ImageContext';
 
 function UploadImage({ currentStep, setCurrentStep }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [coinImage, setCoinImage] = useState(null);
-  const [imageData, setImageData] = useState(null);
+  const [coinImage, setCoinImage] = useState('');
+  const [imageData, setImageData] = useState('');
 
   const { setImageUrl } = useImageContext();
 
@@ -161,8 +161,8 @@ function UploadImage({ currentStep, setCurrentStep }) {
         )}
         <StyledBtn
           disabled={!coinImage}
-          onClick={() => {
-            handleSubmit();
+          onClick={async () => {
+            await handleSubmit();
             currentStep < 5 && setCurrentStep((preState) => preState + 1);
           }}>
           다음

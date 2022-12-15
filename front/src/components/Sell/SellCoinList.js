@@ -17,7 +17,7 @@ function SellCoinList({ coinData, setCoinData }) {
   let cnyResult = 0;
   let usdResult = 0;
 
-  coinData.JPY?.map((el) => {
+  coinData?.JPY?.map((el) => {
     if (el.coinId === process.env.REACT_APP_JPY100) {
       jpyResult += 100 * el.dealAmount;
     }
@@ -26,13 +26,13 @@ function SellCoinList({ coinData, setCoinData }) {
     }
   });
 
-  coinData.CNY?.map((el) => {
+  coinData?.CNY?.map((el) => {
     if (el.coinId === process.env.REACT_APP_CNY1) {
       cnyResult += el.dealAmount;
     }
   });
 
-  coinData.USD?.map((el) => {
+  coinData?.USD?.map((el) => {
     if (el.coinId === process.env.REACT_APP_USD10) {
       usdResult += 10 * el.dealAmount;
     }
@@ -112,9 +112,12 @@ function SellCoinList({ coinData, setCoinData }) {
   return (
     <StyledWrapper>
       {isModal && (
-        <AddCoinModal setIsModal={setIsModal} setCoinData={setCoinData}></AddCoinModal>
+        <AddCoinModal
+          setIsModal={setIsModal}
+          setCoinData={setCoinData}
+          coinData={coinData}></AddCoinModal>
       )}
-      {coinData.JPY && (
+      {coinData?.JPY && (
         <StyledNationWrapper>
           <div>기준환율: {jpyRate?.[0].basePrice} KRW/JPY100</div>
           <StyledNationContentWrapper>
@@ -129,14 +132,14 @@ function SellCoinList({ coinData, setCoinData }) {
               </div>
             </StyledCoinListTitle>
             <StyledCoinListContent>
-              {coinData.JPY[0].coinId === process.env.REACT_APP_JPY100 && (
+              {coinData?.JPY[0]?.coinId === process.env.REACT_APP_JPY100 && (
                 <StyledCoin>
                   <StyledCoinImg src="JPY100.png" />
                   <div>
-                    <div>100엔 x {coinData.JPY[0].dealAmount}개 =</div>
+                    <div>100엔 x {coinData?.JPY[0].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * coinData.JPY[0].dealAmount
+                        jpyRate?.[0].basePrice * coinData?.JPY[0].dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -151,14 +154,14 @@ function SellCoinList({ coinData, setCoinData }) {
                   </div>
                 </StyledCoin>
               )}
-              {coinData.JPY[0].coinId === process.env.REACT_APP_JPY500 && (
+              {coinData?.JPY[0]?.coinId === process.env.REACT_APP_JPY500 && (
                 <StyledCoin>
                   <StyledCoinImg src="/JPY500.png" />
                   <div>
-                    <div>500엔 x {coinData.JPY[0].dealAmount}개 =</div>
+                    <div>500엔 x {coinData?.JPY[0].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * 5 * coinData.JPY[0].dealAmount
+                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[0].dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -173,14 +176,14 @@ function SellCoinList({ coinData, setCoinData }) {
                   </div>
                 </StyledCoin>
               )}
-              {coinData.JPY?.[1].coinId === process.env.REACT_APP_JPY500 && (
+              {coinData?.JPY?.[1]?.coinId === process.env.REACT_APP_JPY500 && (
                 <StyledCoin>
                   <StyledCoinImg src="/JPY500.png" />
                   <div>
-                    <div>500엔 x {coinData.JPY[1].dealAmount}개 =</div>
+                    <div>500엔 x {coinData?.JPY[1].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * 5 * coinData.JPY[1].dealAmount
+                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[1].dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -199,7 +202,7 @@ function SellCoinList({ coinData, setCoinData }) {
           </StyledNationContentWrapper>
         </StyledNationWrapper>
       )}
-      {coinData.CNY && (
+      {coinData?.CNY && (
         <StyledNationWrapper>
           <div>기준환율: {cnyRate?.[0].basePrice} KRW/CNY</div>
           <StyledNationContentWrapper>
@@ -234,7 +237,7 @@ function SellCoinList({ coinData, setCoinData }) {
           </StyledNationContentWrapper>
         </StyledNationWrapper>
       )}
-      {coinData.USD && (
+      {coinData?.USD && (
         <StyledNationWrapper>
           <div>기준환율: {usdRate?.[0].basePrice} KRW/USD</div>
           <StyledNationContentWrapper>
@@ -249,14 +252,14 @@ function SellCoinList({ coinData, setCoinData }) {
               </div>
             </StyledCoinListTitle>
             <StyledCoinListContent>
-              {coinData.USD[0].coinId === process.env.REACT_APP_USD10 && (
+              {coinData?.USD[0]?.coinId === process.env.REACT_APP_USD10 && (
                 <StyledCoin>
                   <StyledCoinImg src="USD10.png" />
                   <div>
-                    <div>10센트 x {coinData.USD[0].dealAmount}개 =</div>
+                    <div>10센트 x {coinData?.USD[0].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        usdRate?.[0].basePrice * coinData.USD[0].dealAmount * 0.1
+                        usdRate?.[0].basePrice * coinData?.USD[0].dealAmount * 0.1
                       ).toLocaleString()}
                       원
                     </div>
@@ -271,14 +274,14 @@ function SellCoinList({ coinData, setCoinData }) {
                   </div>
                 </StyledCoin>
               )}
-              {coinData.USD[0].coinId === process.env.REACT_APP_USD25 && (
+              {coinData?.USD[0]?.coinId === process.env.REACT_APP_USD25 && (
                 <StyledCoin>
                   <StyledCoinImg src="/USD25.png" />
                   <div>
                     <div>25센트 x {coinData.USD[0].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        usdRate?.[0].basePrice * coinData.USD[0].dealAmount * 0.25
+                        usdRate?.[0].basePrice * coinData?.USD[0].dealAmount * 0.25
                       ).toLocaleString()}
                       원
                     </div>
@@ -293,14 +296,14 @@ function SellCoinList({ coinData, setCoinData }) {
                   </div>
                 </StyledCoin>
               )}
-              {coinData.USD?.[1].coinId === process.env.REACT_APP_USD25 && (
+              {coinData?.USD?.[1]?.coinId === process.env.REACT_APP_USD25 && (
                 <StyledCoin>
                   <StyledCoinImg src="/USD25.png" />
                   <div>
-                    <div>25센트 x {coinData.USD[1].dealAmount}개 =</div>
+                    <div>25센트 x {coinData?.USD[1].dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        usdRate?.[0].basePrice * coinData.USD[1].dealAmount * 0.25
+                        usdRate?.[0].basePrice * coinData?.USD[1].dealAmount * 0.25
                       ).toLocaleString()}
                       원
                     </div>

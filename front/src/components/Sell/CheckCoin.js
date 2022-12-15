@@ -7,7 +7,6 @@ import * as Api from 'api/api';
 
 import Loading from 'components/Loading';
 
-import exampleImage from 'assets/images/image_coin_detect.png';
 import SellCoinList from './SellCoinList';
 import SellButton from './SellButton';
 
@@ -16,13 +15,15 @@ function CheckCoin({ currentStep, setCurrentStep }) {
   const portNum = 3000;
   const url = 'http://' + window.location.hostname + ':' + portNum + '/';
 
+  const initialValue = { JPY: [{ coinId: '', dealAmount: 0 }] };
   const [loading, setLoading] = useState(false);
-  const [coinData, setCoinData] = useState();
-  const [coinImg, setCoinImg] = useState();
+  const [coinData, setCoinData] = useState(initialValue);
+  const [coinImg, setCoinImg] = useState('');
 
   useEffect(() => {
     const fetchAnalysisData = async () => {
       setLoading(true);
+
       try {
         const response = await Api.post('analysis', { img: imageUrl });
         console.log(response.data);
@@ -41,8 +42,7 @@ function CheckCoin({ currentStep, setCurrentStep }) {
       {loading && <Loading />}
       <StyledDiv>
         <h2>분석결과</h2>
-        <img src={url + 'img/' + coinImg} style={{ width: '500px' }}></img>
-
+        <StyledImg src={`${url}img/${coinImg}`}></StyledImg>
         <h2>판매신청 코인</h2>
         <SellCoinList
           currentStep={currentStep}
@@ -100,4 +100,8 @@ const StyledBtnWrapper = styled.div`
   justify-content: space-evenly;
 
   margin: 40px 0;
+`;
+
+const StyledImg = styled.img`
+  width: 400px;
 `;
