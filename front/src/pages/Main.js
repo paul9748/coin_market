@@ -102,12 +102,12 @@ function Main() {
             <StyledImg
               src={surpriseImage}
               width="500px"
-              top="250px"
+              top="350px"
               left="0px"
               media="none"
               {...animatedItem[4]}></StyledImg>
             <StyledImg src={prideImage} right="15%"></StyledImg>
-            <div {...animatedImage}>
+            <div {...animatedImage} style={{ opacity: 0.8 }}>
               <p>
                 사용하지 않는 <strong>외국동전</strong>
               </p>
