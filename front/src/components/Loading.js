@@ -11,7 +11,7 @@ function Loading() {
 
   return (
     <StyledDiv>
-      <img src="/spinner.gif" alt="로딩"></img>
+      <img src="/Spinner.gif" alt="로딩"></img>
     </StyledDiv>
   );
 }

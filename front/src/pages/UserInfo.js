@@ -102,26 +102,26 @@ function UserInfo() {
           {isPwClick ? (
             <StyledContentWrapper>
               <label htmlFor="currentPw">현재 비밀번호</label>
-              <input
+              <StyledInput
                 name="currentPw"
                 value={passWord.currentPw}
                 id="currentPw"
                 onChange={handlePwChange}
-                type="password"></input>
+                type="password"></StyledInput>
               <label htmlFor="newPw">새로운 비밀번호</label>
-              <input
+              <StyledInput
                 name="newPw"
                 value={passWord.newPw}
                 onChange={handlePwChange}
                 id="newPw"
-                type="password"></input>
+                type="password"></StyledInput>
               <label htmlFor="checkPw">새로운 비밀번호 확인</label>
-              <input
+              <StyledInput
                 name="checkPw"
                 value={passWord.checkPw}
                 onChange={handlePwChange}
                 id="checkPw"
-                type="password"></input>
+                type="password"></StyledInput>
             </StyledContentWrapper>
           ) : (
             <StyledContentWrapper>
@@ -161,7 +161,13 @@ function UserInfo() {
           )}
         </StyledUserInfoWrapper>
         <StyledBtnWrapper>
-          <StyledBtn onClick={() => navigate(ROUTE.MAIN)}>홈화면</StyledBtn>
+          {isPwClick ? (
+            <StyledBtn onClick={() => setIsPwClick((preState) => !preState)}>
+              이전
+            </StyledBtn>
+          ) : (
+            <StyledBtn onClick={() => navigate(ROUTE.MAIN)}>홈화면</StyledBtn>
+          )}
           {isPwClick ? (
             <StyledBtn onClick={handlePwChangeClick}>변경</StyledBtn>
           ) : (
@@ -265,4 +271,10 @@ const StyledPwBtn = styled.button`
   &:hover {
     background-color: rgba(42, 193, 188, 0.6);
   }
+`;
+
+const StyledInput = styled.input`
+  margin-top: 10px;
+  margin-bottom: 20px;
+  height: 30px;
 `;
