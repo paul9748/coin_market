@@ -57,34 +57,34 @@ const items = [
   { id: 4, url: ai },
 ];
 
-export default class SimpleSlider extends Component {
-  render() {
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      autoplay: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      centerMode: true,
-    };
-    return (
-      <Container>
-        {/* <StyledH2>팀원 소개</StyledH2> */}
+function SimpleSlider() {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    autoplay: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    centerMode: true,
+  };
+  return (
+    <Container>
+      {/* <StyledH2>팀원 소개</StyledH2> */}
 
-        <StyledSlider {...settings}>
-          {items.map((item) => {
-            return (
-              <div key={item.id}>
-                <ImageContainer>
-                  <Image src={item.url} />
-                </ImageContainer>
-              </div>
-            );
-          })}
-        </StyledSlider>
-      </Container>
-    );
-  }
+      <StyledSlider {...settings}>
+        {items.map((item) => {
+          return (
+            <div key={item.id}>
+              <ImageContainer>
+                <Image src={item.url} />
+              </ImageContainer>
+            </div>
+          );
+        })}
+      </StyledSlider>
+    </Container>
+  );
 }
+
+export default SimpleSlider;
