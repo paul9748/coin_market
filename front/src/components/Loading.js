@@ -1,5 +1,14 @@
+import { useEffect } from 'react';
+
 import styled from 'styled-components';
 function Loading() {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
     <StyledDiv>
       <img src="/spinner.gif" alt="로딩"></img>
@@ -10,11 +19,10 @@ function Loading() {
 export default Loading;
 
 const StyledDiv = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
-  top: 0;
-  left: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.2);
   z-index: 999;
   display: flex;

@@ -5,10 +5,9 @@ import { useImageContext } from 'context/ImageContext';
 
 import * as Api from 'api/api';
 
-import Loading from 'components/Loading';
-
 import SellCoinList from './SellCoinList';
 import SellButton from './SellButton';
+import Loading from 'components/Loading';
 
 function CheckCoin({ currentStep, setCurrentStep }) {
   const { imageUrl } = useImageContext();
@@ -16,14 +15,12 @@ function CheckCoin({ currentStep, setCurrentStep }) {
   const url = 'http://' + window.location.hostname + ':' + portNum + '/';
 
   const initialValue = { JPY: [{ coinId: '', dealAmount: 0 }] };
-  const [loading, setLoading] = useState(false);
   const [coinData, setCoinData] = useState(initialValue);
   const [coinImg, setCoinImg] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnalysisData = async () => {
-      setLoading(true);
-
       try {
         const response = await Api.post('analysis', { img: imageUrl });
         console.log(response.data);
@@ -37,12 +34,13 @@ function CheckCoin({ currentStep, setCurrentStep }) {
     fetchAnalysisData();
   }, [imageUrl]);
 
+  if (loading) return <Loading></Loading>;
+
   return (
     <>
-      {loading && <Loading />}
       <StyledDiv>
         <h2>분석결과</h2>
-        <StyledImg src={`${url}img/${coinImg}`}></StyledImg>
+        <StyledImg src={`${url}img/${coinImg}`} alt="분석이미지"></StyledImg>
         <h2>판매신청 코인</h2>
         <SellCoinList
           currentStep={currentStep}
