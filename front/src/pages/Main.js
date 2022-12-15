@@ -292,6 +292,7 @@ const StyledFirstBannerContent = styled.div`
     top: 232px;
     right: 35%;
     position: absolute;
+    opacity: 0.8;
   }
 
   & p {
