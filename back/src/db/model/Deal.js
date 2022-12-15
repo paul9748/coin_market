@@ -14,6 +14,9 @@ class Deal {
         orderCoin: true,
         delivery: true,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     return dealByStatus;
@@ -30,6 +33,9 @@ class Deal {
       include: {
         orderCoin: true,
         delivery: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
       },
     });
     return deal;
@@ -61,6 +67,9 @@ class Deal {
     }
     const deal = await db.deal.findMany({
       where: { id: { in: setData } },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     return deal;
