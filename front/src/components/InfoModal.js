@@ -13,6 +13,11 @@ function InfoModal({ color, setIsLogin, setIsModal }) {
         </StyledLink>
       </li>
       <li>
+        <StyledLink to={ROUTE.USER} color={color}>
+          회원정보 수정
+        </StyledLink>
+      </li>
+      <li>
         <StyledLink
           onClick={() => {
             sessionStorage.clear();
@@ -36,7 +41,7 @@ const StyledDiv = styled.div`
   top: 60px;
   right: 20px;
   width: 150px;
-  height: 150px;
+  height: 200px;
   background-color: white;
   z-index: 30;
   text-align: center;

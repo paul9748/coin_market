@@ -18,6 +18,7 @@ import { CoinContextProvider } from 'context/CoinContext';
 import BuyCompletion from 'pages/BuyCompletion';
 import SellCompletion from 'pages/SellCompletion';
 import Exchange from 'pages/Exchange';
+import UserInfo from 'pages/UserInfo';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path={ROUTE.REGISTER} element={<Register />}></Route>
                 <Route path={ROUTE.EXCHANGE} element={<Exchange />}></Route>
                 <Route path={ROUTE.MYPAGE} element={<MyPage />}></Route>
+                <Route path={ROUTE.USER} element={<UserInfo />}></Route>
                 <Route path="*" element={<NotFound />}></Route>
               </Routes>
             </GoogleOAuthProvider>

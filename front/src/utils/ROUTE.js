@@ -9,6 +9,7 @@ const ROUTE = {
   BUY: '/buy',
   MYPAGE: '/mypage',
   EXCHANGE: '/exchange',
+  USER: '/user',
 };
 
 export default ROUTE;
