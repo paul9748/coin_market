@@ -67,20 +67,23 @@ axios.interceptors.response.use(
           sessionStorage.clear();
           sessionStorage.setItem('ACCESS_TOKEN', response.data.access_token);
           sessionStorage.setItem('REFRESH_TOKEN', response.data.refresh_token);
+          axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(
+          'ACCESS_TOKEN'
+          )}`;
+
+          originalRequest.headers.Authorization = `Bearer ${sessionStorage.getItem(
+          `ACCESS_TOKEN`
+          )}`;
+
+        return axios(originalRequest);
         } catch (err) {
           console.log(err);
           sessionStorage.clear();
+          window.location.reload();
+
         }
 
-        axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(
-          'ACCESS_TOKEN'
-        )}`;
 
-        originalRequest.headers.Authorization = `Bearer ${sessionStorage.getItem(
-          `ACCESS_TOKEN`
-        )}`;
-
-        return axios(originalRequest);
       }
     }
 
