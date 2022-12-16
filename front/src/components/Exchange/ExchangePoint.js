@@ -73,7 +73,7 @@ function ExchangePoint() {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
   return (
     <StyledExchangeWrapper>
       <StyledContentWrapper>
