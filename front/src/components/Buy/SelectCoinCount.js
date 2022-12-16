@@ -200,6 +200,9 @@ const StyledWrapper = styled.div`
   @media (max-width: 1097px) {
     width: 430px;
   }
+  @media (max-width: 500px) {
+    width: 310px;
+  }
 `;
 
 const StyledContentWrapper = styled.div`
@@ -211,6 +214,9 @@ const StyledContentWrapper = styled.div`
   align-items: flex-start;
   @media (max-width: 1097px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 
@@ -224,6 +230,9 @@ const StyledContent = styled.div`
 
 const StyledInput = styled.input`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledAddBtn = styled.button`
@@ -247,6 +256,9 @@ const StyledAddBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -271,5 +283,8 @@ const StyledBtnWrapper = styled.div`
   margin: 40px 0;
   @media (max-width: 620px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;

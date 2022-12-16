@@ -177,6 +177,9 @@ const StyledWrapper = styled.div`
   border: 10px solid rgba(42, 193, 188, 0.8);
   border-radius: 20px;
   background-color: white;
+  @media (max-width: 490px) {
+    width: 340px;
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -219,6 +222,9 @@ const StyledContent = styled.div`
   padding: 20px;
   border-radius: 10px;
   border: 2px solid rgba(0, 0, 0, 0.2);
+  @media (max-width: 490px) {
+    width: 280px;
+  }
 `;
 
 const StyledContentTitle = styled.h4`

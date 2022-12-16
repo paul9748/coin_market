@@ -90,7 +90,10 @@ const StyledMain = styled.main`
   min-width: 600px;
 
   @media (max-width: 600px) {
-    min-width: 300px;
+    min-width: 440px;
+  }
+  @media (max-width: 450px) {
+    min-width: 380px;
   }
 `;
 
@@ -98,6 +101,9 @@ const StyledTitle = styled.div`
   display: flex;
   margin: 20px auto;
   width: 440px;
+  @media (max-width: 450px) {
+    width: 390px;
+  }
 `;
 
 const TitleLabel = styled.div`
@@ -108,6 +114,7 @@ const TitleLabel = styled.div`
   font-weight: bold;
   color: white;
   background-color: #2ac1bc;
+  margin-left: 10px;
 
   &:after {
     border-top: 15px solid #2ac1bc;
@@ -116,6 +123,9 @@ const TitleLabel = styled.div`
     top: 50px;
     right: 10px;
     position: absolute;
+  }
+  @media (max-width: 450px) {
+    font-size: 20px;
   }
 `;
 
@@ -128,6 +138,10 @@ const TitleContent = styled.div`
   line-height: 50px;
   text-indent: 20px;
   font-weight: bold;
+  @media (max-width: 450px) {
+    font-size: 13px;
+    width: 250px;
+  }
 `;
 
 const StyledBtn = styled.button`

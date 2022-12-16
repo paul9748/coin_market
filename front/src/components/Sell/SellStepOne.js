@@ -58,7 +58,6 @@ const StyledDiv = styled.div`
   }
 
   @media (max-width: 700px) {
-    margin-top: 30px;
     & + & {
       margin-left: 0;
     }
@@ -89,13 +88,25 @@ const StyledImgWrapper = styled.div`
   border-radius: 10px;
   width: 330px;
   height: 247px;
+  margin-top: 10px;
   background-color: rgba(0, 0, 0, 0.07);
+  @media (max-width: 450px) {
+    width: 320px;
+    flex-direction: column;
+    height: 330px;
+  }
 `;
 
 const StyledImgDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 450px) {
+    & + & {
+      margin-top: 30px;
+    }
+  }
 `;
 
 const StyledTitle = styled.p`

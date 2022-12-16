@@ -228,11 +228,24 @@ export default Payment;
 
 const StyledLayout = styled.div`
   display: flex;
+  @media (max-width: 855px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const StyledWrapper = styled.div`
   width: 620px;
   padding: 40px;
   box-sizing: border-box;
+  @media (max-width: 630px) {
+    width: 500px;
+  }
+  @media (max-width: 500px) {
+    width: 450px;
+  }
+  @media (max-width: 420px) {
+    width: 400px;
+  }
 `;
 
 const StyledPageTitle = styled.h1`
@@ -265,6 +278,24 @@ const StyledPayWrapper = styled.div`
   top: -70px;
   padding-top: 170px;
   width: 200px;
+  @media (max-width: 855px) {
+    position: static;
+    width: 550px;
+    top: 0;
+    padding: 0;
+    height: 300px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 630px) {
+    width: 430px;
+  }
+  @media (max-width: 500px) {
+    width: 370px;
+  }
+  @media (max-width: 420px) {
+    width: 330px;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -290,6 +321,9 @@ const StyledResultContent = styled.div`
 
 const StyledImg = styled.img`
   width: 90px;
+  @media (max-width: 420px) {
+    width: 50px;
+  }
 `;
 
 const StyledCoinWrapper = styled.div`
