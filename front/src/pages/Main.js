@@ -274,7 +274,7 @@ const StyledBannerWrapper = styled.div`
   }
 
   @media (max-width: 700px) {
-    height: 700px;
+    height: 600px;
   }
 `;
 
@@ -316,6 +316,27 @@ const StyledFirstBannerContent = styled.div`
     font-size: 50px;
   }
 
+  @media (max-width: 1000px) {
+    line-height: 30px;
+    & div {
+      width: 100%;
+      margin-right: 0px;
+      top: 30px;
+    }
+
+    &:after {
+      top: 160px;
+    }
+
+    & p {
+      font-size: 25px;
+    }
+
+    & strong {
+      font-size: 35px;
+    }
+  }
+
   @media (max-width: 800px) {
     line-height: 30px;
     & div {
@@ -325,11 +346,11 @@ const StyledFirstBannerContent = styled.div`
     }
 
     &:after {
-      top: 150px;
+      top: 170px;
     }
 
     & p {
-      font-size: 20px;
+      font-size: 17px;
     }
 
     & strong {
@@ -397,6 +418,12 @@ const StyledSecondBannerContent = styled.div`
       left: 50%;
       transform: translate(-50%, 0%);
     }
+
+    @media (max-width: 600px) {
+      & p {
+        font-size: 15px;
+      }
+    }
   }
 `;
 
@@ -407,10 +434,18 @@ const StyledImg = styled.img`
   right: ${(props) => props.right || null};
   position: absolute;
 
-  @media (max-width: 800px) {
+  @media (max-width: 1000px) {
     display: ${(props) => props.media || null};
-    right: -20%;
+    right: 10%;
     top: 40%;
+    position: absolute;
+  }
+
+  @media (max-width: 600px) {
+    display: ${(props) => props.media || null};
+    max-width: 350px;
+    right: -10%;
+    top: 50%;
     position: absolute;
   }
 `;
@@ -630,18 +665,30 @@ const ThirdBannerStrong = styled.p`
   }
 
   @media (max-width: 1400px) {
-    font-size: 30px;
+    font-size: 25px;
 
     & strong {
-      font-size: 50px;
+      font-size: 45px;
     }
   }
 
   @media (max-width: 800px) {
-    font-size: 15px;
+    font-size: 20px;
+    top: 40%;
 
     & strong {
-      font-size: 25px;
+      font-size: 18px;
+    }
+  }
+  @media (max-width: 700px) {
+    top: 45%;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+    top: 45%;
+
+    & strong {
+      font-size: 18px;
     }
   }
 `;
