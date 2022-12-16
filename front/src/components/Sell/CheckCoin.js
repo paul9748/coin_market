@@ -76,7 +76,8 @@ const StyledDiv = styled.div`
   margin: 50px auto 10px;
 
   & h2 {
-    font-size: 25px;
+    font-size: 40px;
+    font-weight: bold;
     margin: 15px 0;
   }
 

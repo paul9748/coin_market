@@ -3,8 +3,6 @@ import japan500_f from 'assets/images/japan500_f.png';
 import china1_f from 'assets/images/china1_f.png';
 import usa10_f from 'assets/images/usa10_f.png';
 import usa25_f from 'assets/images/usa25_f.png';
-import korea100_f from 'assets/images/korea100_f.png';
-import korea500_f from 'assets/images/korea500_f.png';
 
 import styled from 'styled-components';
 import { useState } from 'react';
@@ -24,7 +22,6 @@ function SelectCoinCount({
     JPY: { image: [japan100_f, japan500_f], name: ['일본100엔', '일본500엔'] },
     CNY: { image: [china1_f], name: ['중국1위안'] },
     USD: { image: [usa10_f, usa25_f], name: ['미국10센트', '미국25센트'] },
-    KRW: { image: [korea100_f, korea500_f], name: ['한국100원', '한국500원'] },
   };
 
   const { setCoinList } = useCoinContext();
