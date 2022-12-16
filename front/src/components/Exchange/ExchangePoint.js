@@ -120,8 +120,13 @@ export default ExchangePoint;
 const StyledExchangeWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: 'center';
   width: 420px;
   padding: 10px;
+
+  @media (max-width: 520px) {
+    width: 300px;
+  }
 `;
 
 const StyledContentWrapper = styled.div`
@@ -140,6 +145,9 @@ const StyledInput = styled.input`
   width: 330px;
   height: 35px;
   margin-top: 10px;
+  @media (max-width: 520px) {
+    width: 200px;
+  }
 `;
 
 const StyledMaxBtn = styled.button`
