@@ -94,7 +94,10 @@ const StyledImgWrapper = styled.div`
   @media (max-width: 450px) {
     width: 320px;
     flex-direction: column;
-    height: 330px;
+    height: 420px;
+  }
+
+    margin-bottom: 20px;
   }
 `;
 
