@@ -223,6 +223,7 @@ const StyledMain = styled.main`
   min-width: 600px;
 
   @media (max-width: 600px) {
+    margin: 0px;
     min-width: 300px;
   }
 `;
@@ -240,6 +241,10 @@ const StyledInfoBox = styled.div`
   align-items: center;
   border-top: 2px solid rgba(0, 0, 0, 0.2);
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  /* @media (max-width: 600px) {
+    margin: 0px;
+    width: 50%;
+  } */
 `;
 const StyledDealBox = styled.div`
   display: flex;
@@ -248,6 +253,10 @@ const StyledDealBox = styled.div`
   flex-wrap: wrap;
   padding: 10px;
   margin-left: 40px;
+  @media (max-width: 600px) {
+    width: 50%;
+    margin-left: 5px;
+  }
 `;
 
 const StyledDetailBox = styled.div`
@@ -268,6 +277,9 @@ const StyledWalletBox = styled.div`
   align-items: center;
   padding: 30px;
   border-right: 2px solid rgba(0, 0, 0, 0.2);
+  @media (max-width: 600px) {
+    padding: 10px;
+  }
 `;
 
 const StyledTitle = styled.p`
@@ -276,12 +288,18 @@ const StyledTitle = styled.p`
   font-weight: bold;
   float: left;
   width: 100%;
+  @media (max-width: 600px) {
+    font-size: 15px;
+  }
 `;
 const StyledText = styled.p`
   font-size: 20px;
   margin: 0 auto 10px;
   text-align: center;
   padding: 5px;
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 const StyledPointText = styled.p`
   font-size: 33px;
@@ -289,6 +307,12 @@ const StyledPointText = styled.p`
   font-weight: bold;
   text-align: center;
   padding: 5px;
+  @media (max-width: 674px) {
+    font-size: 25px;
+  }
+  @media (max-width: 640px) {
+    font-size: 20px;
+  }
 `;
 const StyledBtn = styled.button`
   width: 100px;
@@ -314,4 +338,8 @@ const StyledInfoBtn = styled.a`
   padding: 5px;
   width: 160px;
   color: blue;
+  @media (max-width: 600px) {
+    /* font-size: 15px; */
+    width: 40px;
+  }
 `;
