@@ -96,7 +96,7 @@ const StyledImgWrapper = styled.div`
     flex-direction: column;
     height: 420px;
   }
-
+  & + & {
     margin-bottom: 20px;
   }
 `;
