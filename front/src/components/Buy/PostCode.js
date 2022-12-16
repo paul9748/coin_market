@@ -125,6 +125,15 @@ const StyledAddrInput = styled.input`
   height: 35px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 15px;
+  @media (max-width: 630px) {
+    width: 420px;
+  }
+  @media (max-width: 500px) {
+    width: 370px;
+  }
+  @media (max-width: 420px) {
+    width: 300px;
+  }
 `;
 
 const StyledPhoneInput = styled.input`

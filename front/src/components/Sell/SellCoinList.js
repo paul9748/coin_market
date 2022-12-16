@@ -353,6 +353,9 @@ const StyledNationWrapper = styled.div`
     @media (max-width: 600px) {
       width: 400px;
     }
+    @media (max-width: 450px) {
+      width: 340px;
+    }
   }
 `;
 
@@ -369,6 +372,9 @@ const StyledNationContentWrapper = styled.div`
   @media (max-width: 600px) {
     width: 400px;
   }
+  @media (max-width: 450px) {
+    width: 340px;
+  }
 `;
 
 const StyledCoinListTitle = styled.div`
@@ -382,6 +388,9 @@ const StyledCoinListTitle = styled.div`
   @media (max-width: 600px) {
     width: 330px;
   }
+  @media (max-width: 450px) {
+    width: 300px;
+  }
 `;
 
 const StyledCoinListContent = styled.div``;
@@ -394,6 +403,9 @@ const StyledCoin = styled.div`
   margin-top: 20px;
   @media (max-width: 600px) {
     width: 330px;
+  }
+  @media (max-width: 450px) {
+    width: 300px;
   }
 `;
 

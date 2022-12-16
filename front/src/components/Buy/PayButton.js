@@ -52,7 +52,6 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
     const { success, error_msg, imp_uid, merchant_uid, pay_method, paid_amount, status } =
       response;
 
-    console.log(imp_uid);
     const data = {
       order: {
         dealStatus: 'BUY',
@@ -73,8 +72,6 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
     if (success) {
       try {
         const response = await Api.post('buy', data);
-        console.log(response.data);
-
         navigate(ROUTE.BUYEND);
       } catch (err) {
         console.log(err);

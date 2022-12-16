@@ -9,7 +9,6 @@ import * as Api from 'api/api';
 import SellCoinList from './SellCoinList';
 import SellButton from './SellButton';
 import Loading from 'components/Loading';
-import ROUTE from 'utils/ROUTE';
 
 function CheckCoin({ currentStep, setCurrentStep }) {
   const navigate = useNavigate();
@@ -26,23 +25,18 @@ function CheckCoin({ currentStep, setCurrentStep }) {
     const fetchAnalysisData = async () => {
       try {
         const response = await Api.post('analysis', { img: imageUrl });
-        console.log(response.data);
         setCoinData(response.data[0]);
         setCoinImg(response.data[1]);
         setLoading(false);
       } catch (err) {
         console.log(err);
-        if (
-          err.response.data.name === 'TokenExpiredError' ||
-          err.response.data === 'jwt expired'
-        ) {
-          alert('재로그인 부탁드립니다.');
-          navigate(ROUTE.LOGIN);
-        }
+        alert('사진 분석에 실패하였습니다.');
+        setLoading(false);
+        setCurrentStep((preState) => preState - 1);
       }
     };
     fetchAnalysisData();
-  }, [imageUrl, navigate]);
+  }, [imageUrl, currentStep]);
 
   if (loading) return <Loading></Loading>;
 
@@ -112,4 +106,8 @@ const StyledBtnWrapper = styled.div`
 
 const StyledImg = styled.img`
   width: 400px;
+
+  @media (max-width: 450px) {
+    width: 370px;
+  }
 `;

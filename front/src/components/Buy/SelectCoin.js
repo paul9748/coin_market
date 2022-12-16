@@ -36,13 +36,7 @@ function SelectCoin({ currentStep, setCurrentStep }) {
         setCoinStock(response.data);
       } catch (err) {
         console.log(err);
-        if (
-          err.response.data.name === 'TokenExpiredError' ||
-          err.response.data === 'jwt expired'
-        ) {
-          alert('재로그인 부탁드립니다.');
-          navigate(ROUTE.LOGIN);
-        }
+        alert('환율정보를 불러오지 못했습니다.');
       }
     };
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
@@ -121,6 +115,9 @@ const StyledDiv = styled.div`
   @media (max-width: 1097px) {
     width: 500px;
   }
+  @media (max-width: 500px) {
+    width: 400px;
+  }
 `;
 
 const StyledSelectWrapper = styled.div`
@@ -135,6 +132,9 @@ const StyledSelectWrapper = styled.div`
   height: 320px;
   @media (max-width: 1097px) {
     width: 430px;
+  }
+  @media (max-width: 500px) {
+    width: 310px;
   }
 `;
 

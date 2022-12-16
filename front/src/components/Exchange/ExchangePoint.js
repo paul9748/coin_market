@@ -39,19 +39,11 @@ function ExchangePoint() {
       const response = await Api.post('users/wallet', {
         krwAmount: parseInt(exchangePoint.krwAmount),
       });
-      console.log(response.data);
       alert('환전 신청을 완료하였습니다.');
       navigate(ROUTE.MYPAGE);
     } catch (err) {
       console.log(err);
       alert('환전 신청에 실패하였습니다.');
-      if (
-        err.response.data.name === 'TokenExpiredError' ||
-        err.response.data === 'jwt expired'
-      ) {
-        alert('재로그인 부탁드립니다.');
-        navigate(ROUTE.LOGIN);
-      }
     }
   };
 
@@ -62,14 +54,7 @@ function ExchangePoint() {
         setPoint(response.data.krwAmount);
       } catch (err) {
         console.log(err);
-        if (err.response.data.name) return alert(err.response.data.name);
-        if (
-          err.response.data.name === 'TokenExpiredError' ||
-          err.response.data === 'jwt expired'
-        ) {
-          alert('재로그인 부탁드립니다.');
-          navigate(ROUTE.LOGIN);
-        }
+        if (err.response.data) return alert(err.response.data);
       }
     };
     fetchData();
@@ -135,8 +120,13 @@ export default ExchangePoint;
 const StyledExchangeWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: 'center';
   width: 420px;
   padding: 10px;
+
+  @media (max-width: 520px) {
+    width: 300px;
+  }
 `;
 
 const StyledContentWrapper = styled.div`
@@ -155,6 +145,9 @@ const StyledInput = styled.input`
   width: 330px;
   height: 35px;
   margin-top: 10px;
+  @media (max-width: 520px) {
+    width: 200px;
+  }
 `;
 
 const StyledMaxBtn = styled.button`

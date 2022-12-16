@@ -121,6 +121,9 @@ const StyledDiv = styled.div`
     padding: 0 20px;
     box-sizing: border-box;
   }
+  @media (max-width: 500px) {
+    width: 300px;
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -141,6 +144,9 @@ const StyledBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 35px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -150,5 +156,11 @@ const StyledContent = styled.div`
   align-items: center;
   & > div {
     font-size: 12px;
+  }
+
+  & > span {
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
   }
 `;
