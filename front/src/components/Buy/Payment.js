@@ -24,8 +24,6 @@ function Payment() {
   let cny1 = 0;
   let usd25 = 0;
   let usd10 = 0;
-  let krw100 = 0;
-  let krw500 = 0;
 
   coinList.map((el) => {
     if (el.selectNation === 'JPY') {
@@ -40,11 +38,6 @@ function Payment() {
     if (el.selectNation === 'USD') {
       usd10 += parseInt(el.firstCoin);
       usd25 += parseInt(el.secondCoin);
-      return;
-    }
-    if (el.selectNation === 'KRW') {
-      krw100 += parseInt(el.firstCoin);
-      krw500 += parseInt(el.secondCoin);
       return;
     }
   });
@@ -91,9 +84,7 @@ function Payment() {
   const sumBuyCoin = Math.floor(
     (jpy100 + jpy500 * 5) * jpyRate?.[0].basePrice +
       cny1 * cnyRate?.[0].basePrice +
-      (usd25 * 0.4 + usd10 * 0.1) * usdRate?.[0].basePrice +
-      krw100 * 100 +
-      krw500 * 500
+      (usd25 * 0.4 + usd10 * 0.1) * usdRate?.[0].basePrice
   );
 
   return (
@@ -169,26 +160,6 @@ function Payment() {
                     {Math.floor(usd25 * (usdRate?.[0].basePrice * 0.25)).toLocaleString()}
                   </strong>
                   원
-                </span>
-              </StyledCoinWrapper>
-            ) : null}
-            {krw100 ? (
-              <StyledCoinWrapper>
-                <StyledImg src="/KRW100.png"></StyledImg>
-                <span>한국 100원(₩100)</span>
-                <span>{krw100}개</span>
-                <span>
-                  <strong>{(krw100 * 100).toLocaleString()}</strong>원
-                </span>
-              </StyledCoinWrapper>
-            ) : null}
-            {krw100 ? (
-              <StyledCoinWrapper>
-                <StyledImg src="/KRW500.png"></StyledImg>
-                <span>한국 500원(₩500)</span>
-                <span>{krw500}개</span>
-                <span>
-                  <strong>{(krw500 * 500).toLocaleString()}</strong>원
                 </span>
               </StyledCoinWrapper>
             ) : null}

@@ -7,9 +7,7 @@ import * as Api from 'api/api';
 import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
-import korea from 'assets/images/korea.png';
 import SelectCoinCount from './SelectCoinCount';
-import ROUTE from 'utils/ROUTE';
 
 function SelectCoin({ currentStep, setCurrentStep }) {
   const navigate = useNavigate();
@@ -64,12 +62,6 @@ function SelectCoin({ currentStep, setCurrentStep }) {
             <StyeldSelectContent id="USD" onClick={handleClick}>
               <StyledImg src={usa}></StyledImg>
               <span>미국</span>
-            </StyeldSelectContent>
-          ) : null}
-          {selectNation === 'KRW' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="KRW" onClick={handleClick}>
-              <StyledImg src={korea}></StyledImg>
-              <span>한국</span>
             </StyeldSelectContent>
           ) : null}
         </StyledSelectWrapper>
