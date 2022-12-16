@@ -24,11 +24,18 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledImg = styled.img`
-  width: 150px;
+  width: 200px;
   margin-bottom: 20px;
 `;
 
 const StyledP = styled.p`
   font-size: 28px;
   text-align: center;
+
+  @media (max-width: 500px) {
+    font-size: 23px;
+  }
+  @media (max-width: 420px) {
+    font-size: 20px;
+  }
 `;

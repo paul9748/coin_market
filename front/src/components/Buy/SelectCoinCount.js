@@ -68,7 +68,11 @@ function SelectCoinCount({
 
     const newCoinStock = [];
     newCoinStock.push({ stockAmount: coinStock[0].stockAmount - newBuyCount.firstCoin });
-    newCoinStock.push({ stockAmount: coinStock[1].stockAmount - newBuyCount.secondCoin });
+    newCoinStock.push({
+      stockAmount: coinStock[1]
+        ? coinStock[1].stockAmount - newBuyCount.secondCoin
+        : null,
+    });
 
     setCoinStock(newCoinStock);
 
@@ -95,7 +99,12 @@ function SelectCoinCount({
             </StyledContent>
             <StyledContent>
               <span>재고수량</span>
-              <span>{coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}개</span>
+              <span>
+                {selectNation === 'KRW'
+                  ? 0
+                  : coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}
+                개
+              </span>
             </StyledContent>
             <StyledContent>
               <span>구매수량</span>
@@ -106,7 +115,7 @@ function SelectCoinCount({
                   onChange={handleChange}
                   value={buyCount.firstCoin}
                   min="0"
-                  max={coinStock?.[0]?.stockAmount || 0}></StyledInput>
+                  max={`${coinStock?.[0]?.stockAmount}` || '0'}></StyledInput>
                 <span> 개</span>
               </p>
             </StyledContent>
@@ -119,7 +128,12 @@ function SelectCoinCount({
               </StyledContent>
               <StyledContent>
                 <span>재고수량</span>
-                <span>{coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}개</span>
+                <span>
+                  {selectNation === 'KRW'
+                    ? 0
+                    : coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}
+                  개
+                </span>
               </StyledContent>
               <StyledContent>
                 <span>구매수량</span>
@@ -130,7 +144,7 @@ function SelectCoinCount({
                     onChange={handleChange}
                     value={buyCount.secondCoin}
                     min="0"
-                    max={coinStock?.[1]?.stockAmount || 0}></StyledInput>
+                    max={`${coinStock?.[1]?.stockAmount}` || '0'}></StyledInput>
                   <span> 개</span>
                 </p>
               </StyledContent>
@@ -186,6 +200,9 @@ const StyledWrapper = styled.div`
   @media (max-width: 1097px) {
     width: 430px;
   }
+  @media (max-width: 500px) {
+    width: 310px;
+  }
 `;
 
 const StyledContentWrapper = styled.div`
@@ -197,6 +214,9 @@ const StyledContentWrapper = styled.div`
   align-items: flex-start;
   @media (max-width: 1097px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 
@@ -210,6 +230,9 @@ const StyledContent = styled.div`
 
 const StyledInput = styled.input`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledAddBtn = styled.button`
@@ -233,6 +256,9 @@ const StyledAddBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -257,5 +283,8 @@ const StyledBtnWrapper = styled.div`
   margin: 40px 0;
   @media (max-width: 620px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;

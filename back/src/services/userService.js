@@ -36,22 +36,36 @@ class userService {
       throw new Error("비밀번호가 틀렸습니다.");
     }
 
+    // 로그인시 새로운 토큰 생성(access, refresh)
     const newToken = tokenService.createToken(user.id);
+
+    // 새로 생성한 리프레쉬 토큰 암호화
+    const hashRefreshToken = bcrypt.hashSync(
+      (await newToken).refresh_token,
+      12
+    );
+
+    //userId와 암호화한 리프레쉬 토큰을 묶어줌
     const data = {
       userId: user.id,
-      refreshToken: (await newToken).refresh_token,
+      refreshToken: hashRefreshToken,
     };
 
+    //만약 기존 db에 저장되어있는 토큰이 있다면 새로 생성한 암호화한 리프레쉬토큰으로 수정
     const findToken = await tokenService.findToken(user.id);
     if (findToken) {
       const updateToken = await tokenService.updateToken(
         user.id,
         data.refreshToken
       );
+
+      //암호화하지 않은 access, refresh 토큰 전달
       return newToken;
     } else {
+      //기존 db에 저장되어있지 않다면 새로 생성한 암호화한 토큰을 db에 저장
       const createDb = await tokenService.createdTokenDb(data);
 
+      //암호화하지 않은 access, refresh 토큰 전달
       return newToken;
     }
   }

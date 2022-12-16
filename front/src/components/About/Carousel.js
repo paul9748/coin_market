@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -12,12 +11,19 @@ const Container = styled.div`
   background-color: #ccf2f4;
 `;
 
-const StyledH2 = styled.h2`
-  padding-top: 4vmax;
-  font-size: 1.5vmax;
-`;
-
 const StyledSlider = styled(Slider)`
+  width: auto;
+
+  .slick-list {
+    margin: auto;
+    overflow-x: hidden;
+  }
+  .slick-dots {
+    //슬라이드의 위치
+    bottom: 10px;
+    margin-top: 200px;
+  }
+
   .slick-slide div {
     outline: none;
     text-align: center;
@@ -25,7 +31,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 const ImageContainer = styled.div`
-  margin: 100px 100px 100px 100px;
+  /* margin: 100px 100px 100px 100px; */
+  display: flex;
   vertical-align: center;
   text-align: center;
   justify-content: center;
@@ -33,8 +40,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 70%;
+  max-height: 70%;
   vertical-align: center;
   text-align: center;
   /* display: block; */
@@ -42,7 +49,7 @@ const Image = styled.img`
   width: full;
   text-align: center;
   height: full;
-  justify-content: center;
+  /* justify-content: center; */
 `;
 
 import reader from '../../assets/images/정민규.png';
@@ -57,34 +64,35 @@ const items = [
   { id: 4, url: ai },
 ];
 
-export default class SimpleSlider extends Component {
-  render() {
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      autoplay: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      centerMode: true,
-    };
-    return (
-      <Container>
-        {/* <StyledH2>팀원 소개</StyledH2> */}
+function SimpleSlider() {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 400,
+    autoplay: true,
+    centerPadding: '0px',
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    centerMode: true,
+  };
+  return (
+    <Container>
+      {/* <StyledH2>팀원 소개</StyledH2> */}
 
-        <StyledSlider {...settings}>
-          {items.map((item) => {
-            return (
-              <div key={item.id}>
-                <ImageContainer>
-                  <Image src={item.url} />
-                </ImageContainer>
-              </div>
-            );
-          })}
-        </StyledSlider>
-      </Container>
-    );
-  }
+      <StyledSlider {...settings}>
+        {items.map((item) => {
+          return (
+            <div key={item.id}>
+              <ImageContainer>
+                <Image src={item.url} />
+              </ImageContainer>
+            </div>
+          );
+        })}
+      </StyledSlider>
+    </Container>
+  );
 }
+
+export default SimpleSlider;

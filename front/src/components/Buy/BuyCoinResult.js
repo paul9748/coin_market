@@ -104,7 +104,7 @@ const StyledDiv = styled.div`
 
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  width: 280px;
+  width: 290px;
   height: 60px;
   background-color: rgba(0, 0, 0, 0.07);
 
@@ -120,6 +120,9 @@ const StyledDiv = styled.div`
     width: 400px;
     padding: 0 20px;
     box-sizing: border-box;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 
@@ -141,6 +144,9 @@ const StyledBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 35px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -150,5 +156,11 @@ const StyledContent = styled.div`
   align-items: center;
   & > div {
     font-size: 12px;
+  }
+
+  & > span {
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
   }
 `;

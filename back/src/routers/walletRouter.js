@@ -8,19 +8,28 @@ const walletRouter = Router();
 walletRouter.get("/users/wallet", loginRequired, async (req, res, next) => {
   try {
     const wallet = await walletService.checkChanges(req.userId);
-    wallet.sort(function (a, b) {
-      if (a.expirationDate > b.expirationDate) {
-        return -1;
-      } else if (a.expirationDate < b.expirationDate) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-    res.status(200).json(wallet[0]);
+    const count = req.query.count;
+
+    if (count == undefined) {
+      res.status(200).json(wallet[0]);
+    } else {
+      res.status(200).json(wallet);
+    }
   } catch (err) {
     next(err);
   }
 });
 
+walletRouter.post("/users/wallet", loginRequired, async (req, res, next) => {
+  try {
+    const wallet = await walletService.checkChanges(req.userId);
+    const changes = req.body.krwAmount;
+
+    const newWallet = await walletService.letChanges(wallet[0], changes);
+
+    res.status(201).json(newWallet);
+  } catch (err) {
+    next(err);
+  }
+});
 export { walletRouter };

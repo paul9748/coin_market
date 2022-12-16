@@ -25,6 +25,8 @@ export default Header;
 
 const StyledHeader = styled.header`
   display: flex;
+  background-color: white;
+  opacity: 0.9;
   justify-content: space-between;
   position: sticky;
   top: 0;
@@ -39,6 +41,12 @@ const StyledHeader = styled.header`
 
   @media (max-width: 600px) {
     min-width: 440px;
+  }
+  @media (max-width: 450px) {
+    min-width: 400px;
+  }
+  @media (max-width: 400px) {
+    min-width: 390px;
   }
 `;
 
