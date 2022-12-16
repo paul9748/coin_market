@@ -146,6 +146,7 @@ function UploadImage({ currentStep, setCurrentStep }) {
               htmlFor="file"
               ref={dragRef}
               isDragging={isDragging}></StyledLabel>
+
             <StyledImage
               type="file"
               name="file"
@@ -191,6 +192,9 @@ const StyledDiv = styled.div`
   height: 370px;
   margin: 50px auto 10px;
   z-index: 1;
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledImage = styled.input`
@@ -209,6 +213,9 @@ const StyledLabel = styled.label`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledBackImage = styled.img`
@@ -217,6 +224,9 @@ const StyledBackImage = styled.img`
   top: 80px;
   left: 148px;
   z-index: -1;
+  @media (max-width: 465px) {
+    left: 83px;
+  }
 `;
 
 const StyledP = styled.p`
@@ -227,16 +237,25 @@ const StyledP = styled.p`
   z-index: -1;
   text-align: center;
   line-height: 27px;
+  @media (max-width: 465px) {
+    left: 4px;
+  }
 `;
 
 const StyledComment = styled.p`
   margin: 20px auto;
   font-size: 12px;
+  @media (max-width: 465px) {
+    width: 340px;
+  }
 `;
 
 const PreviewImage = styled.img`
   width: 500px;
   margin: 30px auto;
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledUploadBtn = styled.button`

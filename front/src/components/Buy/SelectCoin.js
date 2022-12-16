@@ -121,6 +121,9 @@ const StyledDiv = styled.div`
   @media (max-width: 1097px) {
     width: 500px;
   }
+  @media (max-width: 500px) {
+    width: 400px;
+  }
 `;
 
 const StyledSelectWrapper = styled.div`
@@ -135,6 +138,9 @@ const StyledSelectWrapper = styled.div`
   height: 320px;
   @media (max-width: 1097px) {
     width: 430px;
+  }
+  @media (max-width: 500px) {
+    width: 310px;
   }
 `;
 

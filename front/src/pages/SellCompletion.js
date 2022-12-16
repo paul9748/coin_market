@@ -96,8 +96,8 @@ const StyledBtnWrapper = styled.div`
   width: 500px;
   margin: 40px 0;
 
-  @media (max-width: 600px) {
-    width: 400px;
+  @media (max-width: 530px) {
+    width: 380px;
   }
 `;
 
@@ -111,6 +111,9 @@ const StyledMain = styled.main`
 
   @media (max-width: 600px) {
     min-width: 440px;
+  }
+  @media (max-width: 400px) {
+    min-width: 380px;
   }
 `;
 
@@ -135,5 +138,13 @@ const StyledContent = styled.div`
 
   & p + p {
     margin-top: 30px;
+  }
+  @media (max-width: 530px) {
+    width: 350px;
+    font-size: 18px;
+  }
+  @media (max-width: 460px) {
+    width: 300px;
+    font-size: 15px;
   }
 `;

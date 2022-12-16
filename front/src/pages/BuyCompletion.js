@@ -26,7 +26,6 @@ function BuyCompletion() {
             <p>구매신청이 완료되었습니다.</p>
             <p>상세내역은 마이페이지에서 확인해주세요.</p>
           </StyledContent>
-
           <StyledBtnWrapper>
             <StyledBtn
               onClick={() => {
@@ -47,7 +46,6 @@ function BuyCompletion() {
     </>
   );
 }
-
 export default BuyCompletion;
 
 const StyledBtn = styled.button`
@@ -68,14 +66,17 @@ const StyledBtn = styled.button`
 const StyledBtnWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
-  width: 1000px;
+  width: 800px;
   margin: 40px 0;
 
-  @media (max-width: 1017px) {
-    width: 400px;
-  }
   @media (max-width: 600px) {
-    width: 400px;
+    width: 600px;
+  }
+  @media (max-width: 460px) {
+    width: 380px;
+  }
+  @media (max-width: 400px) {
+    width: 300px;
   }
 `;
 
@@ -89,6 +90,10 @@ const StyledMain = styled.main`
 
   @media (max-width: 600px) {
     min-width: 440px;
+  }
+
+  @media (max-width: 400px) {
+    min-width: 380px;
   }
 `;
 
@@ -113,5 +118,13 @@ const StyledContent = styled.div`
 
   & p + p {
     margin-top: 30px;
+  }
+
+  @media (max-width: 550px) {
+    width: 350px;
+    font-size: 19px;
+  }
+  @media (max-width: 460px) {
+    width: 250px;
   }
 `;
