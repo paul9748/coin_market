@@ -5,7 +5,6 @@ import { useState } from 'react';
 import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
-import korea from 'assets/images/korea.png';
 import useRate from 'hooks/useRate';
 import AddCoinModal from './AddCoinModal';
 
@@ -119,7 +118,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.JPY && (
         <StyledNationWrapper>
-          <div>기준환율: {jpyRate?.[0].basePrice} KRW/JPY100</div>
+          <div>할인환율(기준환율 * 0.7) : {jpyRate?.[0].basePrice} KRW/JPY100</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={japan} />
@@ -204,7 +203,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.CNY && (
         <StyledNationWrapper>
-          <div>기준환율: {cnyRate?.[0].basePrice} KRW/CNY</div>
+          <div>할인환율(기준환율 * 0.7) : {cnyRate?.[0].basePrice} KRW/CNY</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={china} />
@@ -239,7 +238,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.USD && (
         <StyledNationWrapper>
-          <div>기준환율: {usdRate?.[0].basePrice} KRW/USD</div>
+          <div>할인환율(기준환율 * 0.7) : {usdRate?.[0].basePrice} KRW/USD</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={usa} />

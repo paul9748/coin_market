@@ -102,7 +102,9 @@ function Payment() {
               <StyledCoinWrapper>
                 <StyledImg src="/JPY100.png"></StyledImg>
                 <span>일본 100엔(¥100)</span>
-                <span>{jpy100}개</span>
+                <span>
+                  {`${Math.floor(jpyRate?.[0].basePrice).toLocaleString()} x ${jpy100}`}개
+                </span>
                 <span>
                   <strong>
                     {Math.floor(jpy100 * jpyRate?.[0].basePrice).toLocaleString()}
@@ -115,7 +117,9 @@ function Payment() {
               <StyledCoinWrapper>
                 <StyledImg src="/JPY500.png"></StyledImg>
                 <span>일본 500엔(¥500)</span>
-                <span>{jpy500}개</span>
+                <span>
+                  {`${(5 * jpyRate?.[0].basePrice).toLocaleString()} x ${jpy500}`}개
+                </span>
                 <span>
                   <strong>
                     {Math.floor(jpy500 * 5 * jpyRate?.[0].basePrice).toLocaleString()}
@@ -128,7 +132,7 @@ function Payment() {
               <StyledCoinWrapper>
                 <StyledImg src="/CNY1.png"></StyledImg>
                 <span>중국 1위안(¥1)</span>
-                <span>{cny1}개</span>
+                <span>{`${cnyRate?.[0].basePrice.toLocaleString()} x ${cny1}`}개</span>
                 <span>
                   <strong>
                     {Math.floor(cny1 * cnyRate?.[0].basePrice).toLocaleString()}
@@ -141,7 +145,7 @@ function Payment() {
               <StyledCoinWrapper>
                 <StyledImg src="/USD10.png"></StyledImg>
                 <span>미국 10센트(10¢)</span>
-                <span>{usd10}개</span>
+                <span>{`${usdRate?.[0].basePrice * 0.1} x ${usd10}`}개</span>
                 <span>
                   <strong>
                     {Math.floor(usd10 * (usdRate?.[0].basePrice * 0.1)).toLocaleString()}
@@ -154,7 +158,7 @@ function Payment() {
               <StyledCoinWrapper>
                 <StyledImg src="/USD25.png"></StyledImg>
                 <span>미국 25센트(25¢)</span>
-                <span>{usd25}개</span>
+                <span>{`${usdRate?.[0].basePrice * 0.25} x ${usd25}`}개</span>
                 <span>
                   <strong>
                     {Math.floor(usd25 * (usdRate?.[0].basePrice * 0.25)).toLocaleString()}
@@ -170,7 +174,7 @@ function Payment() {
         <StyledContentTitle>결제 예정금액</StyledContentTitle>
         <StyledContent>
           <span>상품금액</span>
-          <span>{sumBuyCoin.toLocaleString()}원</span>
+          <span>{(sumBuyCoin / 0.7).toLocaleString()}원</span>
         </StyledContent>
         <StyledContent>
           <span>배송비</span>
@@ -178,7 +182,7 @@ function Payment() {
         </StyledContent>
         <StyledContent>
           <span>할인금액</span>
-          <span>{0}원</span>
+          <span>{((sumBuyCoin / 0.7) * 0.3).toLocaleString()}원</span>
         </StyledContent>
         <StyledResultContent>
           <span>합계</span>
