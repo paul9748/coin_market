@@ -44,7 +44,7 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
       buyer_tel: userInfo.buyer_tel,
       buyer_addr: userInfo.buyer_addr + userInfo.detailAddress,
       buyer_postcode: userInfo.buyer_postcode,
-      m_redirect_url: 'https://www.myservice.com/payments/complete/mobile',
+      m_redirect_url: 'http://kdt-ai5-team07.elicecoding.com/buyend',
     };
     IMP.request_pay(data, callback);
   };
