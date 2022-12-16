@@ -23,9 +23,9 @@ function SellCompletion() {
       await deliveryData();
       try {
         const response = await Api.post(`sell/${sellNumber}`);
-        console.log(response.data);
       } catch (err) {
         console.log(err);
+        alert('판매가 완료되지 않았습니다. ');
       }
     };
     const deliveryData = async () => {
@@ -33,9 +33,9 @@ function SellCompletion() {
         const response = await Api.post(`sell/${sellNumber}/deliveryNumber`, {
           deliveryNumber: `${Math.random() * 10}`,
         });
-        console.log(response.data);
       } catch (err) {
         console.log(err);
+        alert('배송 운송장 관련 오류가 발생하였습니다.');
       }
     };
 

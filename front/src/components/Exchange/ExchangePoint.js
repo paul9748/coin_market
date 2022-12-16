@@ -39,19 +39,11 @@ function ExchangePoint() {
       const response = await Api.post('users/wallet', {
         krwAmount: parseInt(exchangePoint.krwAmount),
       });
-      console.log(response.data);
       alert('환전 신청을 완료하였습니다.');
       navigate(ROUTE.MYPAGE);
     } catch (err) {
       console.log(err);
       alert('환전 신청에 실패하였습니다.');
-      if (
-        err.response.data.name === 'TokenExpiredError' ||
-        err.response.data === 'jwt expired'
-      ) {
-        alert('재로그인 부탁드립니다.');
-        navigate(ROUTE.LOGIN);
-      }
     }
   };
 
@@ -62,14 +54,7 @@ function ExchangePoint() {
         setPoint(response.data.krwAmount);
       } catch (err) {
         console.log(err);
-        if (err.response.data.name) return alert(err.response.data.name);
-        if (
-          err.response.data.name === 'TokenExpiredError' ||
-          err.response.data === 'jwt expired'
-        ) {
-          alert('재로그인 부탁드립니다.');
-          navigate(ROUTE.LOGIN);
-        }
+        if (err.response.data) return alert(err.response.data);
       }
     };
     fetchData();

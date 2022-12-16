@@ -36,13 +36,7 @@ function SelectCoin({ currentStep, setCurrentStep }) {
         setCoinStock(response.data);
       } catch (err) {
         console.log(err);
-        if (
-          err.response.data.name === 'TokenExpiredError' ||
-          err.response.data === 'jwt expired'
-        ) {
-          alert('재로그인 부탁드립니다.');
-          navigate(ROUTE.LOGIN);
-        }
+        alert('환율정보를 불러오지 못했습니다.');
       }
     };
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
