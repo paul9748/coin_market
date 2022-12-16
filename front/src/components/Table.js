@@ -32,7 +32,9 @@ function Table({ columns, data }) {
                       // console.log(cell.value);
                       console.log(location);
                       if (cell.column['Header'] == '이미지' && cell.value != null) {
-                        window.open(window.location.hostname + ':3000/img/' + cell.value);
+                        window.open(
+                          'http://' + window.location.hostname + ':3000/img/' + cell.value
+                        );
                       }
                     }}>
                     {cell.render('Cell')}
