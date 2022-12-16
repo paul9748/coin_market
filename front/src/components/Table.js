@@ -81,8 +81,13 @@ const StyledTable = styled.table`
     padding: 5px;
     font-weight: bold;
   }
+  @media (max-width: 880px) {
+    font-size: 13px;
+  }
+  @media (max-width: 880px) {
+    font-size: 10px;
+  }
   @media (max-width: 460px) {
     width: 10px;
-    font-size: 12px;
   }
 `;
