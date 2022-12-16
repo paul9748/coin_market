@@ -78,6 +78,7 @@ const StyledCorrectImg = styled.img`
 
 const StyledWrongImg = styled.img`
   width: 150px;
+  height: 150px;
 `;
 
 const StyledImgWrapper = styled.div`
