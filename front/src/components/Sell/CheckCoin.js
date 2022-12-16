@@ -61,7 +61,7 @@ function CheckCoin({ currentStep, setCurrentStep }) {
             이전
           </StyledBtn>
         )}
-        <SellButton coinData={coinData}></SellButton>
+        <SellButton coinData={coinData} img={coinImg}></SellButton>
       </StyledBtnWrapper>
     </>
   );
