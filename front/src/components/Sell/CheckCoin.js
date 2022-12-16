@@ -36,7 +36,7 @@ function CheckCoin({ currentStep, setCurrentStep }) {
       }
     };
     fetchAnalysisData();
-  }, [imageUrl, currentStep]);
+  }, [imageUrl, currentStep, setCurrentStep]);
 
   if (loading) return <Loading></Loading>;
 
