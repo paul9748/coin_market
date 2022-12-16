@@ -89,7 +89,7 @@ const StyledTable = styled.table`
   @media (max-width: 880px) {
     font-size: 10px;
   }
-  @media (max-width: 460px) {
+  /* @media (max-width: 460px) {
     width: 10px;
-  }
+  } */
 `;
