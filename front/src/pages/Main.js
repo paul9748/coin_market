@@ -286,10 +286,10 @@ const StyledFirstBannerContent = styled.div`
   }
 
   &:after {
-    border-top: 30px solid white;
-    border-left: 40px solid transparent;
+    border-top: 50px solid white;
+    border-left: 60px solid transparent;
     content: '';
-    top: 237.5px;
+    top: 230px;
     right: 35%;
     position: absolute;
   }
@@ -314,7 +314,7 @@ const StyledFirstBannerContent = styled.div`
     }
 
     &:after {
-      top: 174px;
+      top: 150px;
     }
 
     & p {
@@ -397,14 +397,10 @@ const StyledImg = styled.img`
   position: absolute;
 
   @media (max-width: 800px) {
-    width: 340px;
     display: ${(props) => props.media || null};
-    right: 0px;
-    width: ${(props) => props.width || '500px'};
-    top: ${(props) => props.top || '201px'};
-    /* left: ${(props) => props.left || null};
-    right: ${(props) => props.right || null};
-    position: absolute; */
+    right: -20%;
+    top: 40%;
+    position: absolute;
   }
 `;
 
