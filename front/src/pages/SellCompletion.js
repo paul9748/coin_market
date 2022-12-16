@@ -40,7 +40,7 @@ function SellCompletion() {
     };
 
     uploadData();
-  }, [navigate]);
+  }, [navigate, sellNumber]);
 
   return (
     <>
