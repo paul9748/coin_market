@@ -38,16 +38,21 @@ function Main() {
   const URL = 'https://api.manana.kr/exchange/rate/KRW/JPY,USD,CNY,EUR.json';
 
   const getData = async () => {
-    await axios.get(URL).then((res) => {
-      const data = res.data;
-      const TIME_ZONE = 3240 * 10000;
-      setDate(new Date(+new Date() + TIME_ZONE).toISOString().split('T')[0]);
+    await axios
+      .get(URL)
+      .then((res) => {
+        const data = res.data;
+        const TIME_ZONE = 3240 * 10000;
+        setDate(new Date(+new Date() + TIME_ZONE).toISOString().split('T')[0]);
 
-      setJPY(data[0].rate);
-      setUSD(data[1].rate);
-      setCNY(data[2].rate);
-      setEUR(data[3].rate);
-    });
+        setJPY(data[0].rate);
+        setUSD(data[1].rate);
+        setCNY(data[2].rate);
+        setEUR(data[3].rate);
+      })
+      .catch((error) => {
+        window.location.reload();
+      });
   };
 
   useEffect(() => {
