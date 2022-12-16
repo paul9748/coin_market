@@ -35,12 +35,12 @@ function Footer() {
           <StyledPtag style={{ textAlign: 'center' }}>
             주소 : 서울특별시 송파구 올림픽로 300 롯데월드타워 117F
           </StyledPtag>
-          <div style={{ marginTop: '50px' }}>
+          <CopyRightDiv>
             <StyledPtag style={{ textAlign: 'center' }}>
               이용약관 <strong>개인정보처리방침</strong>
             </StyledPtag>
             <StyledPtag style={{ textAlign: 'center' }}>Copyright © 코인마켓</StyledPtag>
-          </div>
+          </CopyRightDiv>
         </CompanyDetail>
       </AllContents>
     </StyledFooter>
@@ -97,7 +97,7 @@ const CompanyDetail = styled.div`
   color: white;
   margin: auto;
   @media (max-width: 700px) {
-    padding: 40px 50px 25px 50px;
+    padding: 10px 50px 10px 50px;
   }
 `;
 
@@ -107,6 +107,13 @@ const StyledPtag = styled.p`
   font-size: 20px;
   @media (max-width: 750px) {
     line-height: 19px;
-    font-size: 15px;
+    font-size: 10px;
+  }
+`;
+
+const CopyRightDiv = styled.div`
+  margin-top: 50px;
+  @media (max-width: 700px) {
+    margin-top: 10px;
   }
 `;
