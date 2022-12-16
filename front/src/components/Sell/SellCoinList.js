@@ -78,33 +78,33 @@ function SellCoinList({ coinData, setCoinData }) {
   const removeCoin = (e) => {
     if (e.target.name === 'JPY100') {
       const newCoinData = { ...coinData };
-      newCoinData.JPY[0].dealAmount -= 1;
+      if (newCoinData.JPY[0].dealAmount > 0) newCoinData.JPY[0].dealAmount -= 1;
       return setCoinData(newCoinData);
     }
     if (e.target.name === 'JPY500') {
       const newCoinData = { ...coinData };
       newCoinData.JPY[1]
-        ? (newCoinData.JPY[1].dealAmount -= 1)
-        : (newCoinData.JPY[0].dealAmount -= 1);
+        ? newCoinData.JPY[1].dealAmount > 0 && (newCoinData.JPY[1].dealAmount -= 1)
+        : newCoinData.JPY[0].dealAmount > 0 && (newCoinData.JPY[0].dealAmount -= 1);
       return setCoinData(newCoinData);
     }
 
     if (e.target.name === 'CNY') {
       const newCoinData = { ...coinData };
-      newCoinData.CNY[0].dealAmount -= 1;
+      if (newCoinData.CNY[0].dealAmount > 0) newCoinData.CNY[0].dealAmount -= 1;
       return setCoinData(newCoinData);
     }
 
     if (e.target.name === 'USD10') {
       const newCoinData = { ...coinData };
-      newCoinData.USD[0].dealAmount -= 1;
+      if (newCoinData.USD[0].dealAmount > 0) newCoinData.USD[0].dealAmount -= 1;
       return setCoinData(newCoinData);
     }
     if (e.target.name === 'USD25') {
       const newCoinData = { ...coinData };
       newCoinData.USD[1]
-        ? (newCoinData.USD[1].dealAmount -= 1)
-        : (newCoinData.USD[0].dealAmount -= 1);
+        ? newCoinData.USD[1].dealAmount > 0 && (newCoinData.USD[1].dealAmount -= 1)
+        : newCoinData.USD[0].dealAmount > 0 && (newCoinData.USD[0].dealAmount -= 1);
       return setCoinData(newCoinData);
     }
   };
