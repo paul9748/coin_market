@@ -224,7 +224,7 @@ const StyledMain = styled.main`
 
   @media (max-width: 600px) {
     margin: 0px;
-    min-width: 300px;
+    min-width: auto;
   }
 `;
 const StyledTitleBox = styled.div`
@@ -241,7 +241,7 @@ const StyledInfoBox = styled.div`
   align-items: center;
   border-top: 2px solid rgba(0, 0, 0, 0.2);
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-  /* @media (max-width: 600px) {
+  /* @media (max-width: 460px) {
     margin: 0px;
     width: 50%;
   } */
