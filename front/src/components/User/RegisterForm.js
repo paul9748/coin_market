@@ -176,6 +176,10 @@ const StyledForm = styled.form`
   background-color: #d9d9d9;
   border-radius: 40px;
   filter: drop-shadow(20px 10px 4px rgba(0, 0, 0, 0.25));
+  @media (max-width: 465px) {
+    width: 330px;
+    border-radius: 20px;
+  }
 `;
 
 const StyledInput = styled.input`
@@ -187,6 +191,10 @@ const StyledInput = styled.input`
   width: 300px;
   text-indent: 20px;
   box-sizing: border-box;
+  @media (max-width: 465px) {
+    width: 230px;
+    font-size: 0.8rem;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -210,6 +218,9 @@ const BtnLogin = styled.button`
 
   &:hover {
     background-color: rgba(42, 193, 188, 0.5);
+  }
+  @media (max-width: 465px) {
+    width: 230px;
   }
 `;
 
