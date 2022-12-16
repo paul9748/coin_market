@@ -44,6 +44,7 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
       buyer_tel: userInfo.buyer_tel,
       buyer_addr: userInfo.buyer_addr + userInfo.detailAddress,
       buyer_postcode: userInfo.buyer_postcode,
+      m_redirect_url: 'https://www.myservice.com/payments/complete/mobile',
     };
     IMP.request_pay(data, callback);
   };
