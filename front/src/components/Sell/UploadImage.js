@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import backImage from 'assets/images/upload_image.png';
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as Api from 'api/api';
 
 import { useImageContext } from 'context/ImageContext';
+import ROUTE from 'utils/ROUTE';
 
 function UploadImage({ currentStep, setCurrentStep }) {
+  const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
   const [coinImage, setCoinImage] = useState('');
   const [imageData, setImageData] = useState('');
@@ -111,6 +114,13 @@ function UploadImage({ currentStep, setCurrentStep }) {
       console.log(response.data);
     } catch (err) {
       console.log(err);
+      if (
+        err.response.data.name === 'TokenExpiredError' ||
+        err.response.data === 'jwt expired'
+      ) {
+        alert('재로그인 부탁드립니다.');
+        navigate(ROUTE.LOGIN);
+      }
     }
   };
 

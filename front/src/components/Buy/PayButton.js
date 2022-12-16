@@ -79,6 +79,13 @@ function PayButton({ userInfo, sumBuyCoin, reportCoinList, rateToken }) {
       } catch (err) {
         console.log(err);
         alert('결제가 완료되지 못했습니다.');
+        if (
+          err.response.data.name === 'TokenExpiredError' ||
+          err.response.data === 'jwt expired'
+        ) {
+          alert('재로그인 부탁드립니다.');
+          navigate(ROUTE.LOGIN);
+        }
       }
     } else {
       alert(`결제 실패 : ${error_msg}`);

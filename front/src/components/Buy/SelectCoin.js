@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import * as Api from 'api/api';
 
@@ -9,8 +9,10 @@ import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
 import korea from 'assets/images/korea.png';
 import SelectCoinCount from './SelectCoinCount';
+import ROUTE from 'utils/ROUTE';
 
 function SelectCoin({ currentStep, setCurrentStep }) {
+  const navigate = useNavigate();
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
   const [coinStock, setCoinStock] = useState();
@@ -34,12 +36,19 @@ function SelectCoin({ currentStep, setCurrentStep }) {
         setCoinStock(response.data);
       } catch (err) {
         console.log(err);
+        if (
+          err.response.data.name === 'TokenExpiredError' ||
+          err.response.data === 'jwt expired'
+        ) {
+          alert('재로그인 부탁드립니다.');
+          navigate(ROUTE.LOGIN);
+        }
       }
     };
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
       fetchData();
     }
-  }, [selectNation, isClick]);
+  }, [selectNation, isClick, navigate]);
 
   return (
     <StyledWrapper>

@@ -32,6 +32,13 @@ function SellButton({ coinData }) {
     } catch (err) {
       console.log(err);
       alert('판매가 완료되지 않았습니다.');
+      if (
+        err.response.data.name === 'TokenExpiredError' ||
+        err.response.data === 'jwt expired'
+      ) {
+        alert('재로그인 부탁드립니다.');
+        navigate(ROUTE.LOGIN);
+      }
     }
   };
 

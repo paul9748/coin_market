@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import { useImageContext } from 'context/ImageContext';
 
@@ -8,8 +9,10 @@ import * as Api from 'api/api';
 import SellCoinList from './SellCoinList';
 import SellButton from './SellButton';
 import Loading from 'components/Loading';
+import ROUTE from 'utils/ROUTE';
 
 function CheckCoin({ currentStep, setCurrentStep }) {
+  const navigate = useNavigate();
   const { imageUrl } = useImageContext();
   const portNum = 3000;
   const url = 'http://' + window.location.hostname + ':' + portNum + '/';
@@ -29,10 +32,17 @@ function CheckCoin({ currentStep, setCurrentStep }) {
         setLoading(false);
       } catch (err) {
         console.log(err);
+        if (
+          err.response.data.name === 'TokenExpiredError' ||
+          err.response.data === 'jwt expired'
+        ) {
+          alert('재로그인 부탁드립니다.');
+          navigate(ROUTE.LOGIN);
+        }
       }
     };
     fetchAnalysisData();
-  }, [imageUrl]);
+  }, [imageUrl, navigate]);
 
   if (loading) return <Loading></Loading>;
 

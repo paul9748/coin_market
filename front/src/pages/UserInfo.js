@@ -10,6 +10,7 @@ import ROUTE from 'utils/ROUTE';
 
 function UserInfo() {
   const navigate = useNavigate();
+
   const initialValue = {
     email: '0000@0000.com',
     isEmailAuthorized: false,
@@ -74,6 +75,11 @@ function UserInfo() {
   };
 
   useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+
     const fetchUserData = async () => {
       try {
         const response = await Api.get('users');
@@ -85,7 +91,7 @@ function UserInfo() {
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   return (
     <>

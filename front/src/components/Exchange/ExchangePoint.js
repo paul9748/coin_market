@@ -45,6 +45,13 @@ function ExchangePoint() {
     } catch (err) {
       console.log(err);
       alert('환전 신청에 실패하였습니다.');
+      if (
+        err.response.data.name === 'TokenExpiredError' ||
+        err.response.data === 'jwt expired'
+      ) {
+        alert('재로그인 부탁드립니다.');
+        navigate(ROUTE.LOGIN);
+      }
     }
   };
 
@@ -56,6 +63,13 @@ function ExchangePoint() {
       } catch (err) {
         console.log(err);
         if (err.response.data.name) return alert(err.response.data.name);
+        if (
+          err.response.data.name === 'TokenExpiredError' ||
+          err.response.data === 'jwt expired'
+        ) {
+          alert('재로그인 부탁드립니다.');
+          navigate(ROUTE.LOGIN);
+        }
       }
     };
     fetchData();
@@ -75,8 +89,7 @@ function ExchangePoint() {
             onChange={handleChange}
             value={exchangePoint.krwAmount}
             type="number"
-            min="0"
-            max={parseInt(point)}></StyledInput>
+            min="0"></StyledInput>
         </div>
         <StyledMaxBtn onClick={handleClick}>최대</StyledMaxBtn>
       </StyledContentWrapper>

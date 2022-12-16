@@ -11,6 +11,12 @@ import * as Api from 'api/api';
 
 function MyPage() {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+  }, [navigate]);
   const initialValue = {
     BUY: 0,
     SELL: 0,

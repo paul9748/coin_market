@@ -69,6 +69,7 @@ axios.interceptors.response.use(
           sessionStorage.setItem('REFRESH_TOKEN', response.data.refresh_token);
         } catch (err) {
           console.log(err);
+          sessionStorage.clear();
         }
 
         axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(

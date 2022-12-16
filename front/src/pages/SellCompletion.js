@@ -11,8 +11,14 @@ import * as Api from 'api/api';
 
 function SellCompletion() {
   const navigate = useNavigate();
+
   const { sellNumber } = useCoinContext();
   useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+
     const uploadData = async () => {
       await deliveryData();
       try {
@@ -34,7 +40,7 @@ function SellCompletion() {
     };
 
     uploadData();
-  }, []);
+  }, [navigate]);
 
   return (
     <>

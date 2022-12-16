@@ -1,10 +1,22 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import Footer from 'components/UI/Footer';
 import Header from 'components/UI/Header';
 import ExchangePoint from 'components/Exchange/ExchangePoint';
+import ROUTE from 'utils/ROUTE';
 
 function Exchange() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      alert('로그인이 필요합니다.');
+      navigate(ROUTE.LOGIN);
+    }
+  }, [navigate]);
+
   return (
     <>
       <Header></Header>
