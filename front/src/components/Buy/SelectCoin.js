@@ -107,6 +107,10 @@ const StyledWrapper = styled.div`
   @media (max-width: 620px) {
     width: 500px;
   }
+
+  @media (max-width: 500px) {
+    width: 400px;
+  }
 `;
 const StyledDiv = styled.div`
   display: flex;

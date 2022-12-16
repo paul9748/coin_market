@@ -42,6 +42,12 @@ const StyledHeader = styled.header`
   @media (max-width: 600px) {
     min-width: 440px;
   }
+  @media (max-width: 450px) {
+    min-width: 400px;
+  }
+  @media (max-width: 400px) {
+    min-width: 390px;
+  }
 `;
 
 const StyledImg = styled.img`
