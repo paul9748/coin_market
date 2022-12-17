@@ -1,15 +1,18 @@
 import styled from 'styled-components';
 import backImage from 'assets/images/upload_image.png';
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as Api from 'api/api';
 
 import { useImageContext } from 'context/ImageContext';
+import ROUTE from 'utils/ROUTE';
 
 function UploadImage({ currentStep, setCurrentStep }) {
+  const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
-  const [coinImage, setCoinImage] = useState(null);
-  const [imageData, setImageData] = useState(null);
+  const [coinImage, setCoinImage] = useState('');
+  const [imageData, setImageData] = useState('');
 
   const { setImageUrl } = useImageContext();
 
@@ -108,9 +111,15 @@ function UploadImage({ currentStep, setCurrentStep }) {
     try {
       const response = await Api.put('analysis', formData);
       setImageUrl(response.data);
-      console.log(response.data);
     } catch (err) {
       console.log(err);
+      if (
+        err.response.data.name === 'TokenExpiredError' ||
+        err.response.data === 'jwt expired'
+      ) {
+        alert('재로그인 부탁드립니다.');
+        navigate(ROUTE.LOGIN);
+      }
     }
   };
 
@@ -136,6 +145,7 @@ function UploadImage({ currentStep, setCurrentStep }) {
               htmlFor="file"
               ref={dragRef}
               isDragging={isDragging}></StyledLabel>
+
             <StyledImage
               type="file"
               name="file"
@@ -161,8 +171,8 @@ function UploadImage({ currentStep, setCurrentStep }) {
         )}
         <StyledBtn
           disabled={!coinImage}
-          onClick={() => {
-            handleSubmit();
+          onClick={async () => {
+            await handleSubmit();
             currentStep < 5 && setCurrentStep((preState) => preState + 1);
           }}>
           다음
@@ -181,6 +191,9 @@ const StyledDiv = styled.div`
   height: 370px;
   margin: 50px auto 10px;
   z-index: 1;
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledImage = styled.input`
@@ -199,6 +212,9 @@ const StyledLabel = styled.label`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledBackImage = styled.img`
@@ -207,6 +223,9 @@ const StyledBackImage = styled.img`
   top: 80px;
   left: 148px;
   z-index: -1;
+  @media (max-width: 465px) {
+    left: 83px;
+  }
 `;
 
 const StyledP = styled.p`
@@ -217,16 +236,25 @@ const StyledP = styled.p`
   z-index: -1;
   text-align: center;
   line-height: 27px;
+  @media (max-width: 465px) {
+    left: 4px;
+  }
 `;
 
 const StyledComment = styled.p`
   margin: 20px auto;
   font-size: 12px;
+  @media (max-width: 465px) {
+    width: 340px;
+  }
 `;
 
 const PreviewImage = styled.img`
   width: 500px;
   margin: 30px auto;
+  @media (max-width: 465px) {
+    width: 300px;
+  }
 `;
 
 const StyledUploadBtn = styled.button`

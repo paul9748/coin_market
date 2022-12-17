@@ -8,8 +8,6 @@ import { emailvalidation } from 'utils/validation';
 
 import * as Api from 'api/api';
 
-import GoogleLogIn from './GoogleLogin';
-
 function LoginForm() {
   const labelIdRef = useRef();
   const inputIdRef = useRef();
@@ -121,7 +119,6 @@ function LoginForm() {
         )}
       </StyledDiv>
       <BtnLogin disabled={!validation}>로그인</BtnLogin>
-      <GoogleLogIn />
       <StyledP>
         아직 회원이 아니신가요?
         <StyledLink to={ROUTE.REGISTER}>등록</StyledLink>
@@ -142,6 +139,10 @@ const StyledForm = styled.form`
   background-color: #d9d9d9;
   border-radius: 40px;
   filter: drop-shadow(20px 10px 4px rgba(0, 0, 0, 0.25));
+
+  @media (max-width: 465px) {
+    width: 330px;
+  }
 `;
 
 const StyledDiv = styled.div`
@@ -168,6 +169,12 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   &:focus {
     outline: 0;
+  }
+  @media (max-width: 465px) {
+    width: 240px;
+  }
+  @media (max-width: 400px) {
+    width: 220px;
   }
 `;
 

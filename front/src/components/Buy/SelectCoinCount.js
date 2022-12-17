@@ -3,8 +3,6 @@ import japan500_f from 'assets/images/japan500_f.png';
 import china1_f from 'assets/images/china1_f.png';
 import usa10_f from 'assets/images/usa10_f.png';
 import usa25_f from 'assets/images/usa25_f.png';
-import korea100_f from 'assets/images/korea100_f.png';
-import korea500_f from 'assets/images/korea500_f.png';
 
 import styled from 'styled-components';
 import { useState } from 'react';
@@ -24,7 +22,6 @@ function SelectCoinCount({
     JPY: { image: [japan100_f, japan500_f], name: ['일본100엔', '일본500엔'] },
     CNY: { image: [china1_f], name: ['중국1위안'] },
     USD: { image: [usa10_f, usa25_f], name: ['미국10센트', '미국25센트'] },
-    KRW: { image: [korea100_f, korea500_f], name: ['한국100원', '한국500원'] },
   };
 
   const { setCoinList } = useCoinContext();
@@ -68,7 +65,11 @@ function SelectCoinCount({
 
     const newCoinStock = [];
     newCoinStock.push({ stockAmount: coinStock[0].stockAmount - newBuyCount.firstCoin });
-    newCoinStock.push({ stockAmount: coinStock[1].stockAmount - newBuyCount.secondCoin });
+    newCoinStock.push({
+      stockAmount: coinStock[1]
+        ? coinStock[1].stockAmount - newBuyCount.secondCoin
+        : null,
+    });
 
     setCoinStock(newCoinStock);
 
@@ -95,7 +96,12 @@ function SelectCoinCount({
             </StyledContent>
             <StyledContent>
               <span>재고수량</span>
-              <span>{coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}개</span>
+              <span>
+                {selectNation === 'KRW'
+                  ? 0
+                  : coinStock?.[0]?.stockAmount - buyCount.firstCoin || 0}
+                개
+              </span>
             </StyledContent>
             <StyledContent>
               <span>구매수량</span>
@@ -106,7 +112,7 @@ function SelectCoinCount({
                   onChange={handleChange}
                   value={buyCount.firstCoin}
                   min="0"
-                  max={coinStock?.[0]?.stockAmount || 0}></StyledInput>
+                  max={`${coinStock?.[0]?.stockAmount}` || '0'}></StyledInput>
                 <span> 개</span>
               </p>
             </StyledContent>
@@ -119,7 +125,12 @@ function SelectCoinCount({
               </StyledContent>
               <StyledContent>
                 <span>재고수량</span>
-                <span>{coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}개</span>
+                <span>
+                  {selectNation === 'KRW'
+                    ? 0
+                    : coinStock?.[1]?.stockAmount - buyCount.secondCoin || 0}
+                  개
+                </span>
               </StyledContent>
               <StyledContent>
                 <span>구매수량</span>
@@ -130,7 +141,7 @@ function SelectCoinCount({
                     onChange={handleChange}
                     value={buyCount.secondCoin}
                     min="0"
-                    max={coinStock?.[1]?.stockAmount || 0}></StyledInput>
+                    max={`${coinStock?.[1]?.stockAmount}` || '0'}></StyledInput>
                   <span> 개</span>
                 </p>
               </StyledContent>
@@ -186,6 +197,9 @@ const StyledWrapper = styled.div`
   @media (max-width: 1097px) {
     width: 430px;
   }
+  @media (max-width: 500px) {
+    width: 310px;
+  }
 `;
 
 const StyledContentWrapper = styled.div`
@@ -197,6 +211,9 @@ const StyledContentWrapper = styled.div`
   align-items: flex-start;
   @media (max-width: 1097px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 
@@ -210,6 +227,9 @@ const StyledContent = styled.div`
 
 const StyledInput = styled.input`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledAddBtn = styled.button`
@@ -233,6 +253,9 @@ const StyledAddBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 50px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -257,5 +280,8 @@ const StyledBtnWrapper = styled.div`
   margin: 40px 0;
   @media (max-width: 620px) {
     width: 400px;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;

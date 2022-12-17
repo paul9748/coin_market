@@ -1,12 +1,10 @@
-import { render } from '@testing-library/react';
-import Main from 'pages/Main';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import ROUTE from 'utils/ROUTE';
 
-function InfoModal({ color }) {
+function InfoModal({ color, setIsLogin, setIsModal }) {
   return (
     <StyledDiv>
       <li>
@@ -15,9 +13,16 @@ function InfoModal({ color }) {
         </StyledLink>
       </li>
       <li>
+        <StyledLink to={ROUTE.USER} color={color}>
+          회원정보 수정
+        </StyledLink>
+      </li>
+      <li>
         <StyledLink
           onClick={() => {
-            sessionStorage.clear(), render(<Main></Main>);
+            sessionStorage.clear();
+            setIsLogin(false);
+            setIsModal(false);
           }}
           to={ROUTE.MAIN}
           color={color}>
@@ -36,7 +41,7 @@ const StyledDiv = styled.div`
   top: 60px;
   right: 20px;
   width: 150px;
-  height: 150px;
+  height: 200px;
   background-color: white;
   z-index: 30;
   text-align: center;

@@ -1,6 +1,4 @@
 import { db } from "../db";
-import { v4 } from "uuid";
-
 class Common {
   static async findCoinsIdByCountryCode(countryCode) {
     return await db.coin.findMany({

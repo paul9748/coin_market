@@ -3,8 +3,6 @@ import JPY500 from 'assets/images/japan500_f.png';
 import CNY1 from 'assets/images/china1_f.png';
 import USD10 from 'assets/images/usa10_f.png';
 import USD25 from 'assets/images/usa25_f.png';
-import KRW100 from 'assets/images/korea100_f.png';
-import KRW500 from 'assets/images/korea500_f.png';
 
 import styled from 'styled-components';
 
@@ -49,12 +47,6 @@ function BuyCoinResult({ buyCoinList, setBuyCoinList, coinStock, setCoinStock })
                     <div>미국10센트</div>
                   </StyledContent>
                 ) : null}
-                {el.selectNation === 'KRW' ? (
-                  <StyledContent>
-                    <StyledImg src={KRW100}></StyledImg>
-                    <div>한국100원</div>
-                  </StyledContent>
-                ) : null}
                 <StyledContent>
                   <span>선택수량</span>
                   <span>{el.firstCoin}개</span>
@@ -73,12 +65,6 @@ function BuyCoinResult({ buyCoinList, setBuyCoinList, coinStock, setCoinStock })
                   <StyledContent>
                     <StyledImg src={USD25}></StyledImg>
                     <div>미국25센트</div>
-                  </StyledContent>
-                ) : null}
-                {el.selectNation === 'KRW' ? (
-                  <StyledContent>
-                    <StyledImg src={KRW500}></StyledImg>
-                    <div>한국500원</div>
                   </StyledContent>
                 ) : null}
                 <StyledContent>
@@ -104,7 +90,7 @@ const StyledDiv = styled.div`
 
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  width: 280px;
+  width: 290px;
   height: 60px;
   background-color: rgba(0, 0, 0, 0.07);
 
@@ -120,6 +106,9 @@ const StyledDiv = styled.div`
     width: 400px;
     padding: 0 20px;
     box-sizing: border-box;
+  }
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 
@@ -141,6 +130,9 @@ const StyledBtn = styled.button`
 
 const StyledImg = styled.img`
   width: 35px;
+  @media (max-width: 500px) {
+    width: 30px;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -150,5 +142,11 @@ const StyledContent = styled.div`
   align-items: center;
   & > div {
     font-size: 12px;
+  }
+
+  & > span {
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
   }
 `;

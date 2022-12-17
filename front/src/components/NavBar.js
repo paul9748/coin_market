@@ -10,7 +10,7 @@ function NavBar({ color }) {
   const [isToggle, setIsToggle] = useState(false);
   const [isModal, setIsModal] = useState(false);
 
-  const isLogin = useProvideAuth();
+  const { isLogin, setIsLogin } = useProvideAuth();
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
@@ -88,7 +88,12 @@ function NavBar({ color }) {
           </li>
         )}
       </StyledUl>
-      {isModal ? <InfoModal color={color}></InfoModal> : null}
+      {isModal ? (
+        <InfoModal
+          color={color}
+          setIsLogin={setIsLogin}
+          setIsModal={setIsModal}></InfoModal>
+      ) : null}
     </StyledNav>
   );
 }

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import * as Api from 'api/api';
 
 import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
-import korea from 'assets/images/korea.png';
 import SelectCoinCount from './SelectCoinCount';
 
 function SelectCoin({ currentStep, setCurrentStep }) {
+  const navigate = useNavigate();
   const [isClick, setIsClick] = useState(false);
   const [selectNation, setSelectNation] = useState('');
   const [coinStock, setCoinStock] = useState();
@@ -34,12 +34,13 @@ function SelectCoin({ currentStep, setCurrentStep }) {
         setCoinStock(response.data);
       } catch (err) {
         console.log(err);
+        alert('환율정보를 불러오지 못했습니다.');
       }
     };
     if (selectNation.length !== 0 && selectNation !== 'KRW') {
       fetchData();
     }
-  }, [selectNation, isClick]);
+  }, [selectNation, isClick, navigate]);
 
   return (
     <StyledWrapper>
@@ -61,12 +62,6 @@ function SelectCoin({ currentStep, setCurrentStep }) {
             <StyeldSelectContent id="USD" onClick={handleClick}>
               <StyledImg src={usa}></StyledImg>
               <span>미국</span>
-            </StyeldSelectContent>
-          ) : null}
-          {selectNation === 'KRW' || selectNation.length === 0 ? (
-            <StyeldSelectContent id="KRW" onClick={handleClick}>
-              <StyledImg src={korea}></StyledImg>
-              <span>한국</span>
             </StyeldSelectContent>
           ) : null}
         </StyledSelectWrapper>
@@ -98,6 +93,10 @@ const StyledWrapper = styled.div`
   @media (max-width: 620px) {
     width: 500px;
   }
+
+  @media (max-width: 500px) {
+    width: 400px;
+  }
 `;
 const StyledDiv = styled.div`
   display: flex;
@@ -107,6 +106,9 @@ const StyledDiv = styled.div`
   width: 350px;
   @media (max-width: 1097px) {
     width: 500px;
+  }
+  @media (max-width: 500px) {
+    width: 400px;
   }
 `;
 
@@ -122,6 +124,9 @@ const StyledSelectWrapper = styled.div`
   height: 320px;
   @media (max-width: 1097px) {
     width: 430px;
+  }
+  @media (max-width: 500px) {
+    width: 310px;
   }
 `;
 

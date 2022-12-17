@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react';
 export const ImageContext = createContext();
 
 export function ImageContextProvider({ children }) {
-  const [imageUrl, setImageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState('');
 
   const value = {
     imageUrl,

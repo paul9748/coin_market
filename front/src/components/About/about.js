@@ -1,16 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import useScrollFadeIn from 'hooks/useScrollFadeIn';
 import useScrollClipPath from 'hooks/useScrollClipPath';
-// const observer = new IntersectionObserver(() => {
-//   console.log('this in div');
-// });
-// const div = document.querySelectorAll('p');
-// observer.observe('p');
-
-// function momo() {
-//   const scrollRef = useRef();
-//   console.log(scrollRef.current);
-// }
 
 function AboutDetail() {
   const animatedItem = {
@@ -45,7 +35,17 @@ function AboutDetail() {
             <strong>혹은</strong>
           </p>
           <p>
-            <strong>묵혀뒀던 지난 여행의 잔여물. 외화!</strong>
+            <strong>
+              묵혀두었던 지난 여행의 잔여물.{' '}
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                외화!
+              </u>
+            </strong>
           </p>
           <p>
             <strong>확실하고 편리하게 해결해드립니다!</strong>
@@ -69,7 +69,7 @@ function AboutDetail() {
                   textUnderlineOffset: '0.5vmax',
                   color: '#ff7900',
                 }}>
-                거래 서비스
+                외화 거래 서비스
               </u>
             </strong>
           </p>
@@ -77,10 +77,39 @@ function AboutDetail() {
         <Paragraph {...animatedItem[3]}>
           <PointH5>Point.2</PointH5>
           <p>
-            <strong>조작은 간단하고 신속!</strong>
+            <strong>
+              조작은{' '}
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                간단
+              </u>
+              하고{' '}
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                신속!
+              </u>
+            </strong>
           </p>
           <p>
-            <strong>사진을 통해 빠르고 편리하게</strong>
+            <strong>
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                사진
+              </u>
+              을 통해 빠르고 편리하게
+            </strong>
           </p>
           <p>
             <strong>일일이 셈할 필요없이 거래 가능</strong>
@@ -89,13 +118,41 @@ function AboutDetail() {
         <Paragraph {...animatedItem[4]}>
           <PointH5>Point.3</PointH5>
           <p>
-            <strong>안심, 안전 !!</strong>
+            <strong>
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                안심, 안전 !!
+              </u>
+            </strong>
           </p>
           <p>
-            <strong>은행보다 저렴한 수수료 국내 최저 수수료!</strong>
+            <strong>
+              은행보다 저렴한 수수료{' '}
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                국내 최저 수수료!
+              </u>
+            </strong>
           </p>
           <p>
-            <strong>다양한 외화 거래 가능!</strong>
+            <strong>
+              <u
+                style={{
+                  textDecorationStyle: 'wavy',
+                  textUnderlineOffset: '0.5vmax',
+                  color: '#ff7900',
+                }}>
+                다양한 외화 거래 가능!
+              </u>
+            </strong>
           </p>
         </Paragraph>
       </StyledMain>

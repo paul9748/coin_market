@@ -42,6 +42,12 @@ const StyledMain = styled.main`
   @media (max-width: 600px) {
     min-width: 440px;
   }
+  @media (max-width: 450px) {
+    min-width: 400px;
+  }
+  @media (max-width: 400px) {
+    min-width: 390px;
+  }
 
   background-color: rgb(42, 193, 188);
 `;

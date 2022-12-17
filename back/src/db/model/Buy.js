@@ -48,39 +48,11 @@ class Buy {
     });
   }
 
-  static async createDeal(userId, dealStatus, imageUrl, isActivate) {
-    return await db.deal.create({
-      data: {
-        userId,
-        dealStatus,
-        imageUrl,
-        isActivate,
-      },
-    });
-  }
-  static createOrderCoin(dealId, coinId, dealAmount) {
-    return db.OrderCoin.create({
-      data: {
-        dealId: dealId,
-        coinId: coinId,
-        dealAmount: dealAmount,
-      },
-    });
-  }
-  static coinStockUpdate(coinId, dealAmount) {
-    return db.coin.update({
-      where: {
-        id: coinId,
-      },
-      data: {
-        stockAmount: { increment: -dealAmount },
-      },
-    });
-  }
   static async findStockOrderByCoinId(coinId) {
     return await db.orderCoin.findMany({
       where: {
         coinId,
+        stockAmount: { not: 0 },
         deal: {
           is: {
             dealStatus: "SELL",
@@ -94,33 +66,52 @@ class Buy {
           updatedAt: "asc",
         },
       },
+      select: {
+        id: true,
+        dealId: true,
+        coinId: true,
+        dealAmount: true,
+        stockAmount: true,
+        coin: {
+          select: {
+            id: true,
+          },
+        },
+        deal: {
+          select: {
+            userId: true,
+          },
+        },
+      },
     });
   }
 
-  static orderCoinUpdate(id, stockAmount) {
-    return db.orderCoin.update({
+  static async findCoinsUnitAmount(CoinIds) {
+    return await db.coin.findMany({
       where: {
-        id: id,
+        id: { in: CoinIds },
       },
-      data: {
-        stockAmount: stockAmount,
+      select: {
+        id: true,
+        unitAmount: true,
+        country: {
+          select: {
+            exchangeRateCode: true,
+          },
+        },
       },
-    });
-  }
-  static async dealDetailCreate(dealDetail) {
-    return await db.delivery.create({
-      data: dealDetail,
     });
   }
 
-  static async createDealTest(
+  static async createDeal(
     userId,
     dealStatus,
     imageUrl,
     isActivate,
     delivery,
     createOrderCoinList,
-    updateDealCoinList
+    updateDealCoinList,
+    addSellerPoint
   ) {
     let orderTransactionList = [];
     const createDeal = db.deal.create({
@@ -178,6 +169,35 @@ class Buy {
         orderTransactionList.push(lastUpdateOrderCoinStocks);
       }
     }
+    const addSellerPointList = Object.keys(addSellerPoint);
+    const walletList = await db.Wallet.findMany({
+      where: {
+        userId: { in: [...addSellerPointList] },
+        expirationDate: new Date("9999-12-31T23:59:59.000Z"),
+      },
+    });
+    orderTransactionList.push(
+      db.wallet.updateMany({
+        where: {
+          userId: { in: Object.keys(addSellerPoint) },
+          expirationDate: new Date("9999-12-31T23:59:59.000Z"),
+        },
+        data: { expirationDate: new Date() },
+      })
+    );
+    let createWalletList = [];
+    for (let i of walletList) {
+      i["krwAmount"] += addSellerPoint[i["userId"]];
+      i["statement"] = "판매금액";
+      delete i["id"];
+      createWalletList.push(i);
+    }
+    orderTransactionList.push(
+      db.wallet.createMany({
+        data: createWalletList,
+      })
+    );
+
     return await db.$transaction(orderTransactionList);
   }
 }

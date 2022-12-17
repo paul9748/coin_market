@@ -6,55 +6,87 @@ const url = 'http://' + window.location.hostname + ':' + portNum + '/';
 async function get(endpoint, params = '') {
   return await axios.get(url + endpoint + params, {
     headers: {
-      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+      Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
 
 async function post(endpoint, data) {
-  return axios.post(url + endpoint, data);
+  return await axios.post(url + endpoint, data, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+    },
+  });
 }
 
 async function put(endpoint, data) {
-  return axios.put(url + endpoint, data, {
+  return await axios.put(url + endpoint, data, {
     headers: {
-      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+      Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
 
 async function del(endpoint) {
-  return axios.delete(url + endpoint, {
+  return await axios.delete(url + endpoint, {
     headers: {
-      Authentication: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+      Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
     },
   });
 }
 
-// // 요청 인터셉터 추가하기
-// axios.interceptors.request.use(
-//   function (config) {
-//     // 요청이 전달되기 전에 작업 수행
-//     return config;
-//   },
-//   function (error) {
-//     // 요청 오류가 있는 작업 수행
-//     return Promise.reject(error);
-//   }
-// );
+// 응답 인터셉터 추가하기
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
 
-// // 응답 인터셉터 추가하기
-// axios.interceptors.response.use(
-//   function (response) {
-//     // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-//     // 응답 데이터가 있는 작업 수행
-//     return response;
-//   },
-//   function (error) {
-//     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-//     // 응답 오류가 있는 작업 수행
-//     return Promise.reject(error);
-//   }
-// );
+  async (error) => {
+    const {
+      config,
+      response: { status },
+    } = error;
+
+    if (status === 400) {
+      if (
+        error.response.data.name === 'TokenExpiredError' ||
+        error.response.data === 'jwt expired'
+      ) {
+        const originalRequest = config;
+        const refreshToken = sessionStorage.getItem('REFRESH_TOKEN');
+        try {
+          const response = await axios.post(
+            url + 'token',
+            { refreshToken: refreshToken },
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+              },
+            }
+          );
+          console.log(response);
+          sessionStorage.clear();
+          sessionStorage.setItem('ACCESS_TOKEN', response.data.access_token);
+          sessionStorage.setItem('REFRESH_TOKEN', response.data.refresh_token);
+          axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem(
+            'ACCESS_TOKEN'
+          )}`;
+
+          originalRequest.headers.Authorization = `Bearer ${sessionStorage.getItem(
+            `ACCESS_TOKEN`
+          )}`;
+
+          return axios(originalRequest);
+        } catch (err) {
+          console.log(err);
+          sessionStorage.clear();
+          window.location.reload();
+        }
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export { get, post, put, del as delete };
