@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userService } from "../services/userService";
 import { loginRequired } from "../middlewares/loginRequired";
 import { mailAuthService } from "../services/mailAuthService";
+import passport from "passport";
 
 const userAuthRouter = Router();
 
@@ -142,6 +143,21 @@ userAuthRouter.put(
 );
 
 //구글 로그인
-// userAuthRouter.get('/google',passpo)
+userAuthRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+userAuthRouter.get(
+  "/oauth2/redirect/google",
+  passport.authenticate("google", { session: false }),
+  (req, res, next) => {
+    try {
+      res.redirect("/");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 export { userAuthRouter };
