@@ -1,7 +1,6 @@
 import { User } from "../../db/model/User";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { tokenService } from "../../services/tokenService";
-import { profile } from "console";
 
 const config = {
   clientID: process.env.google_client_id,
@@ -33,7 +32,9 @@ async function findOrCreateUser({ email, displayName }) {
 module.exports = new GoogleStrategy(
   config,
   async (accessToken, refreshToken, profile, done) => {
-    const { email, displayName } = profile;
+    console.log(profile);
+    const displayName = profile.displayName;
+    const email = profile.emails[0].value;
     try {
       const user = await findOrCreateUser({ email, displayName });
       const token = await tokenService.createToken(user.userId);
