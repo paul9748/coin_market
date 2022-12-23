@@ -10,9 +10,7 @@ const config = {
   // callbackUrl: "http://localhost:3000/oauth2/redirect/google",
 };
 
-async function findOrCreateUser({ email, displayName }) {
-  console.log({ email, displayName });
-
+async function findOrCreateUser({ email, displayName, isEmailAuthorized }) {
   const user = await User.findUserByEmail(email);
 
   if (user) {
@@ -22,6 +20,7 @@ async function findOrCreateUser({ email, displayName }) {
   const created = await User.createUserByEmailAndPassword({
     email: email,
     userName: displayName,
+    isEmailAuthorized: isEmailAuthorized,
     password: "googleLogin",
     phoneNumber: "googleLogin",
   });
@@ -35,8 +34,13 @@ module.exports = new GoogleStrategy(
     console.log(profile);
     const displayName = profile.displayName;
     const email = profile.emails[0].value;
+    const isEmailAuthorized = profile.emails[0].verified;
     try {
-      const user = await findOrCreateUser({ email, displayName });
+      const user = await findOrCreateUser({
+        email,
+        displayName,
+        isEmailAuthorized,
+      });
       const token = await tokenService.createToken(user.userId);
       done(null, token);
     } catch (error) {
