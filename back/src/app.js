@@ -11,6 +11,7 @@ import { dealRouter } from "./routers/dealRouter";
 import { deliveryRouter } from "./routers/deliveryRouter";
 import { walletRouter } from "./routers/walletRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
+import { initialize } from "./passport";
 // import {passport} from "passport"
 // import { GoogleStrategy} from "passport-google-oauth20"
 
@@ -25,6 +26,8 @@ import { errorMiddleware } from "./middlewares/errorMiddleware";
 
 const app = express();
 
+// initialize();
+// app.use(initialize());
 // CORS 에러 방지
 app.use(cors());
 
@@ -41,6 +44,7 @@ app.get("/", (req, res) => {
 
 // router, service 구현 (userAuthRouter는 맨 위에 있어야 함.)
 app.use(userAuthRouter);
+initialize();
 app.use(addressRouter);
 app.use(tokenRouter);
 app.use(analysisRouter);

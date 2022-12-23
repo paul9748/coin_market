@@ -6,3 +6,7 @@ function initialize() {
 }
 
 export { initialize };
+
+// module.exports = () => {
+//   passport.use(google);
+// };
