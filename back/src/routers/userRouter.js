@@ -153,6 +153,26 @@ userAuthRouter.get(
   passport.authenticate("google", { session: false }),
   (req, res, next) => {
     try {
+      res.status(201).json(req.user);
+      res.redirect("/");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+//네이버 로그인
+userAuthRouter.get(
+  "/naver",
+  passport.authenticate("naver", { authType: "reprompt" })
+);
+
+userAuthRouter.get(
+  "/auth/naver/callback",
+  passport.authenticate("naver", { session: false }),
+  (req, res, next) => {
+    try {
+      res.status(201).json(req.user);
       res.redirect("/");
     } catch (err) {
       next(err);
