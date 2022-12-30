@@ -2,24 +2,15 @@ import { Deal } from "../db/model/Deal";
 
 class dealService {
   //상태별deal or deal 전체 조회
-  static async findDealByStatus(status, userId) {
-    const dealListByStatus = await Deal.findDealByStatus(status, userId);
+  static async findDealByStatus(status) {
+    const dealListByStatus = await Deal.findDealByStatus(status);
 
     return dealListByStatus;
   }
 
-  static async findDealByResStatus(resStatus, userId) {
-    let dealListByResStatus;
-    if (resStatus == "BUYCOMP") {
-      dealListByResStatus = await Deal.findCompletedDeal("BUY", userId);
-    } else if (resStatus == "SELLCOMP") {
-      dealListByResStatus = await Deal.findCompletedDeal("SELL", userId);
-    } else {
-      dealListByResStatus = await Deal.findDealByDeliveryStatus(
-        resStatus,
-        userId
-      );
-    }
+  static async findDealByResStatus(resStatus) {
+    const dealListByResStatus = await Deal.findDealByDeliveryStatus(resStatus);
+
     return dealListByResStatus;
   }
 
@@ -28,10 +19,6 @@ class dealService {
     const dealDetail = await Deal.findDealByDealId(dealId);
 
     return dealDetail;
-  }
-  static async countDealByUserId(userId) {
-    const countdata = await Deal.countDealByUserId(userId);
-    return countdata;
   }
 }
 
