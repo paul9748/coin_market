@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userService } from "../services/userService";
 import { loginRequired } from "../middlewares/loginRequired";
 import { mailAuthService } from "../services/mailAuthService";
+import passport from "passport";
 
 const userAuthRouter = Router();
 
@@ -152,6 +153,7 @@ userAuthRouter.get(
   passport.authenticate("google", { session: false }),
   (req, res, next) => {
     try {
+      res.status(201).json(req.user);
       res.redirect("/");
     } catch (err) {
       next(err);

@@ -1,16 +1,18 @@
 import { User } from "../../db/model/User";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as NaverStrategy } from "passport-naver-v2";
 import { tokenService } from "../../services/tokenService";
 
 const config = {
-  clientID: process.env.google_client_id,
-  clientSecret: process.env.google_client_secret,
-  callbackURL: "/oauth2/redirect/google",
-  // scope: ["profile", "email"],
-  // callbackUrl: "http://localhost:3000/oauth2/redirect/google",
+  clientID: process.env.naver_client_id,
+  clientSecret: process.env.naver_client_secret,
+  callbackURL: "/auth/naver/callback",
 };
 
-async function findOrCreateUser({ email, displayName, isEmailAuthorized }) {
+async function findOrCreateUser({ email, name, mobile, isEmailAuthorized }) {
+  if (mobile == undefined) {
+    mobile = "naverLogin";
+  }
+
   const user = await User.findUserByEmail(email);
 
   if (user) {
@@ -19,26 +21,26 @@ async function findOrCreateUser({ email, displayName, isEmailAuthorized }) {
 
   const created = await User.createUserByEmailAndPassword({
     email: email,
-    userName: displayName,
+    userName: name,
     isEmailAuthorized: isEmailAuthorized,
-    password: "googleLogin",
-    phoneNumber: "googleLogin",
+    password: "naverLogin",
+    phoneNumber: mobile,
   });
-
   return created;
 }
 
-module.exports = new GoogleStrategy(
+module.exports = new NaverStrategy(
   config,
   async (accessToken, refreshToken, profile, done) => {
     // console.log(profile);
-    const displayName = profile.displayName;
-    const email = profile.emails[0].value;
-    const isEmailAuthorized = profile.emails[0].verified;
+    const { email, name, mobile } = profile;
+    const isEmailAuthorized = true;
+
     try {
       const user = await findOrCreateUser({
         email,
-        displayName,
+        name,
+        mobile,
         isEmailAuthorized,
       });
       const token = await tokenService.createToken(user.userId);
