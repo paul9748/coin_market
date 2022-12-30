@@ -19,7 +19,13 @@ class addressService {
   }
 
   //주소수정
-  static async updateAddress(id, data) {
+  static async updateAddress(userId, id, data) {
+    const addresses = await Address.findAddressesByUserId(userId);
+
+    if (addresses.filter((address) => address.id == id).length == 0) {
+      throw new Error("해당 주소를 수정할 권한이 없습니다.");
+    }
+
     const addressName = data.addressName;
     const name = data.name;
     const phoneNumber = data.phoneNumber;
@@ -43,14 +49,14 @@ class addressService {
   }
 
   //주소 기본배송지 설정
-  static async defaultAddress(userId, id) {
-    const findAddress = await Address.findAddressesByUserId(userId);
-    // 주소 리스트에서 디폴트 1인값 걸러줘야함
+  static async defaultAddress(id, address) {
+    if (address.isDefault == true) {
+      address.isDefault = false;
+    } else {
+      address.isDefault = true;
+    }
 
-    // if (findAddress.filter({isDefault : true})) {
-
-    // }
-    // const defaultAddress = await Address.defaultAddress(id);
+    const defaultAddress = await Address.defaultAddress(id, address.isDefault);
 
     return defaultAddress;
   }
