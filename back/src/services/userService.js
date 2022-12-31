@@ -7,10 +7,10 @@ class userService {
   static async createUser(data) {
     const email = data.email;
 
-    const user = await User.findUserByEmail(email);
-    if (user) {
-      throw new Error("이미 존재하는 이메일입니다.");
-    }
+    // const user = await User.findUserByEmail(email);
+    // if (user) {
+    //   throw new Error("이미 존재하는 이메일입니다.");
+    // }
 
     const newUser = await User.createUserByEmailAndPassword(data);
 
