@@ -49,7 +49,7 @@ tokenRouter.post("/token", async function (req, res, next) {
     //새로 생성한 토큰 전달
     res.status(201).json(newToken);
   } catch (err) {
-    next(err);
+    next("refresh_token failed");
   }
 });
 
