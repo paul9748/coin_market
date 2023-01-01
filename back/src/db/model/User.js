@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import { db } from "../db";
 import { v4 } from "uuid";
+import { nextTick } from "process";
+import { Prisma } from "@prisma/client";
 
 class User {
   static async createUserByEmailAndPassword(data) {
@@ -8,7 +10,8 @@ class User {
     data.id = v4();
     data.wallet = {};
     data.wallet.create = { krwAmount: 0, statement: "회원가입" };
-    const newUser = db.user.create({
+
+    const newUser = await db.user.create({
       data,
     });
     return newUser;

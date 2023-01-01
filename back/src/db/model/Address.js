@@ -34,7 +34,6 @@ class Address {
         id,
       },
       data: {
-        id,
         addressName,
         name,
         phoneNumber,
@@ -47,13 +46,13 @@ class Address {
     return address;
   }
 
-  static async defaultAddress(id) {
+  static async defaultAddress(id, isDefault) {
     const defaultAddress = db.address.update({
       where: {
         id,
       },
       data: {
-        isDefault: true,
+        isDefault,
       },
     });
     return defaultAddress;
