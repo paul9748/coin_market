@@ -8,7 +8,6 @@ class User {
     data.id = v4();
     data.wallet = {};
     data.wallet.create = { krwAmount: 0, statement: "회원가입" };
-
     const newUser = db.user.create({
       data,
     });
