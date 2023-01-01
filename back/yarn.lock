@@ -4874,7 +4874,14 @@ passport-google-oauth20@^2.0.0:
   dependencies:
     passport-oauth2 "1.x.x"
 
-passport-oauth2@1.x.x:
+"passport-naver-v2@^2.0.8":
+  "integrity" "sha512-CA0u+aA4K4Zf5e3dSd47agOS69ULOdBGei7CZY2BN1cEbLnhnc6OalFPvnXLuEKT8I4IuGwvh3EBZCST2FoI+A=="
+  "resolved" "https://registry.npmjs.org/passport-naver-v2/-/passport-naver-v2-2.0.8.tgz"
+  "version" "2.0.8"
+  dependencies:
+    "passport-oauth2" "^1.5.0"
+
+"passport-oauth2@^1.5.0", passport-oauth2@1.x.x:
   version "1.6.1"
   resolved "https://registry.npmjs.org/passport-oauth2/-/passport-oauth2-1.6.1.tgz"
   integrity sha512-ZbV43Hq9d/SBSYQ22GOiglFsjsD1YY/qdiptA+8ej+9C1dL1TVB+mBE5kDH/D4AJo50+2i8f4bx0vg4/yDDZCQ==
