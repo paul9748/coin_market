@@ -1,15 +1,13 @@
 import bcrypt from "bcrypt";
 import { db } from "../db";
 import { v4 } from "uuid";
-import { nextTick } from "process";
-import { Prisma } from "@prisma/client";
 
 class User {
   static async createUserByEmailAndPassword(data) {
     data.password = bcrypt.hashSync(data.password, 12);
     data.id = v4();
 
-    const newUser = await db.user.create({
+    const newUser = db.user.create({
       data,
     });
     return newUser;
