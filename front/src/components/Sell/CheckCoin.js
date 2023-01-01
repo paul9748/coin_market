@@ -36,7 +36,7 @@ function CheckCoin({ currentStep, setCurrentStep }) {
       }
     };
     fetchAnalysisData();
-  }, [imageUrl, currentStep]);
+  }, [imageUrl, currentStep, setCurrentStep]);
 
   if (loading) return <Loading></Loading>;
 
@@ -61,7 +61,7 @@ function CheckCoin({ currentStep, setCurrentStep }) {
             이전
           </StyledBtn>
         )}
-        <SellButton coinData={coinData}></SellButton>
+        <SellButton coinData={coinData} img={coinImg}></SellButton>
       </StyledBtnWrapper>
     </>
   );
@@ -70,10 +70,14 @@ function CheckCoin({ currentStep, setCurrentStep }) {
 export default CheckCoin;
 
 const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 50px auto 10px;
 
   & h2 {
-    font-size: 25px;
+    font-size: 40px;
+    font-weight: bold;
     margin: 15px 0;
   }
 

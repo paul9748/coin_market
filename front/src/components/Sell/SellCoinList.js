@@ -5,7 +5,6 @@ import { useState } from 'react';
 import japan from 'assets/images/japan.png';
 import china from 'assets/images/china.png';
 import usa from 'assets/images/usa.jpg';
-import korea from 'assets/images/korea.png';
 import useRate from 'hooks/useRate';
 import AddCoinModal from './AddCoinModal';
 
@@ -44,15 +43,25 @@ function SellCoinList({ coinData, setCoinData }) {
   const addCoin = (e) => {
     if (e.target.name === 'JPY100') {
       const newCoinData = { ...coinData };
-      newCoinData.JPY[0].dealAmount += 1;
-      return setCoinData(newCoinData);
+      if (newCoinData.JPY[0].coinId === process.env.REACT_APP_JPY100) {
+        newCoinData.JPY[0].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.JPY[1].coinId === process.env.REACT_APP_JPY100) {
+        newCoinData.JPY[1].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
     }
     if (e.target.name === 'JPY500') {
       const newCoinData = { ...coinData };
-      newCoinData.JPY[1]
-        ? (newCoinData.JPY[1].dealAmount += 1)
-        : (newCoinData.JPY[0].dealAmount += 1);
-      return setCoinData(newCoinData);
+      if (newCoinData.JPY[0].coinId === process.env.REACT_APP_JPY500) {
+        newCoinData.JPY[0].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.JPY[1].coinId === process.env.REACT_APP_JPY500) {
+        newCoinData.JPY[1].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
     }
 
     if (e.target.name === 'CNY') {
@@ -63,49 +72,80 @@ function SellCoinList({ coinData, setCoinData }) {
 
     if (e.target.name === 'USD10') {
       const newCoinData = { ...coinData };
-      newCoinData.USD[0].dealAmount += 1;
-      return setCoinData(newCoinData);
+      if (newCoinData.USD[0].coinId === process.env.REACT_APP_USD10) {
+        newCoinData.USD[0].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.USD[1].coinId === process.env.REACT_APP_USD10) {
+        newCoinData.USD[1].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
     }
     if (e.target.name === 'USD25') {
       const newCoinData = { ...coinData };
-      newCoinData.USD[1]
-        ? (newCoinData.USD[1].dealAmount += 1)
-        : (newCoinData.USD[0].dealAmount += 1);
-      return setCoinData(newCoinData);
+      if (newCoinData.USD[0].coinId === process.env.REACT_APP_USD25) {
+        newCoinData.USD[0].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.USD[1].coinId === process.env.REACT_APP_USD25) {
+        newCoinData.USD[1].dealAmount += 1;
+        return setCoinData(newCoinData);
+      }
     }
   };
 
   const removeCoin = (e) => {
     if (e.target.name === 'JPY100') {
       const newCoinData = { ...coinData };
-      newCoinData.JPY[0].dealAmount -= 1;
-      return setCoinData(newCoinData);
+      if (newCoinData.JPY[0].coinId === process.env.REACT_APP_JPY100) {
+        if (newCoinData.JPY[0].dealAmount > 0) newCoinData.JPY[0].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.JPY[1].coinId === process.env.REACT_APP_JPY100) {
+        if (newCoinData.JPY[1].dealAmount > 0) newCoinData.JPY[1].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
     }
     if (e.target.name === 'JPY500') {
       const newCoinData = { ...coinData };
-      newCoinData.JPY[1]
-        ? (newCoinData.JPY[1].dealAmount -= 1)
-        : (newCoinData.JPY[0].dealAmount -= 1);
-      return setCoinData(newCoinData);
+      if (newCoinData.JPY[0].coinId === process.env.REACT_APP_JPY500) {
+        if (newCoinData.JPY[0].dealAmount > 0) newCoinData.JPY[0].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.JPY[1].coinId === process.env.REACT_APP_JPY500) {
+        if (newCoinData.JPY[1].dealAmount > 0) newCoinData.JPY[1].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
     }
 
     if (e.target.name === 'CNY') {
       const newCoinData = { ...coinData };
-      newCoinData.CNY[0].dealAmount -= 1;
+      if (newCoinData.CNY[0].dealAmount > 0) newCoinData.CNY[0].dealAmount -= 1;
       return setCoinData(newCoinData);
     }
 
     if (e.target.name === 'USD10') {
       const newCoinData = { ...coinData };
-      newCoinData.USD[0].dealAmount -= 1;
-      return setCoinData(newCoinData);
+      if (newCoinData.USD[0].coinId === process.env.REACT_APP_USD10) {
+        if (newCoinData.USD[0].dealAmount > 0) newCoinData.USD[0].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.USD[1].coinId === process.env.REACT_APP_USD10) {
+        if (newCoinData.USD[1].dealAmount > 0) newCoinData.USD[1].dealAmount -= 1;
+        return setCoinData(newCoinData);
+      }
     }
     if (e.target.name === 'USD25') {
       const newCoinData = { ...coinData };
-      newCoinData.USD[1]
-        ? (newCoinData.USD[1].dealAmount -= 1)
-        : (newCoinData.USD[0].dealAmount -= 1);
-      return setCoinData(newCoinData);
+
+      if (newCoinData.USD[0].coinId === process.env.REACT_APP_USD25) {
+        newCoinData.USD[0].dealAmount > 0 && (newCoinData.USD[0].dealAmount -= 1);
+        return setCoinData(newCoinData);
+      }
+      if (newCoinData.USD[1].coinId === process.env.REACT_APP_USD25) {
+        newCoinData.USD[1].dealAmount > 0 && (newCoinData.USD[1].dealAmount -= 1);
+        return setCoinData(newCoinData);
+      }
     }
   };
 
@@ -119,7 +159,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.JPY && (
         <StyledNationWrapper>
-          <div>기준환율: {jpyRate?.[0].basePrice} KRW/JPY100</div>
+          <div>할인환율(기준환율 * 0.7) : {jpyRate?.[0].basePrice} KRW/JPY100</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={japan} />
@@ -136,10 +176,32 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="JPY100.png" />
                   <div>
-                    <div>100엔 x {coinData?.JPY[0].dealAmount}개 =</div>
+                    <div>100엔 x {coinData?.JPY[0]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * coinData?.JPY[0].dealAmount
+                        jpyRate?.[0].basePrice * coinData?.JPY[0]?.dealAmount
+                      ).toLocaleString()}
+                      원
+                    </div>
+                  </div>
+                  <div>
+                    <StyledCountBtn name="JPY100" onClick={addCoin}>
+                      +
+                    </StyledCountBtn>
+                    <StyledCountBtn name="JPY100" onClick={removeCoin}>
+                      -
+                    </StyledCountBtn>
+                  </div>
+                </StyledCoin>
+              )}
+              {coinData?.JPY?.[1]?.coinId === process.env.REACT_APP_JPY100 && (
+                <StyledCoin>
+                  <StyledCoinImg src="/JPY100.png" />
+                  <div>
+                    <div>100엔 x {coinData?.JPY[1]?.dealAmount}개 =</div>
+                    <div>
+                      {Math.floor(
+                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[1]?.dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -158,10 +220,10 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="/JPY500.png" />
                   <div>
-                    <div>500엔 x {coinData?.JPY[0].dealAmount}개 =</div>
+                    <div>500엔 x {coinData?.JPY[0]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[0].dealAmount
+                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[0]?.dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -180,10 +242,10 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="/JPY500.png" />
                   <div>
-                    <div>500엔 x {coinData?.JPY[1].dealAmount}개 =</div>
+                    <div>500엔 x {coinData?.JPY[1]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[1].dealAmount
+                        jpyRate?.[0].basePrice * 5 * coinData?.JPY[1]?.dealAmount
                       ).toLocaleString()}
                       원
                     </div>
@@ -204,7 +266,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.CNY && (
         <StyledNationWrapper>
-          <div>기준환율: {cnyRate?.[0].basePrice} KRW/CNY</div>
+          <div>할인환율(기준환율 * 0.7) : {cnyRate?.[0].basePrice} KRW/CNY</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={china} />
@@ -239,7 +301,7 @@ function SellCoinList({ coinData, setCoinData }) {
       )}
       {coinData?.USD && (
         <StyledNationWrapper>
-          <div>기준환율: {usdRate?.[0].basePrice} KRW/USD</div>
+          <div>할인환율(기준환율 * 0.7) : {usdRate?.[0].basePrice} KRW/USD</div>
           <StyledNationContentWrapper>
             <StyledCoinListTitle>
               <StyledImg src={usa} />
@@ -256,10 +318,32 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="USD10.png" />
                   <div>
-                    <div>10센트 x {coinData?.USD[0].dealAmount}개 =</div>
+                    <div>10센트 x {coinData?.USD[0]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        usdRate?.[0].basePrice * coinData?.USD[0].dealAmount * 0.1
+                        usdRate?.[0].basePrice * coinData?.USD[0]?.dealAmount * 0.1
+                      ).toLocaleString()}
+                      원
+                    </div>
+                  </div>
+                  <div>
+                    <StyledCountBtn name="USD10" onClick={addCoin}>
+                      +
+                    </StyledCountBtn>
+                    <StyledCountBtn name="USD10" onClick={removeCoin}>
+                      -
+                    </StyledCountBtn>
+                  </div>
+                </StyledCoin>
+              )}
+              {coinData?.USD?.[1]?.coinId === process.env.REACT_APP_USD10 && (
+                <StyledCoin>
+                  <StyledCoinImg src="/USD10.png" />
+                  <div>
+                    <div>10센트 x {coinData?.USD[1]?.dealAmount}개 =</div>
+                    <div>
+                      {Math.floor(
+                        usdRate?.[0].basePrice * coinData?.USD[1]?.dealAmount * 0.1
                       ).toLocaleString()}
                       원
                     </div>
@@ -278,7 +362,7 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="/USD25.png" />
                   <div>
-                    <div>25센트 x {coinData.USD[0].dealAmount}개 =</div>
+                    <div>25센트 x {coinData?.USD[0]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
                         usdRate?.[0].basePrice * coinData?.USD[0].dealAmount * 0.25
@@ -300,10 +384,10 @@ function SellCoinList({ coinData, setCoinData }) {
                 <StyledCoin>
                   <StyledCoinImg src="/USD25.png" />
                   <div>
-                    <div>25센트 x {coinData?.USD[1].dealAmount}개 =</div>
+                    <div>25센트 x {coinData?.USD[1]?.dealAmount}개 =</div>
                     <div>
                       {Math.floor(
-                        usdRate?.[0].basePrice * coinData?.USD[1].dealAmount * 0.25
+                        usdRate?.[0].basePrice * coinData?.USD[1]?.dealAmount * 0.25
                       ).toLocaleString()}
                       원
                     </div>

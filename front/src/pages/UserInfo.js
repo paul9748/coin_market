@@ -197,8 +197,14 @@ const StyledMain = styled.main`
   min-height: calc(100vh - 200px);
   min-width: 600px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 600px) {
     min-width: 440px;
+  }
+  @media (max-width: 450px) {
+    min-width: 400px;
+  }
+  @media (max-width: 400px) {
+    min-width: 380px;
   }
 `;
 
@@ -207,6 +213,9 @@ const StyledUserInfoWrapper = styled.div`
   flex-direction: column;
   justify-self: center;
   width: 400px;
+  @media (max-width: 500px) {
+    width: 340px;
+  }
 `;
 
 const StyledTitleWrapper = styled.div`
@@ -257,11 +266,8 @@ const StyledBtnWrapper = styled.div`
   width: 700px;
   margin: 30px 0;
 
-  @media (max-width: 1017px) {
-    width: 600px;
-  }
-  @media (max-width: 600px) {
-    width: 400px;
+  @media (max-width: 500px) {
+    width: 300px;
   }
 `;
 

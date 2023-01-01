@@ -78,6 +78,7 @@ const StyledCorrectImg = styled.img`
 
 const StyledWrongImg = styled.img`
   width: 150px;
+  height: 150px;
 `;
 
 const StyledImgWrapper = styled.div`
@@ -93,7 +94,10 @@ const StyledImgWrapper = styled.div`
   @media (max-width: 450px) {
     width: 320px;
     flex-direction: column;
-    height: 330px;
+    height: 420px;
+  }
+  & + & {
+    margin-bottom: 20px;
   }
 `;
 

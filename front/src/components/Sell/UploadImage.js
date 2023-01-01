@@ -111,7 +111,6 @@ function UploadImage({ currentStep, setCurrentStep }) {
     try {
       const response = await Api.put('analysis', formData);
       setImageUrl(response.data);
-      console.log(response.data);
     } catch (err) {
       console.log(err);
       if (

@@ -3,8 +3,6 @@ import JPY500 from 'assets/images/japan500_f.png';
 import CNY1 from 'assets/images/china1_f.png';
 import USD10 from 'assets/images/usa10_f.png';
 import USD25 from 'assets/images/usa25_f.png';
-import KRW100 from 'assets/images/korea100_f.png';
-import KRW500 from 'assets/images/korea500_f.png';
 
 import styled from 'styled-components';
 
@@ -49,12 +47,6 @@ function BuyCoinResult({ buyCoinList, setBuyCoinList, coinStock, setCoinStock })
                     <div>미국10센트</div>
                   </StyledContent>
                 ) : null}
-                {el.selectNation === 'KRW' ? (
-                  <StyledContent>
-                    <StyledImg src={KRW100}></StyledImg>
-                    <div>한국100원</div>
-                  </StyledContent>
-                ) : null}
                 <StyledContent>
                   <span>선택수량</span>
                   <span>{el.firstCoin}개</span>
@@ -73,12 +65,6 @@ function BuyCoinResult({ buyCoinList, setBuyCoinList, coinStock, setCoinStock })
                   <StyledContent>
                     <StyledImg src={USD25}></StyledImg>
                     <div>미국25센트</div>
-                  </StyledContent>
-                ) : null}
-                {el.selectNation === 'KRW' ? (
-                  <StyledContent>
-                    <StyledImg src={KRW500}></StyledImg>
-                    <div>한국500원</div>
                   </StyledContent>
                 ) : null}
                 <StyledContent>

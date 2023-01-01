@@ -5,7 +5,7 @@ import { useCoinContext } from 'context/CoinContext';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from 'utils/ROUTE';
 
-function SellButton({ coinData }) {
+function SellButton({ coinData, img }) {
   const { setSellNumber } = useCoinContext();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ function SellButton({ coinData }) {
   const handleClick = async () => {
     const data = {
       order: {
-        imageUrl: 'url',
+        imageUrl: img,
         dealStatus: 'SELL',
       },
       coins,
